@@ -1,7 +1,9 @@
 import { FireFlame } from "iconoir-react"
 import Image from "next/image"
+import Link from "next/link"
 
 interface MenuItem {
+  id: string
   name: string
   price: string
   description: string
@@ -17,9 +19,10 @@ export function MenuCategory({ items }: MenuCategoryProps) {
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
       {items.map((item) => (
-        <div
-          key={item.name}
-          className="group relative cursor-pointer"
+        <Link
+          key={item.id}
+          href={`/product/${item.id}`}
+          className="group relative cursor-pointer block"
         >
           {/* Floating Burger Image - NO BOX */}
           {item.image && (
@@ -27,15 +30,6 @@ export function MenuCategory({ items }: MenuCategoryProps) {
               {/* Price Badge - Floating on Image */}
               <div className="absolute -top-4 -right-4 z-20 bg-primary text-primary-foreground px-6 py-3 rounded-full shadow-2xl group-hover:scale-110 transition-transform duration-300">
                 <span className="text-3xl font-black">{item.price}</span>
-              </div>
-
-              {/* Halal Badge - Bottom Left Corner */}
-              <div className="absolute bottom-2 left-2 z-20 group-hover:scale-110 transition-transform duration-300">
-                <img
-                  src="/graphics/halal logo.svg"
-                  alt="100% Halal"
-                  className="h-12 w-12 md:h-16 md:w-16 drop-shadow-lg"
-                />
               </div>
 
               {/* Burger Image - Transparent Background, Floating Effect */}
@@ -73,7 +67,7 @@ export function MenuCategory({ items }: MenuCategoryProps) {
               </div>
             )}
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   )

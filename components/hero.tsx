@@ -17,13 +17,13 @@ export function Hero() {
           {/* Left Content */}
           <div className="text-center md:text-left order-2 md:order-1">
         {/* Halal Badge */}
-        <div className="inline-flex items-center gap-3 mb-6">
+        {/* <div className="inline-flex items-center gap-3 mb-6">
           <img
             src="/graphics/halal logo.svg"
             alt="100% Halal Certified"
             className="h-16 w-auto"
           />
-        </div>
+        </div> */}
 
         {/* Main Title */}
         <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-4">
@@ -102,7 +102,7 @@ export function Hero() {
 
               {/* Tasty Burger - Main Hero Image */}
               <img
-                src="/products/CajasSE/cajaSE1.svg"
+                src="/graphics/slide1.svg"
                 alt="Our Signature Burgers"
                 className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
               />
