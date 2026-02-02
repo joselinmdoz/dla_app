@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, Xmark, MapPin, FastArrowRight } from "iconoir-react"
+import { Menu, Xmark, MapPin, FastArrowRight, User } from "iconoir-react"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -55,6 +55,13 @@ export function Header() {
               <MapPin className="w-5 h-5" />
               <span className="text-sm font-medium">Orlando</span>
             </div>
+            <Link
+              href="/login"
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
+            >
+              <User className="w-4 h-4" />
+              Iniciar Sesión
+            </Link>
           </nav>
 
           {/* Halal Badge */}
@@ -115,11 +122,13 @@ export function Header() {
                   <MapPin className="w-5 h-5" />
                   <span className="text-sm font-medium">Orlando</span>
                 </div>
-                <img
-                  src="/graphics/logo.svg"
-                  alt="100% Halal"
-                  className="h-10 w-auto"
-                />
+                <Link
+                  href="/login"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm"
+                >
+                  <User className="w-4 h-4" />
+                  Iniciar Sesión
+                </Link>
               </div>
             </div>
           </nav>

@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Usuario para autenticación
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+// Envío / Pedido
+model Shipment {
+  id          String      @id @default(cuid())
+  hbl         String      @unique // Número de guía HBL
+  clientId    String
+  client      Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  address     String
+  province    String
+  city        String?
+  type        ShipmentType @default(MARITIMO)
+  status      ShipmentStatus @default(PENDING)
+  price       Decimal     @db.Decimal(10, 2)
+  notes       String?
+  trackingUrl String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt()
+  
+  products    ShipmentProduct[]
+}
+
+enum ShipmentType {
+  MARITIMO
+  AEREO
+  TERRESTRE
+}
+
+enum ShipmentStatus {
+  PENDING
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}
+
+// Cliente
+model Client {
+  id          String    @id @default(cuid())
+  name        String
+  email       String    @unique
+  phone       String
+  address     String?
+  province    String?
+  city        String?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  
+  shipments   Shipment[]
+}
+
+// Categoría de productos (Cajas Super Express, Electrónicos, Motos)
+model Category {
+  id          String    @id @default(cuid())
+  name        String    // ej: "Cajas Super Express"
+  slug        String    @unique // ej: "cajas-super-express"
+  description String?
+  icon        String?   // Nombre del ícono a usar
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  
+  products    Product[]
+}
+
+// Producto individual
+model Product {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  price       Decimal   @db.Decimal(10, 2) // Precio de venta
+  costPrice   Decimal?  @db.Decimal(10, 2) // Precio de costo
+  image       String?
+  spiceLevel  Int       @default(0) // Nivel de picante
+  available   Boolean   @default(true)
+  sortOrder   Int       @default(0)
+  content     Json?     // Contenido de la caja como array de {item, quantity}
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  shipments   ShipmentProduct[]
+  
+  @@index([categoryId])
+}
+
+// Tabla de relación Shipment-Product (muchos a muchos)
+model ShipmentProduct {
+  id          String    @id @default(cuid())
+  shipmentId  String
+  productId   String
+  quantity    Int       @default(1)
+  unitPrice   Decimal   @db.Decimal(10, 2) // Precio al momento del envío
+  
+  shipment    Shipment  @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime  @default(now())
+  
+  @@index([shipmentId])
+  @@index([productId])
+}
