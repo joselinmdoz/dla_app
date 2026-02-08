@@ -25,28 +25,63 @@ enum Role {
 
 // Envío / Pedido
 model Shipment {
-  id          String      @id @default(cuid())
-  hbl         String      @unique // Número de guía HBL
-  clientId    String
-  client      Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  address     String
-  province    String
-  city        String?
-  type        ShipmentType @default(MARITIMO)
-  status      ShipmentStatus @default(PENDING)
-  price       Decimal     @db.Decimal(10, 2)
-  notes       String?
-  trackingUrl String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt()
+  id            String        @id @default(cuid())
+  hbl           String        @unique // Número de guía HBL
+  clientId      String
+  client        Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  address       String
+  city          String?
   
-  products    ShipmentProduct[]
+  // Relaciones con catálogos
+  shippingTypeId String?
+  shippingType   ShippingType? @relation(fields: [shippingTypeId], references: [id])
+  
+  cargoTypeId   String?
+  cargoType     CargoCatalog? @relation(fields: [cargoTypeId], references: [id])
+  
+  provinceId    String?
+  province      Province?     @relation(fields: [provinceId], references: [id])
+  
+  paymentMethodId String?
+  paymentMethod PaymentCatalog? @relation(fields: [paymentMethodId], references: [id])
+  
+  // Campos legacy para compatibilidad (opcional)
+  type          ShipmentType? @default(MARITIMO)
+  provinceText  String? // Antiguo campo de provincia como texto
+  
+  status        ShipmentStatus @default(PENDING)
+  price         Decimal       @db.Decimal(10, 2)
+  customsTax    Decimal?      @db.Decimal(10, 2) // Impuesto de aduanas
+  weight        Decimal?      @db.Decimal(10, 2) // Peso en libras
+  freeWeight    Decimal?      @db.Decimal(10, 2) // Peso gratis
+  discountAmount Decimal?     @db.Decimal(10, 2) // Descuento
+  collectedAmount Decimal?    @db.Decimal(10, 2) // Total cobrado
+  offerCode     String?       // Código de oferta
+  memo          String?       // Notas adicionales
+  trackingUrl   String?
+  
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt()
+  
+  products      ShipmentProduct[]
 }
 
 enum ShipmentType {
   MARITIMO
   AEREO
   TERRESTRE
+}
+
+enum CargoType {
+  MISCELANEA
+  DURADERO
+}
+
+enum PaymentMethod {
+  CASH
+  ZELLE
+  TARJETAS
+  TRANSFERENCIA
 }
 
 enum ShipmentStatus {
@@ -56,16 +91,75 @@ enum ShipmentStatus {
   CANCELLED
 }
 
-// Cliente
+// Tipo de envío (Marítimo, Aéreo, Terrestre)
+model ShippingType {
+  id          String    @id @default(cuid())
+  name        String    // ej: "Marítimo", "Aéreo"
+  code        String    @unique // ej: "MARITIMO", "AEREO"
+  description String?
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  
+  shipments   Shipment[]
+}
+
+// Catálogo de tipos de mercancía
+model CargoCatalog {
+  id          String    @id @default(cuid())
+  name        String    // ej: "Miscelánea", "Duradero"
+  code        String    @unique // ej: "MISCELANEA", "DURADERO"
+  description String?
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  
+  shipments   Shipment[]
+}
+
+// Provincia de destino (Cuba)
+model Province {
+  id          String    @id @default(cuid())
+  name        String    @unique // ej: "Habana", "Santiago de Cuba"
+  code        String?   // Código opcional
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  
+  shipments   Shipment[]
+  clients     Client[]
+}
+
+// Catálogo de métodos de pago
+model PaymentCatalog {
+  id          String    @id @default(cuid())
+  name        String    // ej: "Cash", "Zelle", "Tarjetas"
+  code        String    @unique // ej: "CASH", "ZELLE", "TARJETAS"
+  description String?
+  isActive    Boolean   @default(true)
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  
+  shipments   Shipment[]
+}
+
 model Client {
   id          String    @id @default(cuid())
   name        String
   email       String    @unique
   phone       String
   address     String?
-  province    String?
   city        String?
   notes       String?
+  
+  // Relación con provincia
+  provinceId  String?
+  province    Province?  @relation(fields: [provinceId], references: [id])
+  
+  // Campo legacy para compatibilidad
+  provinceText String?
+  
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
   
@@ -125,4 +219,17 @@ model ShipmentProduct {
   
   @@index([shipmentId])
   @@index([productId])
+}
+
+// Slides del carrusel del Hero
+model HeroSlide {
+  id          String    @id @default(cuid())
+  imageUrl    String    // URL de la imagen
+  altText     String    // Texto alternativo para accesibilidad
+  title       String?   // Título opcional
+  linkUrl     String?   // URL de destino si es clickeable
+  sortOrder   Int       @default(0) // Orden de aparición
+  isActive    Boolean   @default(true) // Si está activo o no
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
 }

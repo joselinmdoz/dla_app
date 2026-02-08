@@ -1,10 +1,22 @@
 "use client"
 
+import { useState, useEffect } from 'react'
 import { ArrowDown, FastArrowRight, Phone } from "iconoir-react"
 import Link from "next/link"
 import Image from "next/image"
+import { useHeroSlides } from '@/hooks/use-hero-slides'
+import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
 
 export function Hero() {
+  const { slides, currentSlide, isLoading, nextSlide, prevSlide, goToSlide } = useHeroSlides(5000)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+
+  const currentSlideData = slides[currentSlide]
+
+  const toggleAutoPlay = () => {
+    setIsAutoPlaying(!isAutoPlaying)
+  }
+
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-black">
       {/* Decorative Elements */}
@@ -16,96 +28,159 @@ export function Hero() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="text-center md:text-left order-2 md:order-1">
-        {/* Halal Badge */}
-        {/* <div className="inline-flex items-center gap-3 mb-6">
-          <img
-            src="/graphics/halal logo.svg"
-            alt="100% Halal Certified"
-            className="h-16 w-auto"
-          />
-        </div> */}
+            {/* Main Title */}
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-4">
+              <span className="text-primary">DLA</span>
+              <br />
+              <span className="text-foreground">Viajes y Envíos</span>
+            </h1>
 
-        {/* Main Title */}
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-4">
-          <span className="text-primary">DLA</span>
-          <br />
-          <span className="text-foreground">Viajes y Envíos</span>
-        </h1>
+            {/* Tagline */}
+            <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground font-light tracking-wide mb-8 max-w-2xl mx-auto">
+              Donde conectamos con tu destino
+            </p>
 
-        {/* Tagline */}
-        <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground font-light tracking-wide mb-8 max-w-2xl mx-auto">
-          Donde conectamos con tu destino
-        </p>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+              <a
+                href="https://wa.me/14076394011" target="_blank" rel="noopener noreferrer"
+                className="group flex items-center gap-3 px-8 py-4 bg-primary text-primary-foreground font-bold tracking-wider rounded-lg hover:bg-primary/90 transition-all shadow-2xl shadow-primary/50 w-full sm:w-auto justify-center"
+              >
+                <Phone className="w-5 h-5" />
+                +1 (407) 639-4011
+              </a>
+              <Link
+                href="https://www.solvebigtech.com/solvedc/tracking/dayready/"
+                className="group flex items-center gap-2 px-8 py-4 border-2 border-primary text-primary font-bold tracking-wider rounded-lg hover:bg-primary hover:text-primary-foreground transition-all w-full sm:w-auto justify-center"
+              >
+                Rastrear envío
+                <FastArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
 
-        {/* Description */}
-        {/* <p className="text-base sm:text-lg text-foreground/80 max-w-xl mx-auto mb-10 leading-relaxed">
-          Premium Halal Burger, knuspriges Fried Chicken und authentische Currywurst – direkt vom Foodtruck zu dir.
-        </p> */}
-
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-          <a
-            href="https://wa.me/14076394011" target="_blank" rel="noopener noreferrer"
-            className="group flex items-center gap-3 px-8 py-4 bg-primary text-primary-foreground font-bold tracking-wider rounded-lg hover:bg-primary/90 transition-all shadow-2xl shadow-primary/50 w-full sm:w-auto justify-center"
-          >
-            <Phone className="w-5 h-5" />
-            +1 (407) 639-4011
-          </a>
-          <Link
-            // href="#menu"
-            href="https://www.solvebigtech.com/solvedc/tracking/dayready/"
-            className="group flex items-center gap-2 px-8 py-4 border-2 border-primary text-primary font-bold tracking-wider rounded-lg hover:bg-primary hover:text-primary-foreground transition-all w-full sm:w-auto justify-center"
-          >
-          Rastrear envío
-            <FastArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
-
-        {/* Location Badge with Truck Icon - Large & Prominent */}
-        <div className="max-w-xl mx-auto mb-16 p-6 md:p-8 bg-primary/10 rounded-2xl border-2 border-primary/30 backdrop-blur-sm">
-          <div className="flex items-center justify-center gap-4 md:gap-6">
-            <img
-              src="/graphics/truck.svg"
-              alt="Food Truck"
-              className="h-16 w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
-            />
-            <div className="text-left">
-              <p className="text-primary font-black text-2xl md:text-3xl lg:text-4xl mb-1">Todos los días</p>
-              <p className="text-foreground font-bold text-base md:text-lg lg:text-xl">En 4913 S Orange ave Orlando FL 32806</p>
-              <p className="text-muted-foreground text-sm md:text-base mt-1">10:00AM - 6:00PM Uhr</p>
+            {/* Location Badge */}
+            <div className="max-w-xl mx-auto mb-16 p-6 md:p-8 bg-primary/10 rounded-2xl border-2 border-primary/30 backdrop-blur-sm">
+              <div className="flex items-center justify-center gap-4 md:gap-6">
+                <img
+                  src="/graphics/truck.svg"
+                  alt="Food Truck"
+                  className="h-16 w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
+                />
+                <div className="text-left">
+                  <p className="text-primary font-black text-2xl md:text-3xl lg:text-4xl mb-1">Todos los días</p>
+                  <p className="text-foreground font-bold text-base md:text-lg lg:text-xl">En 4913 S Orange ave Orlando FL 32806</p>
+                  <p className="text-muted-foreground text-sm md:text-base mt-1">10:00AM - 6:00PM Uhr</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Stats */}
-        {/* <div className="grid grid-cols-3 gap-4 md:gap-8 max-w-lg mx-auto md:mx-0">
-          <div className="text-center md:text-left">
-            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary">11+</p>
-            <p className="text-xs sm:text-sm text-muted-foreground tracking-wide">BURGER</p>
-          </div>
-          <div className="text-center md:text-left">
-            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary">10+</p>
-            <p className="text-xs sm:text-sm text-muted-foreground tracking-wide">DIPS</p>
-          </div>
-          <div className="text-center md:text-left">
-            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary">100%</p>
-            <p className="text-xs sm:text-sm text-muted-foreground tracking-wide">HALAL</p>
-          </div>
-        </div> */}
-          </div>
-
-          {/* Right Content - Hero Burger */}
+          {/* Right Content - Hero Carousel */}
           <div className="order-1 md:order-2 relative">
             <div className="relative w-full h-[400px] md:h-[600px] flex items-center justify-center">
               {/* Glow Effects */}
               <div className="absolute inset-0 bg-gradient-radial from-primary/20 via-transparent to-transparent animate-pulse" />
 
-              {/* Tasty Burger - Main Hero Image */}
-              <img
-                src="/graphics/slide1.svg"
-                alt="Our Signature Burgers"
-                className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
-              />
+              {/* Slides Container */}
+              <div className="relative w-full h-full">
+                {isLoading ? (
+                  // Loading skeleton
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+                  </div>
+                ) : slides.length === 0 ? (
+                  // Fallback image when no slides
+                  <div className="w-full h-full flex items-center justify-center">
+                    <img
+                      src="/graphics/slide1.svg"
+                      alt="DLA Viajes y Envíos"
+                      className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
+                    />
+                  </div>
+                ) : (
+                  // Carousel slides
+                  <>
+                    {slides.map((slide, index) => (
+                      <div
+                        key={slide.id}
+                        className={`absolute inset-0 transition-all duration-700 ease-in-out ${
+                          index === currentSlide
+                            ? 'opacity-100 scale-100 translate-x-0'
+                            : index === (currentSlide - 1 + slides.length) % slides.length
+                            ? 'opacity-0 scale-95 -translate-x-full'
+                            : 'opacity-0 scale-95 translate-x-full'
+                        }`}
+                      >
+                        {slide.linkUrl ? (
+                          <a href={slide.linkUrl} target="_blank" rel="noopener noreferrer">
+                            <img
+                              src={slide.imageUrl}
+                              alt={slide.altText}
+                              className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
+                            />
+                          </a>
+                        ) : (
+                          <img
+                            src={slide.imageUrl}
+                            alt={slide.altText}
+                            className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </>
+                )}
+              </div>
+
+              {/* Carousel Controls - Only show if there are multiple slides */}
+              {slides.length > 1 && (
+                <>
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={prevSlide}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/50 text-white hover:bg-primary transition-colors"
+                    aria-label="Slide anterior"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={nextSlide}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/50 text-white hover:bg-primary transition-colors"
+                    aria-label="Siguiente slide"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+
+                  {/* Dots Indicator */}
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+                    {slides.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => goToSlide(index)}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                          index === currentSlide
+                            ? 'bg-primary scale-110'
+                            : 'bg-white/50 hover:bg-white/80'
+                        }`}
+                        aria-label={`Ir a slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Auto-play Toggle */}
+                  {/* <button
+                    onClick={toggleAutoPlay}
+                    className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/50 text-white hover:bg-primary transition-colors"
+                    aria-label={isAutoPlaying ? 'Pausar autoplay' : 'Iniciar autoplay'}
+                  >
+                    {isAutoPlaying ? (
+                      <Pause className="w-5 h-5" />
+                    ) : (
+                      <Play className="w-5 h-5" />
+                    )}
+                  </button> */}
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -6,11 +6,69 @@ async function main() {
   console.log('🌱 Starting seed...')
 
   // Limpiar datos existentes
+  await prisma.shipmentProduct.deleteMany()
+  await prisma.shipment.deleteMany()
   await prisma.product.deleteMany()
   await prisma.category.deleteMany()
+  await prisma.shippingType.deleteMany()
+  await prisma.cargoCatalog.deleteMany()
+  await prisma.province.deleteMany()
+  await prisma.paymentCatalog.deleteMany()
+  await prisma.client.deleteMany()
+
+  // Crear ShippingTypes
+  console.log('🚢 Creating shipping types...')
+  await prisma.shippingType.createMany({
+    data: [
+      { name: 'Marítimo', code: 'MARITIMO', sortOrder: 1 },
+      { name: 'Aéreo', code: 'AEREO', sortOrder: 2 },
+      { name: 'Terrestre', code: 'TERRESTRE', sortOrder: 3 },
+    ]
+  })
+
+  // Crear CargoCatalog
+  console.log('📦 Creating cargo types...')
+  await prisma.cargoCatalog.createMany({
+    data: [
+      { name: 'Miscelánea', code: 'MISCELANEA', sortOrder: 1 },
+      { name: 'Duradero', code: 'DURADERO', sortOrder: 2 },
+    ]
+  })
+
+  // Crear Provinces (Cuba)
+  console.log('🗺️ Creating provinces...')
+  await prisma.province.createMany({
+    data: [
+      { name: 'Pinar del Río', code: 'PR', sortOrder: 1 },
+      { name: 'Artemisa', code: 'AR', sortOrder: 2 },
+      { name: 'La Habana', code: 'LH', sortOrder: 3 },
+      { name: 'Mayabeque', code: 'MJ', sortOrder: 4 },
+      { name: 'Matanzas', code: 'MT', sortOrder: 5 },
+      { name: 'Cienfuegos', code: 'CF', sortOrder: 6 },
+      { name: 'Villa Clara', code: 'VC', sortOrder: 7 },
+      { name: 'San Antonio de los Baños', code: 'SB', sortOrder: 8 },
+      { name: 'Camagüey', code: 'CM', sortOrder: 9 },
+      { name: 'Las Tunas', code: 'LT', sortOrder: 10 },
+      { name: 'Holguín', code: 'HG', sortOrder: 11 },
+      { name: 'Granma', code: 'GR', sortOrder: 12 },
+      { name: 'Santiago de Cuba', code: 'SC', sortOrder: 13 },
+      { name: 'Guantánamo', code: 'GT', sortOrder: 14 },
+    ]
+  })
+
+  // Crear PaymentCatalog
+  console.log('💳 Creating payment methods...')
+  await prisma.paymentCatalog.createMany({
+    data: [
+      { name: 'Cash', code: 'CASH', sortOrder: 1 },
+      { name: 'Zelle', code: 'ZELLE', sortOrder: 2 },
+      { name: 'Tarjetas', code: 'TARJETAS', sortOrder: 3 },
+      { name: 'Transferencia', code: 'TRANSFERENCIA', sortOrder: 4 },
+    ]
+  })
 
   // Crear categorías
-  console.log('📦 Creating categories...')
+  console.log('🏷️ Creating categories...')
   const categoryBeef = await prisma.category.create({
     data: {
       name: 'Cajas Super Express',

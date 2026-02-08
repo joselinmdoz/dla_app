@@ -18,6 +18,7 @@ services:
     container_name: next_app
     restart: unless-stopped
     networks:
+      - proxy
       - app_network
     expose:
       - "3000"
@@ -25,6 +26,8 @@ services:
       - postgres
 
 networks:
+  proxy:
+    external: true
   app_network:
     driver: bridge
 

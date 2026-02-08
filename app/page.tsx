@@ -12,16 +12,16 @@ export default function Home() {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Restaurant",
-        "@id": "https://foodiewagon.de/#restaurant",
-        "name": "The Foodie Wagon",
+        "@type": "Agencia",
+        "@id": "https://dlaenvios.com/#restaurant",
+        "name": "DLA Viajes y envíos",
         "description": "Premium Halal Burger Food Truck in Ingolstadt - Hausgemachte Beef Patties, Fried Chicken, Currywurst und authentisches Street Food",
-        "url": "https://foodiewagon.de",
+        "url": "https://dlaenvios.com",
         "telephone": "+49-XXX-XXXXXXX",
         "servesCuisine": ["Burger", "Halal", "Street Food", "Fast Food", "American", "German"],
         "priceRange": "€€",
-        "image": "https://foodiewagon.de/graphics/web comida.svg",
-        "logo": "https://foodiewagon.de/graphics/fooiewagen logo.svg",
+        "image": "https://dlaenvios.com/graphics/web comida.svg",
+        "logo": "https://dlaenvios.com/graphics/fooiewagen logo.svg",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Ingolstadt",
@@ -46,8 +46,8 @@ export default function Home() {
       },
       {
         "@type": "FoodEstablishment",
-        "@id": "https://foodiewagon.de/#foodestablishment",
-        "name": "The Foodie Wagon",
+        "@id": "https://dlaenvios.com/#foodestablishment",
+        "name": "DLA Viajes y envíos",
         "hasMenu": {
           "@type": "Menu",
           "hasMenuSection": [
@@ -121,8 +121,8 @@ export default function Home() {
       },
       {
         "@type": "LocalBusiness",
-        "@id": "https://foodiewagon.de/#localbusiness",
-        "name": "The Foodie Wagon",
+        "@id": "https://dlaenvios.com/#localbusiness",
+        "name": "DLA Viajes y envíos",
         "description": "Mobile Food Truck für Halal Burger und Street Food in Ingolstadt",
         "slogan": "Donde conectamos con tu destino",
         "hasCredential": {
@@ -133,12 +133,12 @@ export default function Home() {
       },
       {
         "@type": "WebSite",
-        "@id": "https://foodiewagon.de/#website",
-        "url": "https://foodiewagon.de",
-        "name": "The Foodie Wagon",
+        "@id": "https://dlaenvios.com/#website",
+        "url": "https://dlaenvios.com",
+        "name": "DLA Viajes y envíos",
         "description": "Premium Halal Burgers & Street Food in Ingolstadt",
         "publisher": {
-          "@id": "https://foodiewagon.de/#restaurant"
+          "@id": "https://dlaenvios.com/#restaurant"
         },
         "inLanguage": "de-DE"
       }

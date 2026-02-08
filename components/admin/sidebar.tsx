@@ -15,11 +15,17 @@ import {
   X,
   Truck,
   LogOut,
+  FileSpreadsheet,
+  Database,
+  Image,
 } from "lucide-react"
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { label: "Slides Carrusel", href: "/admin/hero-slides", icon: Image },
   { label: "Envíos", href: "/admin/shipments", icon: Truck },
+  { label: "Gestión Datos", href: "/admin/data", icon: Database },
+  { label: "Importar/Exportar", href: "/admin/import", icon: FileSpreadsheet },
   { label: "Productos", href: "/admin/products", icon: ShoppingCart },
   { label: "Categorías", href: "/admin/categories", icon: Folder },
   { label: "Clientes", href: "/admin/clients", icon: Users },

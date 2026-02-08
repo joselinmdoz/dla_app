@@ -42,7 +42,7 @@ export default function AdminDashboard() {
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="text-muted-foreground mt-1">
-          Bienvenido al panel de administración de Foodie Wagon
+          Bienvenido al panel de administración de DLA
         </p>
       </div>
 

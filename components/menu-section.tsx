@@ -7,7 +7,7 @@ import { BoxIcon } from "lucide-react"
 import { ElectronicsChip, Cycling } from "iconoir-react"
 
 export function MenuSection() {
-  const [activeCategory, setActiveCategory] = useState<string>("all")
+  const [activeCategory, setActiveCategory] = useState<string>("beef")
   const { products, loading, error } = useProducts(activeCategory === "all" ? undefined : activeCategory)
   const { categories, loading: loadingCategories } = useCategories()
 

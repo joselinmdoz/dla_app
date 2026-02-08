@@ -1,7 +1,7 @@
 {
-  "name": "The Foodie Wagon",
-  "short_name": "Foodie Wagon",
-  "description": "Premium Halal Burgers & Fried Chicken in Ingolstadt",
+  "name": "DLA Viajes y envíos",
+  "short_name": "DLA",
+  "description": "Agencia de viajes y envíos.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1a1a1a",
