@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes)
 
     // Crear directorio si no existe
-    const uploadDir = path.join(process.cwd(), 'public', 'graphics', 'slides')
+    const uploadDir = path.join(process.cwd(), 'public', 'graphics')
     await mkdir(uploadDir, { recursive: true })
 
     // Guardar el archivo
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     await writeFile(filePath, buffer)
 
     // Devolver la URL pública
-    const publicUrl = `/graphics/slides/${fileName}`
+    const publicUrl = `/graphics/${fileName}`
     
     return NextResponse.json({ 
       url: publicUrl,
