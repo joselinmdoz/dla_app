@@ -114,14 +114,14 @@ export function Hero() {
                         {slide.linkUrl ? (
                           <a href={slide.linkUrl} target="_blank" rel="noopener noreferrer">
                             <img
-                              src={slide.imageUrl}
+                              src={`/api/hero-slides/${slide.id}/serve`}
                               alt={slide.altText}
                               className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
                             />
                           </a>
                         ) : (
                           <img
-                            src={slide.imageUrl}
+                            src={`/api/hero-slides/${slide.id}/serve`}
                             alt={slide.altText}
                             className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
                           />

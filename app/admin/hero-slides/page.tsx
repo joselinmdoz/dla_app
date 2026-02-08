@@ -168,7 +168,7 @@ export default function HeroSlidesAdmin() {
             <div className="relative aspect-video bg-muted">
               {slide.imageUrl ? (
                 <Image
-                  src={slide.imageUrl}
+                  src={`/api/hero-slides/${slide.id}/serve`}
                   alt={slide.altText}
                   fill
                   className="object-cover"
@@ -258,7 +258,7 @@ export default function HeroSlidesAdmin() {
                 <ImageUploadZone
                   onImageSelect={handleImageSelect}
                   selectedImage={selectedImageFile}
-                  imageUrl={editingSlide?.imageUrl || ''}
+                  imageUrl={editingSlide ? `/api/hero-slides/${editingSlide.id}/serve` : ''}
                   onClear={handleClearImage}
                   maxSize={5 * 1024 * 1024} // 5MB para imágenes
                 />
