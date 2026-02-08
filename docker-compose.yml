@@ -24,6 +24,8 @@ services:
       - "3000"
     depends_on:
       - postgres
+    volumes:
+      - ./public/graphics:/app/public/graphics
 
 networks:
   proxy:
