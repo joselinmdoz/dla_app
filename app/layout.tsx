@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: '%s | DLA Viajes y envíos'
   },
   description:
-    "DLA Viajes y envíos",
+    "Entdecke DLA Viajes y envíos - Dein Food Truck für premium hausgemachte Halal Burger, knuspriges Fried Chicken, Currywurst und authentisches Street Food in Ingolstadt. 100% Halal zertifiziert. Jetzt bestellen!",
   keywords: [
     "foodie wagon",
     "food truck ingolstadt",
