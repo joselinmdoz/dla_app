@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16
-    container_name: foodie_wagon_db
+    container_name: postgres_dla_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -12,20 +12,50 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  next_app:
-    build: .
-    container_name: next_app
+  # Servicio de desarrollo con hot reload
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: dla_app_dev
     restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/dla_db?schema=public
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
     networks:
+      - app_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Servicio de producción
+  prod:
+    build: .
+    container_name: dla_app_prod
+    restart: unless-stopped
+    ports:
+      - "3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/dla_db?schema=public
+    networks: 
       - proxy
       - app_network
-    expose:
-      - "3000"
     depends_on:
-      - postgres
-    volumes:
-      - ./public/graphics:/app/public/graphics
+      postgres:
+        condition: service_healthy
 
 networks:
   proxy:

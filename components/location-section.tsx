@@ -12,7 +12,7 @@ export function LocationSection() {
               alt="Food Truck"
               className="h-16 w-16 object-contain"
             />
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight">ORLANDO</h2>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight">ORLANDO1</h2>
             <img
               src="/graphics/truck.svg"
               alt="Food Truck"
@@ -80,7 +80,7 @@ export function LocationSection() {
             <div className="p-6 bg-primary/10 border border-primary/30 rounded-xl">
               <h4 className="text-xl font-bold text-primary mb-2">Recogémos su paquete en la puerta de su casa</h4>
               <p className="text-foreground">
-               Obtenga servicio de recogida gratuito para sus envíos y disfrute de la comodidad de enviar desde su hogar.
+               Obtenga servicio de recogida para sus envíos y disfrute de la comodidad de enviar desde su hogar.
               </p>
             </div>
           </div>
