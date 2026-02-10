@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Instagram, Phone, Mail, MapPin, Whatsapp } from "iconoir-react"
+import { Instagram, Phone, Mail, MapPin, Whatsapp, Facebook, Tiktok } from "iconoir-react"
 
 export function Footer() {
   return (
@@ -99,13 +99,31 @@ export function Footer() {
                 className="h-10 md:h-12 w-auto"
               /> */}
               <a
-                href="https://www.instagram.com/thefoodiewagon"
+                href="https://www.facebook.com/share/17so3zSUeL/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-foreground hover:text-primary hover:bg-secondary/80 transition-all"
+                aria-label="Facebook - DLA"
+              >
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a
+                href="https://www.instagram.com/dlaviajesyenvios?igsh=MWZzeWRmaTljYTYyZg==&utm_source=ig_contact_invite
+"                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-foreground hover:text-primary hover:bg-secondary/80 transition-all"
+                aria-label="Instagram - DLA"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a
+                href="https://www.tiktok.com/@dla.viajes.y.envi?_r=1&_t=ZP-93ff0dcsaTu"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-foreground hover:text-primary hover:bg-secondary/80 transition-all"
                 aria-label="Whatsapp"
               >
-                <Whatsapp className="w-5 h-5" />
+                <Tiktok className="w-5 h-5" />
               </a>
             </div>
           </div>

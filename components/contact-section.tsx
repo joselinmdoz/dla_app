@@ -19,7 +19,7 @@ export function ContactSection() {
               <Phone className="w-8 h-8 text-primary-foreground" />
             </div>
             <div>
-              <p className="text-muted-foreground text-sm mb-2">Telefon</p>
+              <p className="text-muted-foreground text-sm mb-2">Teléfono</p>
               <a
                 href="https://wa.me/14076394011" target="_blank" rel="noopener noreferrer"
                 className="text-2xl md:text-3xl font-black text-primary hover:text-primary/80 transition-colors"

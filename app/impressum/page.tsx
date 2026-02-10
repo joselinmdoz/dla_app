@@ -60,7 +60,7 @@ export default function ImpressumPage() {
               <h2 className="text-2xl font-bold text-foreground mb-4">Contáctenos</h2>
               <div className="space-y-2 text-muted-foreground">
                 <p>
-                  <strong className="text-foreground">Telefon:</strong>{" "}
+                  <strong className="text-foreground">Teléfono:</strong>{" "}
                   <a href="https://wa.me/14076394011" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                     +1 (407) 639-4011
                   </a>

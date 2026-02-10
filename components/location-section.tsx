@@ -33,7 +33,15 @@ export function LocationSection() {
               <div className="relative">
                 <div className="absolute -inset-4 bg-accent/30 rounded-full animate-ping" />
                 <div className="relative w-12 h-12 bg-accent rounded-full flex items-center justify-center">
+                 <a
+                href="https://share.google/6E5rfOKnE4ZSqUA36"
+                target="_blank"
+                rel="noopener noreferrer"
+             
+                aria-label="Google"
+                 >
                   <MapPin className="w-6 h-6 text-accent-foreground" />
+                  </a>
                 </div>
               </div>
             </div>
@@ -45,7 +53,15 @@ export function LocationSection() {
             <div className="p-8 bg-card border border-border rounded-2xl">
               <div className="flex items-start gap-4 mb-6">
                 <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center flex-shrink-0">
+                <a
+                href="https://share.google/6E5rfOKnE4ZSqUA36"
+                target="_blank"
+                rel="noopener noreferrer"
+             
+                aria-label="Google"
+                 >
                   <MapPin className="w-6 h-6 text-accent-foreground" />
+                </a>  
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-foreground mb-2">Orlando</h3>

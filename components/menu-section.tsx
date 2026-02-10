@@ -77,7 +77,7 @@ export function MenuSection() {
 
   // Combine default "all" with API categories
   const allCategories = [
-    { id: "all", name: "Todos", slug: "all" },
+   // { id: "all", name: "Todos", slug: "all" },
     ...categories
   ]
 
