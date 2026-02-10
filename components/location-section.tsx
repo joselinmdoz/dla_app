@@ -12,7 +12,7 @@ export function LocationSection() {
               alt="Food Truck"
               className="h-16 w-16 object-contain"
             />
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight">ORLANDO1</h2>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight">ORLANDO</h2>
             <img
               src="/graphics/truck.svg"
               alt="Food Truck"
