@@ -69,7 +69,7 @@ export function Hero() {
                 <div className="text-left">
                   <p className="text-primary font-black text-2xl md:text-3xl lg:text-4xl mb-1">Todos los días</p>
                   <p className="text-foreground font-bold text-base md:text-lg lg:text-xl">En 4913 S Orange ave Orlando FL 32806</p>
-                  <p className="text-muted-foreground text-sm md:text-base mt-1">10:00AM - 6:00PM Uhr</p>
+                  <p className="text-muted-foreground text-sm md:text-base mt-1">10:00AM - 6:00PM</p>
                 </div>
               </div>
             </div>

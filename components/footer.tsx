@@ -3,7 +3,7 @@ import { Instagram, Phone, Mail, MapPin, Whatsapp, Facebook, Tiktok } from "icon
 
 export function Footer() {
   return (
-    <footer className="py-12 bg-background border-t border-border">
+    <footer className="py-12 pb-24 md:pb-12 bg-background border-t border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {/* Brand */}
@@ -92,7 +92,7 @@ export function Footer() {
                 Términos y condiciones
               </Link>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center justify-center md:justify-end gap-4 mt-4 md:mt-0">
               {/* <img
                 src="/graphics/halal logo.svg"
                 alt="100% Halal Certified"
@@ -105,25 +105,34 @@ export function Footer() {
                 className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-foreground hover:text-primary hover:bg-secondary/80 transition-all"
                 aria-label="Facebook - DLA"
               >
-                <Facebook className="w-5 h-5" />
+                <svg width="1.5em" height="1.5em" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor" className="w-5 h-5">
+                  <path d="M17 2H14C12.6739 2 11.4021 2.52678 10.4645 3.46447C9.52678 4.40215 9 5.67392 9 7V10H6V14H9V22H13V14H16L17 10H13V7C13 6.73478 13.1054 6.48043 13.2929 6.29289C13.4804 6.10536 13.7348 6 14 6H17V2Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"></path>
+                </svg>
               </a>
               <a
-                href="https://www.instagram.com/dlaviajesyenvios?igsh=MWZzeWRmaTljYTYyZg==&utm_source=ig_contact_invite
-"                target="_blank"
+                href="https://www.instagram.com/dlaviajesyenvios?igsh=MWZzeWRmaTljYTYyZg==&utm_source=ig_contact_invite"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-foreground hover:text-primary hover:bg-secondary/80 transition-all"
                 aria-label="Instagram - DLA"
               >
-                <Instagram className="w-5 h-5" />
+                <svg width="1.5em" height="1.5em" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor" className="w-5 h-5">
+                  <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"></path>
+                  <path d="M3 16V8C3 5.23858 5.23858 3 8 3H16C18.7614 3 21 5.23858 21 8V16C21 18.7614 18.7614 21 16 21H8C5.23858 21 3 18.7614 3 16Z" stroke="currentColor"></path>
+                  <path d="M17.5 6.51L17.51 6.49889" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"></path>
+                </svg>
               </a>
               <a
                 href="https://www.tiktok.com/@dla.viajes.y.envi?_r=1&_t=ZP-93ff0dcsaTu"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-foreground hover:text-primary hover:bg-secondary/80 transition-all"
-                aria-label="Whatsapp"
+                aria-label="TikTok - DLA"
               >
-                <Tiktok className="w-5 h-5" />
+                <svg width="1.5em" height="1.5em" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor" className="w-5 h-5">
+                  <path d="M21 8V16C21 18.7614 18.7614 21 16 21H8C5.23858 21 3 18.7614 3 16V8C3 5.23858 5.23858 3 8 3H16C18.7614 3 21 5.23858 21 8Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"></path>
+                  <path d="M10 12C8.34315 12 7 13.3431 7 15C7 16.6569 8.34315 18 10 18C11.6569 18 13 16.6569 13 15V6C13.3333 7 14.6 9 17 9" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"></path>
+                </svg>
               </a>
             </div>
           </div>

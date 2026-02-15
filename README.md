@@ -332,7 +332,7 @@ We cater for private events, parties, and festivals! Contact us for custom quote
 ### Visit Us
 📍 **Every Saturday**
 - **Location:** 4913 S Orange ave Orlando FL 32806
-- **Hours:** 11:00 - 20:00 Uhr
+- **Hours:** 11:00 - 20:00 
 
 ---
 

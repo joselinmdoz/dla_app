@@ -87,7 +87,7 @@ export function LocationSection() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-foreground mb-2">Horario</h3>
-                  <p className="text-muted-foreground">10:00AM - 6:00PM Uhr</p>
+                  <p className="text-muted-foreground">10:00AM - 6:00PM</p>
                 </div>
               </div>
             </div>

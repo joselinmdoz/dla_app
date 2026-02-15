@@ -1,5 +1,5 @@
 # ---------- deps ----------
-FROM node:20-alpine AS deps
+FROM docker.m.daocloud.io/node:20-alpine AS deps
 WORKDIR /app
 
 # Instalar dependencias necesarias para Prisma
@@ -11,7 +11,7 @@ COPY prisma ./prisma/
 RUN npm install
 
 # ---------- build ----------
-FROM node:20-alpine AS build
+FROM docker.m.daocloud.io/node:20-alpine AS build
 WORKDIR /app
 
 # Instalar dependencias para build
@@ -23,7 +23,7 @@ COPY . .
 RUN npm run build
 
 # ---------- runner ----------
-FROM node:20-alpine AS runner
+FROM docker.m.daocloud.io/node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 

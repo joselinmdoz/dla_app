@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, Xmark, MapPin, FastArrowRight, User } from "iconoir-react"
+import { Menu, Xmark, MapPin, FastArrowRight, User, Facebook, Instagram, Tiktok } from "iconoir-react"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -122,6 +122,38 @@ export function Header() {
                   <MapPin className="w-5 h-5" />
                   <span className="text-sm font-medium">Orlando</span>
                 </div>
+                <div className="flex items-center gap-3">
+                  <a
+                    href="https://www.facebook.com/share/17so3zSUeL/?mibextid=wwXIfr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 text-foreground hover:text-primary transition-colors"
+                    aria-label="Facebook"
+                  >
+                    <Facebook className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="https://www.instagram.com/dlaviajesyenvios?igsh=MWZzeWRmaTljYTYyZg==&utm_source=ig_contact_invite"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 text-foreground hover:text-primary transition-colors"
+                    aria-label="Instagram"
+                  >
+                    <Instagram className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="https://www.tiktok.com/@dla.viajes.y.envi?_r=1&_t=ZP-93ff0dcsaTu"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 text-foreground hover:text-primary transition-colors"
+                    aria-label="TikTok"
+                  >
+                    <Tiktok className="w-5 h-5" />
+                  </a>
+                </div>
+              </div>
+              <div className="flex items-center justify-between pt-2">
+                <div></div>
                 <Link
                   href="/login"
                   className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm"

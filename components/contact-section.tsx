@@ -53,7 +53,7 @@ export function ContactSection() {
               <Whatsapp className="w-8 h-8 text-primary-foreground" />
             </div>
             <div>
-              <p className="text-muted-foreground text-sm mb-2">Whatsapp</p>
+              <p className="text-muted-foreground text-sm mb-2">WhatsApp</p>
               <a
                 href="https://wa.me/14076394011"
                 target="_blank"
@@ -63,7 +63,7 @@ export function ContactSection() {
                 https://wa.me/14076394011
               </a>
             </div>
-            <p className="text-sm text-muted-foreground">Síguenos en Whatsapp</p>
+            <p className="text-sm text-muted-foreground">Síguenos en WhatsApp</p>
           </div>
         </div>
 

@@ -1,0 +1,27 @@
+# Desarrollo - Dockerfile
+# Usar mirror de Docker para evitar problemas de conexión
+FROM docker.m.daocloud.io/node:20-alpine
+
+WORKDIR /app
+
+# Instalar dependencias necesarias para Prisma
+RUN apk add --no-cache openssl openssl-dev
+
+# Copiar package files
+COPY package*.json ./
+COPY prisma ./prisma/
+
+# Instalar dependencias
+RUN npm install
+
+# Copiar código fuente
+COPY . .
+
+# Generar Prisma Client
+RUN npx prisma generate
+
+# Exponer puerto
+EXPOSE 3000
+
+# Comando para desarrollo con hot reload
+CMD ["npm", "run", "dev"]
