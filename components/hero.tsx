@@ -67,9 +67,11 @@ export function Hero() {
                   className="h-16 w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
                 />
                 <div className="text-left">
-                  <p className="text-primary font-black text-2xl md:text-3xl lg:text-4xl mb-1">Todos los días</p>
+                  <p className="text-primary font-black text-2xl md:text-3xl lg:text-4xl mb-1">De Lunes a Sábado</p>
                   <p className="text-foreground font-bold text-base md:text-lg lg:text-xl">En 4913 S Orange ave Orlando FL 32806</p>
-                  <p className="text-muted-foreground text-sm md:text-base mt-1">10:00AM - 6:00PM</p>
+                 <p className="text-muted-foreground text-sm md:text-base mt-1" >🗓 Lunes a Viernes: 10:00 a.m. – 6:00 p.m.</p>
+                 <p className="text-muted-foreground text-sm md:text-base mt-1">🗓 Sábados: 10:00 a.m. – 2:00 p.m.</p>
+                  {/* <p className="text-muted-foreground text-sm md:text-base mt-1">10:00AM - 6:00PM</p> */}
                 </div>
               </div>
             </div>

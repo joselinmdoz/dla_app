@@ -233,3 +233,25 @@ model HeroSlide {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
 }
+
+// Tarjetas de características/información
+model FeatureCard {
+  id          String    @id @default(cuid())
+  imageUrl    String    // URL de la imagen principal
+  altText     String    // Texto alternativo para accesibilidad
+  title       String?   // Título de la tarjeta
+  description String?   // Descripción/opción de la tarjeta
+  linkUrl     String?   // URL de destino si es clickeable
+  sortOrder   Int       @default(0) // Orden de aparición
+  isActive    Boolean   @default(true) // Si está activo o no
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+}
+
+// Configuración general del sitio
+model SiteSettings {
+  id                    String   @id @default(cuid())
+  key                   String   @unique // Clave de configuración
+  value                 String   // Valor de la configuración
+  updatedAt             DateTime @updatedAt()
+}

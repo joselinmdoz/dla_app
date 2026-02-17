@@ -76,7 +76,7 @@ export function LocationSection() {
                   <Calendar className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-foreground mb-2">Todos los días!</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-2">De Lunes a Sábado!</h3>
                   <p className="text-muted-foreground">Visítenos con frecuencia para que tu destino y tu paquete encuentren el mejor camino.</p>
                 </div>
               </div>
@@ -86,9 +86,11 @@ export function LocationSection() {
                   <Clock className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-foreground mb-2">Horario</h3>
-                  <p className="text-muted-foreground">10:00AM - 6:00PM</p>
-                </div>
+              <h3 className="text-xl font-bold text-foreground mb-2">Horario</h3>
+              <p className="text-muted-foreground">🗓 Lunes a Viernes: 10:00 a.m. – 6:00 p.m.</p>
+              <p className="text-muted-foreground">🗓 Sábados: 10:00 a.m. – 2:00 p.m.</p>
+              <p className="text-muted-foreground mt-2 text-sm">📌 Para su mayor comodidad, ofrecemos atención fuera de horario con cita previa hasta las 9:00</p>
+            </div>
               </div>
             </div>
 

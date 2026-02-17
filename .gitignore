@@ -4,3 +4,7 @@ next-env.d.ts
 Menu/
 Veggi Burgers/
 siterefs/
+.env
+.env.docker
+Dockerfile
+Dockerfile.dev

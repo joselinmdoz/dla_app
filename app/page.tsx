@@ -1,5 +1,6 @@
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
+import { FeatureCards } from "@/components/feature-cards"
 import { MenuSection } from "@/components/menu-section"
 import { LocationSection } from "@/components/location-section"
 import { ContactSection } from "@/components/contact-section"
@@ -154,6 +155,7 @@ export default function Home() {
       <main className="min-h-screen bg-background">
         <Header />
         <Hero />
+        <FeatureCards />
         <MenuSection />
         <LocationSection />
         <ContactSection />
