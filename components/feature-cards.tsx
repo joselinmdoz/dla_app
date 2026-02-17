@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Star } from 'lucide-react'
+import { Car } from 'iconoir-react'
 
 interface FeatureCard {
   id: string
@@ -87,16 +88,16 @@ export function FeatureCards() {
         {/* Section Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full mb-4">
-            <Star className="w-4 h-4 text-primary fill-primary" />
-            <span className="text-sm font-medium text-primary">Ofertas Especiales</span>
+            <Car className="w-4 h-4 text-primary fill-primary" />
+            <span className="text-sm font-medium text-primary">Ofertas de servicio</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
-            Descubre Nuestras
-            <span className="text-primary block mt-1">Promociones</span>
+            Descubre Nuestros
+            <span className="text-primary block mt-1">Servicios</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explora nuestras ofertas exclusivas y aprovecha los mejores precios
-          </p>
+          {/* <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Explora nuestros ofertas exclusivas y aprovecha los mejores precios
+          </p> */}
         </div>
 
         {/* Cards Grid - Simple */}
