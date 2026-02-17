@@ -209,7 +209,7 @@ export default function FeatureCardsAdmin() {
               <div className="relative aspect-video">
                 {card.imageUrl ? (
                   <img
-                    src={card.imageUrl}
+                    src={`/api/feature-cards/${card.id}/serve`}
                     alt={card.altText}
                     className="w-full h-full object-cover rounded-t-lg"
                   />
@@ -270,7 +270,7 @@ export default function FeatureCardsAdmin() {
               <ImageUploadZone
                 onImageSelect={handleImageSelect}
                 selectedImage={selectedImage}
-                imageUrl={formData.imageUrl}
+                imageUrl={editingCard ? `/api/feature-cards/${editingCard.id}/serve` : formData.imageUrl}
                 onClear={handleClearImage}
               />
             </div>
