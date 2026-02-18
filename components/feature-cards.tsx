@@ -108,7 +108,7 @@ export function FeatureCards() {
                 key={card.id}
                 src={`/api/feature-cards/${card.id}/serve`}
                 alt={card.altText || card.title || 'Imagen de oferta'}
-                className="w-full md:w-[500px] h-96 rounded-2xl drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] transition-transform duration-300 hover:scale-105 cursor-pointer"
+                className="w-full md:w-[500px] rounded-2xl drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] transition-transform duration-300 hover:scale-105 cursor-pointer"
                 style={{ objectFit: 'fill' }}
               />
             ) : null
