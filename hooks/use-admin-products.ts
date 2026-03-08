@@ -7,6 +7,15 @@ export interface ContentItem {
   quantity: string
 }
 
+export interface ProductDetailContent {
+  boxItems?: ContentItem[]
+  features?: string[]
+  includes?: ContentItem[]
+  deliveryTime?: string
+  rating?: number
+  reviews?: number
+}
+
 export interface Product {
   id: string
   name: string
@@ -15,9 +24,10 @@ export interface Product {
   price: number
   costPrice: number | null
   image: string | null
+  spiceLevel: number
   available: boolean
   sortOrder: number
-  content: ContentItem[] | null
+  content: ContentItem[] | ProductDetailContent | null
   categoryId: string
   category?: { id: string; name: string }
   createdAt: string

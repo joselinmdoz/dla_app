@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Star } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Car } from 'iconoir-react'
+import { useLandingContent } from "@/hooks/use-landing-content"
 
 interface FeatureCard {
   id: string
@@ -17,50 +18,42 @@ interface FeatureCard {
 }
 
 export function FeatureCards() {
+  const { content, isSectionEnabled, isLoading: isContentLoading } = useLandingContent()
   const [cards, setCards] = useState<FeatureCard[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const featureCardsEnabled = isSectionEnabled("featureCardsEnabled")
 
   useEffect(() => {
     async function fetchCards() {
       try {
-        // Verificar settings primero
-        const settingsResponse = await fetch('/api/site-settings')
-        
-        if (settingsResponse.ok) {
-          const settingsData = await settingsResponse.json()
-          
-          let featureCardsEnabled = true
-          if (Array.isArray(settingsData)) {
-            const setting = settingsData.find((s: { key: string }) => s.key === 'featureCardsEnabled')
-            featureCardsEnabled = setting ? setting.value === 'true' : true
-          } else if (typeof settingsData === 'object' && settingsData !== null) {
-            featureCardsEnabled = settingsData.featureCardsEnabled !== 'false'
-          }
-          
-          if (!featureCardsEnabled) {
-            setCards([])
-            setIsLoading(false)
-            return
-          }
+        if (isContentLoading) return
+
+        if (!featureCardsEnabled) {
+          setCards([])
+          setIsLoading(false)
+          return
         }
-        
+
         const response = await fetch('/api/feature-cards')
         if (!response.ok) {
-          throw new Error('Error al cargar las tarjetas')
+          setCards([])
+          setError(null)
+          return
         }
         const data = await response.json()
-        setCards(data)
-      } catch (err) {
-        console.error('Error fetching feature cards:', err)
-        setError('Error al cargar las tarjetas')
+        setCards(Array.isArray(data) ? data : [])
+        setError(null)
+      } catch {
+        setCards([])
+        setError(null)
       } finally {
         setIsLoading(false)
       }
     }
 
     fetchCards()
-  }, [])
+  }, [featureCardsEnabled, isContentLoading])
 
   if (isLoading) {
     return (
@@ -76,7 +69,7 @@ export function FeatureCards() {
     )
   }
 
-  if (error || cards.length === 0) {
+  if (error || cards.length === 0 || !featureCardsEnabled) {
     return null
   }
 
@@ -89,11 +82,11 @@ export function FeatureCards() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full mb-4">
             <Car className="w-4 h-4 text-primary fill-primary" />
-            <span className="text-sm font-medium text-primary">Ofertas de servicio</span>
+            <span className="text-sm font-medium text-primary">{content.featureCards.badgeText}</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
-            Descubre Nuestros
-            <span className="text-primary block mt-1">Servicios</span>
+            {content.featureCards.titleLine1}
+            <span className="text-primary block mt-1">{content.featureCards.titleLine2}</span>
           </h2>
           {/* <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Explora nuestros ofertas exclusivas y aprovecha los mejores precios

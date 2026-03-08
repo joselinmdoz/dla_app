@@ -3,9 +3,17 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Menu, Xmark, MapPin, FastArrowRight, User, Facebook, Instagram, Tiktok } from "iconoir-react"
+import { useLandingContent } from "@/hooks/use-landing-content"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const { content, isSectionEnabled } = useLandingContent()
+  const { business, header } = content
+  const headerEnabled = isSectionEnabled("headerSectionEnabled")
+
+  if (!headerEnabled) {
+    return null
+  }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -19,48 +27,48 @@ export function Header() {
               className="h-12 md:h-16 w-auto"
             />
             <div className="hidden sm:block">
-              <h1 className="text-primary font-bold text-xl md:text-2xl tracking-wider uppercase">Viajes y envíos</h1>
-              <p className="text-muted-foreground text-xs tracking-widest">Donde conectamos con tu destino</p>
+              <h1 className="text-primary font-bold text-xl md:text-2xl tracking-wider uppercase">{business.brandName}</h1>
+              <p className="text-muted-foreground text-xs tracking-widest">{business.brandTagline}</p>
             </div>
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
             <Link
-              href="https://www.solvebigtech.com/solvedc/tracking/dayready/"
+              href={business.trackingUrl}
               className="group flex items-center gap-2 px-6 py-3 border-2 border-primary text-primary font-bold tracking-wider rounded-lg hover:bg-primary hover:text-primary-foreground transition-all"
             >
-              Rastrear envío
+              {header.trackingButtonText}
               <FastArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               href="#menu"
               className="text-foreground hover:text-primary transition-colors font-medium tracking-wide"
             >
-              Envíos
+              {header.navShipmentsText}
             </Link>
             <Link
               href="#menu"
               className="text-foreground hover:text-primary transition-colors font-medium tracking-wide"
             >
-              Cajas Super Express
+              {header.navBoxesText}
             </Link>
             <Link
               href="#menu"
               className="text-foreground hover:text-primary transition-colors font-medium tracking-wide"
             >
-              Electrónicos
+              {header.navElectronicsText}
             </Link>
             <div className="flex items-center gap-2 text-accent">
               <MapPin className="w-5 h-5" />
-              <span className="text-sm font-medium">Orlando</span>
+              <span className="text-sm font-medium">{business.cityLabel}</span>
             </div>
             <Link
               href="/login"
               className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
             >
               <User className="w-4 h-4" />
-              Iniciar Sesión
+              {header.loginButtonText}
             </Link>
           </nav>
 
@@ -76,10 +84,10 @@ export function Header() {
           {/* Mobile Actions */}
           <div className="flex items-center gap-2">
             <Link
-              href="https://www.solvebigtech.com/solvedc/tracking/dayready/"
+              href={business.trackingUrl}
               className="md:hidden group flex items-center gap-2 px-4 py-2 border-2 border-primary text-primary font-bold tracking-wider rounded-lg hover:bg-primary hover:text-primary-foreground transition-all text-sm"
             >
-              Rastrear envío
+              {header.trackingButtonText}
               <FastArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <button
@@ -101,30 +109,30 @@ export function Header() {
                 className="text-foreground hover:text-primary transition-colors font-medium tracking-wide py-2"
                 onClick={() => setIsOpen(false)}
               >
-              Envíos
+              {header.navShipmentsText}
               </Link>
               <Link
                 href="#location"
                 className="text-foreground hover:text-primary transition-colors font-medium tracking-wide py-2"
                 onClick={() => setIsOpen(false)}
               >
-                 Cajas Super Express
+                 {header.navBoxesText}
               </Link>
               <Link
                 href="#contact"
                 className="text-foreground hover:text-primary transition-colors font-medium tracking-wide py-2"
                 onClick={() => setIsOpen(false)}
               >
-                  Electrónicos
+                  {header.navElectronicsText}
               </Link>
               <div className="flex items-center justify-between pt-4 border-t border-border">
                 <div className="flex items-center gap-2 text-accent">
                   <MapPin className="w-5 h-5" />
-                  <span className="text-sm font-medium">Orlando</span>
+                  <span className="text-sm font-medium">{business.cityLabel}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <a
-                    href="https://www.facebook.com/share/17so3zSUeL/?mibextid=wwXIfr"
+                    href={business.facebookUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-2 text-foreground hover:text-primary transition-colors"
@@ -133,7 +141,7 @@ export function Header() {
                     <Facebook className="w-5 h-5" />
                   </a>
                   <a
-                    href="https://www.instagram.com/dlaviajesyenvios?igsh=MWZzeWRmaTljYTYyZg==&utm_source=ig_contact_invite"
+                    href={business.instagramUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-2 text-foreground hover:text-primary transition-colors"
@@ -142,7 +150,7 @@ export function Header() {
                     <Instagram className="w-5 h-5" />
                   </a>
                   <a
-                    href="https://www.tiktok.com/@dla.viajes.y.envi?_r=1&_t=ZP-93ff0dcsaTu"
+                    href={business.tiktokUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-2 text-foreground hover:text-primary transition-colors"
@@ -159,7 +167,7 @@ export function Header() {
                   className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm"
                 >
                   <User className="w-4 h-4" />
-                  Iniciar Sesión
+                  {header.loginButtonText}
                 </Link>
               </div>
             </div>

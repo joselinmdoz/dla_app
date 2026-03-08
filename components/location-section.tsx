@@ -1,6 +1,16 @@
+"use client"
+
 import { MapPin, Clock, Calendar } from "iconoir-react"
+import { useLandingContent } from "@/hooks/use-landing-content"
 
 export function LocationSection() {
+  const { content, isSectionEnabled } = useLandingContent()
+  const locationEnabled = isSectionEnabled("locationSectionEnabled")
+
+  if (!locationEnabled) {
+    return null
+  }
+
   return (
     <section id="location" className="py-20 md:py-32 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,7 +22,7 @@ export function LocationSection() {
               alt="Food Truck"
               className="h-16 w-16 object-contain"
             />
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight">ORLANDO</h2>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight">{content.location.sectionTitle}</h2>
             <img
               src="/graphics/truck.svg"
               alt="Food Truck"
@@ -20,21 +30,21 @@ export function LocationSection() {
             />
           </div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Donde tus envíos y sueños de viaje están en las mejores manos
+            {content.location.subtitle}
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Map Placeholder */}
           <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden bg-secondary">
-            <img src="/map-of-ingolstadt-germany-westpark-area-street-map.jpg" alt="Standort Karte" className="w-full h-full object-cover" />
+            <img src={content.location.mapImageUrl} alt={content.location.mapImageAlt} className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-background/40" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <div className="relative">
                 <div className="absolute -inset-4 bg-accent/30 rounded-full animate-ping" />
                 <div className="relative w-12 h-12 bg-accent rounded-full flex items-center justify-center">
                  <a
-                href="https://share.google/6E5rfOKnE4ZSqUA36"
+                href={content.business.mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
              
@@ -54,7 +64,7 @@ export function LocationSection() {
               <div className="flex items-start gap-4 mb-6">
                 <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center flex-shrink-0">
                 <a
-                href="https://share.google/6E5rfOKnE4ZSqUA36"
+                href={content.business.mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
              
@@ -64,9 +74,9 @@ export function LocationSection() {
                 </a>  
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-foreground mb-2">Orlando</h3>
+                  <h3 className="text-2xl font-bold text-foreground mb-2">{content.location.cityTitle}</h3>
                   <p className="text-lg text-muted-foreground">
-                   4913 S Orange ave Orlando FL 32806
+                   {content.business.address}
                   </p>
                 </div>
               </div>
@@ -76,8 +86,8 @@ export function LocationSection() {
                   <Calendar className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-foreground mb-2">De Lunes a Sábado!</h3>
-                  <p className="text-muted-foreground">Visítenos con frecuencia para que tu destino y tu paquete encuentren el mejor camino.</p>
+                  <h3 className="text-xl font-bold text-foreground mb-2">{content.location.visitTitle}</h3>
+                  <p className="text-muted-foreground">{content.location.scheduleDescription}</p>
                 </div>
               </div>
 
@@ -86,19 +96,19 @@ export function LocationSection() {
                   <Clock className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-              <h3 className="text-xl font-bold text-foreground mb-2">Horario</h3>
-              <p className="text-muted-foreground">🗓 Lunes a Viernes: 10:00 a.m. – 6:00 p.m.</p>
-              <p className="text-muted-foreground">🗓 Sábados: 10:00 a.m. – 2:00 p.m.</p>
-              <p className="text-muted-foreground mt-2 text-sm">📌 Para su mayor comodidad, ofrecemos atención fuera de horario con cita previa hasta las 9:00</p>
+              <h3 className="text-xl font-bold text-foreground mb-2">{content.location.scheduleTitle}</h3>
+              <p className="text-muted-foreground">🗓 {content.location.weekSchedule}</p>
+              <p className="text-muted-foreground">🗓 {content.location.saturdaySchedule}</p>
+              <p className="text-muted-foreground mt-2 text-sm">📌 {content.location.appointmentNote}</p>
             </div>
               </div>
             </div>
 
             {/* Events Banner */}
             <div className="p-6 bg-primary/10 border border-primary/30 rounded-xl">
-              <h4 className="text-xl font-bold text-primary mb-2">Recogémos su paquete en la puerta de su casa</h4>
+              <h4 className="text-xl font-bold text-primary mb-2">{content.location.bannerTitle}</h4>
               <p className="text-foreground">
-               Obtenga servicio de recogida para sus envíos y disfrute de la comodidad de enviar desde su hogar.
+               {content.location.bannerDescription}
               </p>
             </div>
           </div>

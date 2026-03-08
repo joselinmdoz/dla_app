@@ -29,7 +29,8 @@ export async function GET(request: Request) {
     // Convertir Decimal a string para JSON
     const productsWithStringPrice = products.map(product => ({
       ...product,
-      price: product.price.toString()
+      price: product.price.toString(),
+      costPrice: product.costPrice ? product.costPrice.toString() : null
     }))
     
     return NextResponse.json({
@@ -57,10 +58,13 @@ export async function POST(request: Request) {
       name, 
       description, 
       price, 
+      costPrice,
       image, 
+      spiceLevel,
       available, 
       sortOrder, 
-      categoryId
+      categoryId,
+      content
     } = body
 
     if (!name || !price || !categoryId) {
@@ -83,9 +87,17 @@ export async function POST(request: Request) {
         slug,
         description,
         price: parseFloat(price),
+        costPrice: costPrice !== null && costPrice !== undefined && costPrice !== ''
+          ? parseFloat(costPrice.toString())
+          : null,
         image,
+        spiceLevel:
+          spiceLevel !== null && spiceLevel !== undefined && spiceLevel !== ''
+            ? Number(spiceLevel)
+            : 0,
         available: available !== false,
         sortOrder: sortOrder || 0,
+        content: content ?? null,
         categoryId,
       },
       include: { category: true },
@@ -93,7 +105,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       ...product,
-      price: product.price.toString()
+      price: product.price.toString(),
+      costPrice: product.costPrice ? product.costPrice.toString() : null
     })
   } catch (error) {
     console.error('Error creating product:', error)

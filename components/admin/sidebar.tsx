@@ -18,13 +18,17 @@ import {
   FileSpreadsheet,
   Database,
   Image,
+  Building2,
   CreditCard,
+  FileText,
 } from "lucide-react"
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Slides Carrusel", href: "/admin/hero-slides", icon: Image },
   { label: "Tarjetas Info", href: "/admin/feature-cards", icon: CreditCard },
+  { label: "Oficinas", href: "/admin/office-images", icon: Building2 },
+  { label: "Contenido Landing", href: "/admin/content", icon: FileText },
   { label: "Envíos", href: "/admin/shipments", icon: Truck },
   { label: "Gestión Datos", href: "/admin/data", icon: Database },
   { label: "Importar/Exportar", href: "/admin/import", icon: FileSpreadsheet },
@@ -37,7 +41,19 @@ const navItems = [
 
 export function AdminSidebar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
   const pathname = usePathname()
+
+  async function handleLogout() {
+    if (isLoggingOut) return
+
+    try {
+      setIsLoggingOut(true)
+      await fetch("/api/auth/logout", { method: "POST" })
+    } finally {
+      window.location.href = "/login"
+    }
+  }
 
   return (
     <>
@@ -118,7 +134,13 @@ export function AdminSidebar() {
                 <p className="text-sm font-medium truncate">Admin</p>
                 <p className="text-xs text-muted-foreground truncate">admin@dla.com</p>
               </div>
-              <button className="text-muted-foreground hover:text-foreground transition-colors">
+              <button
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
+                aria-label="Cerrar sesión"
+                title="Cerrar sesión"
+              >
                 <LogOut className="w-4 h-4" />
               </button>
             </div>

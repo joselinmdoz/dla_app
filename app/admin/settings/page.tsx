@@ -10,6 +10,7 @@ import { Settings, Save } from 'lucide-react'
 
 interface SiteSettings {
   featureCardsEnabled: boolean
+  officeGalleryEnabled: boolean
   heroSlidesEnabled: boolean
   menuSectionEnabled: boolean
   locationSectionEnabled: boolean
@@ -20,6 +21,7 @@ export default function SettingsPage() {
   const { toast } = useToast()
   const [settings, setSettings] = useState<SiteSettings>({
     featureCardsEnabled: true,
+    officeGalleryEnabled: true,
     heroSlidesEnabled: true,
     menuSectionEnabled: true,
     locationSectionEnabled: true,
@@ -39,6 +41,7 @@ export default function SettingsPage() {
         // La API puede devolver un objeto o un array
         const parsed: SiteSettings = {
           featureCardsEnabled: true,
+          officeGalleryEnabled: true,
           heroSlidesEnabled: true,
           menuSectionEnabled: true,
           locationSectionEnabled: true,
@@ -49,6 +52,8 @@ export default function SettingsPage() {
           data.forEach((setting: { key: string; value: string }) => {
             if (setting.key === 'featureCardsEnabled') {
               parsed.featureCardsEnabled = setting.value === 'true'
+            } else if (setting.key === 'officeGalleryEnabled') {
+              parsed.officeGalleryEnabled = setting.value === 'true'
             } else if (setting.key === 'heroSlidesEnabled') {
               parsed.heroSlidesEnabled = setting.value === 'true'
             } else if (setting.key === 'menuSectionEnabled') {
@@ -62,6 +67,7 @@ export default function SettingsPage() {
         } else if (typeof data === 'object') {
           // Es un objeto clave-valor
           parsed.featureCardsEnabled = data.featureCardsEnabled !== 'false'
+          parsed.officeGalleryEnabled = data.officeGalleryEnabled !== 'false'
           parsed.heroSlidesEnabled = data.heroSlidesEnabled !== 'false'
           parsed.menuSectionEnabled = data.menuSectionEnabled !== 'false'
           parsed.locationSectionEnabled = data.locationSectionEnabled !== 'false'
@@ -84,6 +90,7 @@ export default function SettingsPage() {
     try {
       const settingsToSave = [
         { key: 'featureCardsEnabled', value: settings.featureCardsEnabled.toString() },
+        { key: 'officeGalleryEnabled', value: settings.officeGalleryEnabled.toString() },
         { key: 'heroSlidesEnabled', value: settings.heroSlidesEnabled.toString() },
         { key: 'menuSectionEnabled', value: settings.menuSectionEnabled.toString() },
         { key: 'locationSectionEnabled', value: settings.locationSectionEnabled.toString() },
@@ -164,6 +171,20 @@ export default function SettingsPage() {
               id="featureCards"
               checked={settings.featureCardsEnabled}
               onCheckedChange={(checked) => setSettings({ ...settings, featureCardsEnabled: checked })}
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <Label htmlFor="officeGallery">Galería de Oficinas</Label>
+              <p className="text-sm text-muted-foreground">
+                Muestra la sección con imágenes de oficinas en la página principal
+              </p>
+            </div>
+            <Switch
+              id="officeGallery"
+              checked={settings.officeGalleryEnabled}
+              onCheckedChange={(checked) => setSettings({ ...settings, officeGalleryEnabled: checked })}
             />
           </div>
 

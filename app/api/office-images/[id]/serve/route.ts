@@ -1,14 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
-import path from 'path'
-import { readFile } from 'fs/promises'
+import { NextRequest, NextResponse } from "next/server"
+import prisma from "@/lib/prisma"
+import path from "path"
+import { readFile } from "fs/promises"
 
-type FeatureCardImage = {
+type OfficeImageRecord = {
   imageUrl: string | null
 }
 
 const CREATE_TABLE_SQL = `
-  CREATE TABLE IF NOT EXISTS "FeatureCard" (
+  CREATE TABLE IF NOT EXISTS "OfficeImage" (
     "id" TEXT PRIMARY KEY,
     "imageUrl" TEXT NOT NULL,
     "altText" TEXT NOT NULL,
@@ -30,50 +30,45 @@ export async function GET(
     const { id } = await params
 
     await prisma.$executeRawUnsafe(CREATE_TABLE_SQL)
-    const [card] = await prisma.$queryRaw<FeatureCardImage[]>`
+    const [image] = await prisma.$queryRaw<OfficeImageRecord[]>`
       SELECT "imageUrl"
-      FROM "FeatureCard"
+      FROM "OfficeImage"
       WHERE "id" = ${id}
       LIMIT 1
     `
 
-    if (!card || !card.imageUrl) {
+    if (!image?.imageUrl) {
       return NextResponse.json(
-        { error: 'Imagen no encontrada' },
+        { error: "Imagen no encontrada" },
         { status: 404 }
       )
     }
 
-    // Get the image path
-    const imagePath = card.imageUrl.replace(/^\//, '')
-    const fullPath = path.join(process.cwd(), 'public', imagePath)
+    const imagePath = image.imageUrl.replace(/^\//, "")
+    const fullPath = path.join(process.cwd(), "public", imagePath)
 
-    // Determine content type based on file extension
     const ext = path.extname(imagePath).toLowerCase()
     const contentTypes: Record<string, string> = {
-      '.jpg': 'image/jpeg',
-      '.jpeg': 'image/jpeg',
-      '.png': 'image/png',
-      '.gif': 'image/gif',
-      '.webp': 'image/webp',
-      '.svg': 'image/svg+xml'
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg",
+      ".png": "image/png",
+      ".gif": "image/gif",
+      ".webp": "image/webp",
+      ".svg": "image/svg+xml",
     }
-    
-    const contentType = contentTypes[ext] || 'application/octet-stream'
 
-    // Read and return the file
     const fileBuffer = await readFile(fullPath)
-    
+
     return new NextResponse(fileBuffer, {
       headers: {
-        'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=31536000, immutable',
+        "Content-Type": contentTypes[ext] || "application/octet-stream",
+        "Cache-Control": "public, max-age=31536000, immutable",
       },
     })
   } catch (error) {
-    console.error('Error serving feature card image:', error)
+    console.error("Error serving office image:", error)
     return NextResponse.json(
-      { error: 'Error al servir la imagen' },
+      { error: "Error al servir la imagen" },
       { status: 500 }
     )
   }

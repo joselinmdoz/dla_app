@@ -1,15 +1,18 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { MenuCategory } from "./menu-category"
 import { useProducts, useCategories } from "@/hooks/use-products"
 import { BoxIcon } from "lucide-react"
 import { ElectronicsChip, Cycling } from "iconoir-react"
+import { useLandingContent } from "@/hooks/use-landing-content"
 
 export function MenuSection() {
+  const { content, isSectionEnabled } = useLandingContent()
   const [activeCategory, setActiveCategory] = useState<string>("beef")
   const { products, loading, error } = useProducts(activeCategory === "all" ? undefined : activeCategory)
   const { categories, loading: loadingCategories } = useCategories()
+  const menuEnabled = isSectionEnabled("menuSectionEnabled")
 
   const iconMap: Record<string, any> = {
     beef: BoxIcon,
@@ -46,13 +49,17 @@ export function MenuSection() {
       }))
     : []
 
+  if (!menuEnabled) {
+    return null
+  }
+
   if (loading || loadingCategories) {
     return (
       <section id="menu" className="py-20 md:py-32 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-primary tracking-tighter mb-4">
-              Nuestras ofertas
+              {content.menu.title}
             </h2>
           </div>
           <div className="flex justify-center py-20">
@@ -87,7 +94,7 @@ export function MenuSection() {
         {/* Section Header - Restaurant Style */}
         <div className="text-center mb-12">
           <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-primary tracking-tighter mb-4">
-            Nuestras ofertas
+            {content.menu.title}
           </h2>
         </div>
 

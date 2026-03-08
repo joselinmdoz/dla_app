@@ -2,6 +2,7 @@ import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
 import { FeatureCards } from "@/components/feature-cards"
 import { MenuSection } from "@/components/menu-section"
+import { OfficeGallery } from "@/components/office-gallery"
 import { LocationSection } from "@/components/location-section"
 import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
@@ -157,6 +158,7 @@ export default function Home() {
         <Hero />
         <FeatureCards />
         <MenuSection />
+        <OfficeGallery />
         <LocationSection />
         <ContactSection />
         <Footer />

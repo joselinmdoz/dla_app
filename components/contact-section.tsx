@@ -1,14 +1,24 @@
-import { Phone, Mail, MapPin, Instagram, Whatsapp } from "iconoir-react"
+"use client"
+
+import { Phone, Mail, Whatsapp } from "iconoir-react"
+import { useLandingContent } from "@/hooks/use-landing-content"
 
 export function ContactSection() {
+  const { content, isSectionEnabled } = useLandingContent()
+  const contactEnabled = isSectionEnabled("contactSectionEnabled")
+
+  if (!contactEnabled) {
+    return null
+  }
+
   return (
     <section id="contact" className="py-20 md:py-32 bg-card">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight mb-4">Contáctenos</h2>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight mb-4">{content.contact.sectionTitle}</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-          ¿Tienes alguna pregunta o quieres contratarnos para un viaje o envío? ¡Contáctanos!          </p>
+          {content.contact.subtitle}          </p>
         </div>
 
         {/* Contact Cards - Centered Grid */}
@@ -19,15 +29,15 @@ export function ContactSection() {
               <Phone className="w-8 h-8 text-primary-foreground" />
             </div>
             <div>
-              <p className="text-muted-foreground text-sm mb-2">Teléfono</p>
+              <p className="text-muted-foreground text-sm mb-2">{content.contact.phoneLabel}</p>
               <a
-                href="https://wa.me/14076394011" target="_blank" rel="noopener noreferrer"
+                href={content.business.whatsappUrl} target="_blank" rel="noopener noreferrer"
                 className="text-2xl md:text-3xl font-black text-primary hover:text-primary/80 transition-colors"
               >
-                +1 (407) 639-4011
+                {content.business.phoneDisplay}
               </a>
             </div>
-            <p className="text-sm text-muted-foreground">Llámanos directamente</p>
+            <p className="text-sm text-muted-foreground">{content.contact.phoneHelp}</p>
           </div>
 
           {/* Email Card */}
@@ -36,15 +46,15 @@ export function ContactSection() {
               <Mail className="w-8 h-8 text-primary-foreground" />
             </div>
             <div>
-              <p className="text-muted-foreground text-sm mb-2">E-Mail</p>
+              <p className="text-muted-foreground text-sm mb-2">{content.contact.emailLabel}</p>
               <a
-                href="mailto:info@dlaenvios.com"
+                href={`mailto:${content.business.email}`}
                 className="text-lg md:text-xl font-bold text-primary hover:text-primary/80 transition-colors break-all"
               >
-                info@dlaenvios.com
+                {content.business.email}
               </a>
             </div>
-            <p className="text-sm text-muted-foreground">Escríbenos un correo electrónico</p>
+            <p className="text-sm text-muted-foreground">{content.contact.emailHelp}</p>
           </div>
 
           {/* Instagram Card */}
@@ -53,17 +63,17 @@ export function ContactSection() {
               <Whatsapp className="w-8 h-8 text-primary-foreground" />
             </div>
             <div>
-              <p className="text-muted-foreground text-sm mb-2">WhatsApp</p>
+              <p className="text-muted-foreground text-sm mb-2">{content.contact.whatsappLabel}</p>
               <a
-                href="https://wa.me/14076394011"
+                href={content.business.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-lg md:text-xl font-bold text-primary hover:text-primary/80 transition-colors"
               >
-                https://wa.me/14076394011
+                {content.business.whatsappUrl}
               </a>
             </div>
-            <p className="text-sm text-muted-foreground">Síguenos en WhatsApp</p>
+            <p className="text-sm text-muted-foreground">{content.contact.whatsappHelp}</p>
           </div>
         </div>
 

@@ -1,20 +1,19 @@
 "use client"
 
-import { useState, useEffect } from 'react'
 import { ArrowDown, FastArrowRight, Phone } from "iconoir-react"
 import Link from "next/link"
-import Image from "next/image"
 import { useHeroSlides } from '@/hooks/use-hero-slides'
-import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
+import { useLandingContent } from "@/hooks/use-landing-content"
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 export function Hero() {
+  const { content, isSectionEnabled } = useLandingContent()
   const { slides, currentSlide, isLoading, nextSlide, prevSlide, goToSlide } = useHeroSlides(5000)
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const heroEnabled = isSectionEnabled("heroSectionEnabled")
+  const heroSlidesEnabled = isSectionEnabled("heroSlidesEnabled", true)
 
-  const currentSlideData = slides[currentSlide]
-
-  const toggleAutoPlay = () => {
-    setIsAutoPlaying(!isAutoPlaying)
+  if (!heroEnabled) {
+    return null
   }
 
   return (
@@ -30,30 +29,30 @@ export function Hero() {
           <div className="text-center md:text-left order-2 md:order-1">
             {/* Main Title */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-4">
-              <span className="text-primary">DLA</span>
+              <span className="text-primary">{content.hero.titlePrimary}</span>
               <br />
-              <span className="text-foreground">Viajes y Envíos</span>
+              <span className="text-foreground">{content.hero.titleSecondary}</span>
             </h1>
 
             {/* Tagline */}
             <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground font-light tracking-wide mb-8 max-w-2xl mx-auto">
-              Donde conectamos con tu destino
+              {content.hero.subtitle}
             </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
               <a
-                href="https://wa.me/14076394011" target="_blank" rel="noopener noreferrer"
+                href={content.business.whatsappUrl} target="_blank" rel="noopener noreferrer"
                 className="group flex items-center gap-3 px-8 py-4 bg-primary text-primary-foreground font-bold tracking-wider rounded-lg hover:bg-primary/90 transition-all shadow-2xl shadow-primary/50 w-full sm:w-auto justify-center"
               >
                 <Phone className="w-5 h-5" />
-                +1 (407) 639-4011
+                {content.business.phoneDisplay}
               </a>
               <Link
-                href="https://www.solvebigtech.com/solvedc/tracking/dayready/"
+                href={content.business.trackingUrl}
                 className="group flex items-center gap-2 px-8 py-4 border-2 border-primary text-primary font-bold tracking-wider rounded-lg hover:bg-primary hover:text-primary-foreground transition-all w-full sm:w-auto justify-center"
               >
-                Rastrear envío
+                {content.header.trackingButtonText}
                 <FastArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
@@ -67,10 +66,10 @@ export function Hero() {
                   className="h-16 w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
                 />
                 <div className="text-left">
-                  <p className="text-primary font-black text-2xl md:text-3xl lg:text-4xl mb-1">De Lunes a Sábado</p>
-                  <p className="text-foreground font-bold text-base md:text-lg lg:text-xl">En 4913 S Orange ave Orlando FL 32806</p>
-                 <p className="text-muted-foreground text-sm md:text-base mt-1" >🗓 Lunes a Viernes: 10:00 a.m. – 6:00 p.m.</p>
-                 <p className="text-muted-foreground text-sm md:text-base mt-1">🗓 Sábados: 10:00 a.m. – 2:00 p.m.</p>
+                  <p className="text-primary font-black text-2xl md:text-3xl lg:text-4xl mb-1">{content.hero.scheduleTitle}</p>
+                  <p className="text-foreground font-bold text-base md:text-lg lg:text-xl">En {content.business.address}</p>
+                 <p className="text-muted-foreground text-sm md:text-base mt-1" >🗓 {content.hero.weekSchedule}</p>
+                 <p className="text-muted-foreground text-sm md:text-base mt-1">🗓 {content.hero.saturdaySchedule}</p>
                   {/* <p className="text-muted-foreground text-sm md:text-base mt-1">10:00AM - 6:00PM</p> */}
                 </div>
               </div>
@@ -85,7 +84,15 @@ export function Hero() {
 
               {/* Slides Container */}
               <div className="relative w-full h-full">
-                {isLoading ? (
+                {!heroSlidesEnabled ? (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <img
+                      src={content.hero.fallbackImageUrl}
+                      alt="DLA Viajes y Envíos"
+                      className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
+                    />
+                  </div>
+                ) : isLoading ? (
                   // Loading skeleton
                   <div className="w-full h-full flex items-center justify-center">
                     <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
@@ -94,7 +101,7 @@ export function Hero() {
                   // Fallback image when no slides
                   <div className="w-full h-full flex items-center justify-center">
                     <img
-                      src="/graphics/slide1.svg"
+                      src={content.hero.fallbackImageUrl}
                       alt="DLA Viajes y Envíos"
                       className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
                     />
@@ -135,7 +142,7 @@ export function Hero() {
               </div>
 
               {/* Carousel Controls - Only show if there are multiple slides */}
-              {slides.length > 1 && (
+              {slides.length > 1 && heroSlidesEnabled && (
                 <>
                   {/* Navigation Arrows */}
                   <button

@@ -22,7 +22,8 @@ export async function GET(
     
     const productWithStringPrice = {
       ...product,
-      price: product.price.toString()
+      price: product.price.toString(),
+      costPrice: product.costPrice ? product.costPrice.toString() : null
     }
     
     return NextResponse.json(productWithStringPrice)
@@ -47,31 +48,41 @@ export async function PUT(
       name, 
       description, 
       price, 
+      costPrice,
       image, 
       spiceLevel, 
       available, 
       sortOrder, 
-      categoryId
+      categoryId,
+      content
     } = body
 
     const product = await prisma.product.update({
       where: { id },
       data: {
-        name,
-        description,
-        price: price ? parseFloat(price.toString()) : undefined,
-        image,
-        spiceLevel,
-        available,
-        sortOrder,
-        categoryId,
+        name: name ?? undefined,
+        description: description === undefined ? undefined : description,
+        price: price === undefined ? undefined : parseFloat(price.toString()),
+        costPrice:
+          costPrice === undefined
+            ? undefined
+            : costPrice !== null && costPrice !== ''
+              ? parseFloat(costPrice.toString())
+              : null,
+        image: image === undefined ? undefined : image,
+        spiceLevel: spiceLevel === undefined ? undefined : Number(spiceLevel),
+        available: available === undefined ? undefined : available,
+        sortOrder: sortOrder === undefined ? undefined : Number(sortOrder),
+        categoryId: categoryId ?? undefined,
+        content: content === undefined ? undefined : content,
       },
       include: { category: true },
     })
 
     return NextResponse.json({
       ...product,
-      price: product.price.toString()
+      price: product.price.toString(),
+      costPrice: product.costPrice ? product.costPrice.toString() : null
     })
   } catch (error) {
     console.error('Error updating product:', error)

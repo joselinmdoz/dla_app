@@ -46,6 +46,94 @@ interface ContentItem {
   quantity: string
 }
 
+interface ProductDetailContent {
+  boxItems: ContentItem[]
+  features: string[]
+  includes: ContentItem[]
+  deliveryTime: string
+  rating: string
+  reviews: string
+}
+
+function isContentItem(value: unknown): value is ContentItem {
+  if (!value || typeof value !== "object") return false
+  const item = (value as Record<string, unknown>).item
+  const quantity = (value as Record<string, unknown>).quantity
+  return typeof item === "string" && typeof quantity === "string"
+}
+
+function parseProductDetailContent(raw: unknown): ProductDetailContent {
+  const empty: ProductDetailContent = {
+    boxItems: [],
+    features: [],
+    includes: [],
+    deliveryTime: "",
+    rating: "",
+    reviews: "",
+  }
+
+  if (!raw) return empty
+
+  if (Array.isArray(raw)) {
+    return {
+      ...empty,
+      boxItems: raw.filter(isContentItem),
+    }
+  }
+
+  if (typeof raw !== "object") return empty
+
+  const data = raw as Record<string, unknown>
+  const boxItems = Array.isArray(data.boxItems) ? data.boxItems.filter(isContentItem) : []
+  const features = Array.isArray(data.features)
+    ? data.features.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+    : []
+  const includes = Array.isArray(data.includes) ? data.includes.filter(isContentItem) : []
+  const deliveryTime = typeof data.deliveryTime === "string" ? data.deliveryTime : ""
+  const rating =
+    typeof data.rating === "number" || typeof data.rating === "string" ? String(data.rating) : ""
+  const reviews =
+    typeof data.reviews === "number" || typeof data.reviews === "string" ? String(data.reviews) : ""
+
+  return {
+    boxItems,
+    features,
+    includes,
+    deliveryTime,
+    rating,
+    reviews,
+  }
+}
+
+function buildProductDetailContent(data: ProductDetailContent): Record<string, unknown> | ContentItem[] | null {
+  const boxItems = data.boxItems.filter((item) => item.item.trim() && item.quantity.trim())
+  const features = data.features.map((item) => item.trim()).filter(Boolean)
+  const includes = data.includes.filter((item) => item.item.trim() && item.quantity.trim())
+  const deliveryTime = data.deliveryTime.trim()
+  const ratingValue = data.rating.trim()
+  const reviewsValue = data.reviews.trim()
+
+  const hasExtendedData =
+    features.length > 0 ||
+    includes.length > 0 ||
+    Boolean(deliveryTime) ||
+    Boolean(ratingValue) ||
+    Boolean(reviewsValue)
+
+  if (!hasExtendedData) {
+    return boxItems.length > 0 ? boxItems : null
+  }
+
+  return {
+    boxItems,
+    features,
+    includes,
+    deliveryTime: deliveryTime || undefined,
+    rating: ratingValue ? Number(ratingValue) : undefined,
+    reviews: reviewsValue ? Number(reviewsValue) : undefined,
+  }
+}
+
 export default function ProductsPage() {
   const { 
     products, 
@@ -76,11 +164,19 @@ export default function ProductsPage() {
     costPrice: "",
     image: "",
     categoryId: "",
+    spiceLevel: 0,
     available: true,
     sortOrder: 0,
     content: [] as ContentItem[],
+    features: [] as string[],
+    includes: [] as ContentItem[],
+    deliveryTime: "",
+    rating: "",
+    reviews: "",
   })
   const [newContentItem, setNewContentItem] = useState({ item: "", quantity: "" })
+  const [newFeature, setNewFeature] = useState("")
+  const [newIncludeItem, setNewIncludeItem] = useState({ item: "", quantity: "" })
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -102,7 +198,7 @@ export default function ProductsPage() {
     
     if (product) {
       setEditingProduct(product)
-      const content = product.content as ContentItem[] | undefined
+      const detailContent = parseProductDetailContent(product.content)
       setFormData({
         name: product.name,
         description: product.description || "",
@@ -110,9 +206,15 @@ export default function ProductsPage() {
         costPrice: product.costPrice?.toString() || "",
         image: product.image || "",
         categoryId: product.categoryId,
+        spiceLevel: Number(product.spiceLevel) || 0,
         available: product.available,
         sortOrder: product.sortOrder || 0,
-        content: content || [],
+        content: detailContent.boxItems,
+        features: detailContent.features,
+        includes: detailContent.includes,
+        deliveryTime: detailContent.deliveryTime,
+        rating: detailContent.rating,
+        reviews: detailContent.reviews,
       })
     } else {
       setEditingProduct(null)
@@ -123,11 +225,19 @@ export default function ProductsPage() {
         costPrice: "",
         image: "",
         categoryId: categories[0]?.id || "",
+        spiceLevel: 0,
         available: true,
         sortOrder: 0,
         content: [],
+        features: [],
+        includes: [],
+        deliveryTime: "",
+        rating: "",
+        reviews: "",
       })
     }
+    setNewFeature("")
+    setNewIncludeItem({ item: "", quantity: "" })
     setIsModalOpen(true)
   }
 
@@ -159,9 +269,51 @@ export default function ProductsPage() {
     })
   }
 
+  const handleAddFeature = () => {
+    const feature = newFeature.trim()
+    if (!feature) return
+    setFormData({
+      ...formData,
+      features: [...formData.features, feature],
+    })
+    setNewFeature("")
+  }
+
+  const handleRemoveFeature = (index: number) => {
+    setFormData({
+      ...formData,
+      features: formData.features.filter((_, i) => i !== index),
+    })
+  }
+
+  const handleAddIncludeItem = () => {
+    if (!newIncludeItem.item.trim() || !newIncludeItem.quantity.trim()) return
+    setFormData({
+      ...formData,
+      includes: [...formData.includes, { ...newIncludeItem }],
+    })
+    setNewIncludeItem({ item: "", quantity: "" })
+  }
+
+  const handleRemoveIncludeItem = (index: number) => {
+    setFormData({
+      ...formData,
+      includes: formData.includes.filter((_, i) => i !== index),
+    })
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
+      const contentPayload = buildProductDetailContent({
+        boxItems: formData.content,
+        features: formData.features,
+        includes: formData.includes,
+        deliveryTime: formData.deliveryTime,
+        rating: formData.rating,
+        reviews: formData.reviews,
+      })
+
       const productData = {
         name: formData.name,
         description: formData.description || null,
@@ -169,9 +321,10 @@ export default function ProductsPage() {
         costPrice: formData.costPrice ? parseFloat(formData.costPrice) : null,
         image: formData.image || null,
         categoryId: formData.categoryId,
+        spiceLevel: formData.spiceLevel,
         available: formData.available,
         sortOrder: formData.sortOrder,
-        content: formData.content.length > 0 ? formData.content : null,
+        content: contentPayload,
       }
       if (editingProduct) {
         await updateProduct(editingProduct.id, productData)
@@ -413,8 +566,8 @@ export default function ProductsPage() {
                   </div>
                 </div>
 
-                {/* Row 2: Price, Cost */}
-                <div className="grid grid-cols-2 gap-3">
+                {/* Row 2: Price, Cost, Spice */}
+                <div className="grid grid-cols-3 gap-3">
                   <div>
                     <Label className="text-xs">Precio</Label>
                     <Input
@@ -437,6 +590,23 @@ export default function ProductsPage() {
                       value={formData.costPrice}
                       onChange={(e) => setFormData({ ...formData, costPrice: e.target.value })}
                       placeholder="0.00"
+                      className="h-8"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Picante (0-5)</Label>
+                    <Input
+                      id="spiceLevel"
+                      type="number"
+                      min="0"
+                      max="5"
+                      value={formData.spiceLevel}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          spiceLevel: Math.max(0, Math.min(5, parseInt(e.target.value || "0", 10))),
+                        })
+                      }
                       className="h-8"
                     />
                   </div>
@@ -479,6 +649,45 @@ export default function ProductsPage() {
               />
             </div>
 
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <Label className="text-xs">Tiempo de entrega</Label>
+                <Input
+                  id="deliveryTime"
+                  value={formData.deliveryTime}
+                  onChange={(e) => setFormData({ ...formData, deliveryTime: e.target.value })}
+                  placeholder="5-7 días hábiles"
+                  className="h-8"
+                />
+              </div>
+              <div>
+                <Label className="text-xs">Rating (0-5)</Label>
+                <Input
+                  id="rating"
+                  type="number"
+                  min="0"
+                  max="5"
+                  step="0.1"
+                  value={formData.rating}
+                  onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
+                  placeholder="4.5"
+                  className="h-8"
+                />
+              </div>
+              <div>
+                <Label className="text-xs">Reseñas</Label>
+                <Input
+                  id="reviews"
+                  type="number"
+                  min="0"
+                  value={formData.reviews}
+                  onChange={(e) => setFormData({ ...formData, reviews: e.target.value })}
+                  placeholder="0"
+                  className="h-8"
+                />
+              </div>
+            </div>
+
             <div>
               <Label className="text-xs">Contenido</Label>
               <div className="flex gap-2 mt-1">
@@ -514,6 +723,86 @@ export default function ProductsPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleRemoveContentItem(index)}
+                        className="h-6 w-6 p-0 text-red-500 hover:text-red-600"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div>
+              <Label className="text-xs">Características</Label>
+              <div className="flex gap-2 mt-1">
+                <Input
+                  placeholder="Añadir característica"
+                  value={newFeature}
+                  onChange={(e) => setNewFeature(e.target.value)}
+                  className="flex-1 h-8"
+                />
+                <Button type="button" size="sm" onClick={handleAddFeature} className="h-8">
+                  <Plus className="w-3 h-3" />
+                </Button>
+              </div>
+              {formData.features.length > 0 && (
+                <div className="mt-2 space-y-1 max-h-32 overflow-y-auto">
+                  {formData.features.map((feature, index) => (
+                    <div
+                      key={`${feature}-${index}`}
+                      className="flex items-center justify-between bg-muted/50 px-2 py-1 rounded text-xs"
+                    >
+                      <span>{feature}</span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemoveFeature(index)}
+                        className="h-6 w-6 p-0 text-red-500 hover:text-red-600"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div>
+              <Label className="text-xs">Incluye</Label>
+              <div className="flex gap-2 mt-1">
+                <Input
+                  placeholder="Elemento"
+                  value={newIncludeItem.item}
+                  onChange={(e) => setNewIncludeItem({ ...newIncludeItem, item: e.target.value })}
+                  className="flex-1 h-8"
+                />
+                <Input
+                  placeholder="Cant."
+                  value={newIncludeItem.quantity}
+                  onChange={(e) => setNewIncludeItem({ ...newIncludeItem, quantity: e.target.value })}
+                  className="w-20 h-8"
+                />
+                <Button type="button" size="sm" onClick={handleAddIncludeItem} className="h-8">
+                  <Plus className="w-3 h-3" />
+                </Button>
+              </div>
+              {formData.includes.length > 0 && (
+                <div className="mt-2 space-y-1 max-h-32 overflow-y-auto">
+                  {formData.includes.map((includeItem, index) => (
+                    <div
+                      key={`${includeItem.item}-${index}`}
+                      className="flex items-center justify-between bg-muted/50 px-2 py-1 rounded text-xs"
+                    >
+                      <span>
+                        <span className="font-medium">{includeItem.item}</span> {includeItem.quantity}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemoveIncludeItem(index)}
                         className="h-6 w-6 p-0 text-red-500 hover:text-red-600"
                       >
                         <Trash2 className="w-3 h-3" />
