@@ -21,7 +21,7 @@ export function useHeroSlides(autoPlayInterval = 5000): UseHeroSlidesReturn {
   const fetchSlides = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/hero-slides')
+      const response = await fetch('/api/hero-slides', { cache: 'no-store' })
       if (!response.ok) throw new Error('Error al cargar las slides')
       const data = await response.json()
       setSlides(data)
@@ -95,7 +95,7 @@ export function useAdminHeroSlides() {
   const fetchSlides = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/hero-slides')
+      const response = await fetch('/api/hero-slides', { cache: 'no-store' })
       if (!response.ok) throw new Error('Error al cargar las slides')
       const data = await response.json()
       setSlides(data)

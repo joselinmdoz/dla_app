@@ -1,8 +1,7 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useId, useMemo, useEffect } from 'react'
 import { Upload, X, AlertCircle, Image as ImageIcon } from 'lucide-react'
-import Image from 'next/image'
 
 interface ImageUploadZoneProps {
   onImageSelect: (file: File) => void
@@ -23,6 +22,20 @@ export function ImageUploadZone({
 }: ImageUploadZoneProps) {
   const [isDragging, setIsDragging] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const inputId = useId()
+
+  const previewUrl = useMemo(
+    () => (selectedImage ? URL.createObjectURL(selectedImage) : imageUrl),
+    [selectedImage, imageUrl]
+  )
+
+  useEffect(() => {
+    return () => {
+      if (selectedImage && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl)
+      }
+    }
+  }, [previewUrl, selectedImage])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -74,29 +87,36 @@ export function ImageUploadZone({
 
   // Mostrar imagen seleccionada o desde URL
   if (selectedImage || imageUrl) {
-    const previewUrl = selectedImage
-      ? URL.createObjectURL(selectedImage)
-      : imageUrl
-
     return (
       <div className="relative border-2 border-green-500 rounded-lg overflow-hidden bg-green-50">
+        <input
+          type="file"
+          accept={accept}
+          onChange={handleChange}
+          className="hidden"
+          id={inputId}
+        />
+        <label
+          htmlFor={inputId}
+          className="absolute top-2 left-2 px-2 py-1 text-xs font-medium bg-white/90 hover:bg-white rounded cursor-pointer transition-colors z-10"
+        >
+          Cambiar imagen
+        </label>
         <button
-          onClick={onClear}
+          onClick={() => {
+            onClear()
+            setError(null)
+          }}
           className="absolute top-2 right-2 p-1 hover:bg-green-200 rounded-full transition-colors z-10"
           aria-label="Eliminar imagen"
         >
           <X className="w-5 h-5 text-green-700" />
         </button>
         <div className="relative aspect-video">
-          <Image
+          <img
             src={previewUrl}
             alt="Vista previa"
-            fill
-            className="object-contain"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement
-              target.style.display = 'none'
-            }}
+            className="w-full h-full object-contain"
           />
         </div>
         {selectedImage && (
@@ -127,9 +147,9 @@ export function ImageUploadZone({
         accept={accept}
         onChange={handleChange}
         className="hidden"
-        id="image-upload"
+        id={inputId}
       />
-      <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center">
+      <label htmlFor={inputId} className="cursor-pointer flex flex-col items-center">
         <Upload className={`w-12 h-12 mb-3 ${isDragging ? 'text-blue-500' : 'text-gray-400'}`} />
         <p className="text-lg font-medium text-gray-700 mb-1">
           {isDragging ? 'Suelta la imagen aquí' : 'Arrastra y suelta una imagen'}

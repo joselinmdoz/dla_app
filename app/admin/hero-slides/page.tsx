@@ -73,6 +73,7 @@ export default function HeroSlidesAdmin() {
 
   const handleClearImage = () => {
     setSelectedImageFile(null)
+    setFormData((prev) => ({ ...prev, imageUrl: '' }))
   }
 
   const uploadImage = async (): Promise<string | null> => {
@@ -168,7 +169,7 @@ export default function HeroSlidesAdmin() {
             <div className="relative aspect-video bg-muted">
               {slide.imageUrl ? (
                 <Image
-                  src={`/api/hero-slides/${slide.id}/serve`}
+                  src={`/api/hero-slides/${slide.id}/serve?v=${encodeURIComponent(String(slide.updatedAt))}`}
                   alt={slide.altText}
                   fill
                   className="object-cover"
@@ -258,7 +259,7 @@ export default function HeroSlidesAdmin() {
                 <ImageUploadZone
                   onImageSelect={handleImageSelect}
                   selectedImage={selectedImageFile}
-                  imageUrl={editingSlide ? `/api/hero-slides/${editingSlide.id}/serve` : ''}
+                  imageUrl={formData.imageUrl}
                   onClear={handleClearImage}
                   maxSize={5 * 1024 * 1024} // 5MB para imágenes
                 />

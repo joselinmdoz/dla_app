@@ -32,7 +32,7 @@ export function useAdminOfficeImages(): UseOfficeImagesReturn {
   const fetchImages = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await fetch("/api/office-images?includeInactive=true")
+      const response = await fetch("/api/office-images?includeInactive=true", { cache: "no-store" })
       if (!response.ok) throw new Error("Error al cargar las imágenes de oficinas")
       const data = (await response.json()) as OfficeImage[]
       setImages(data)
@@ -133,7 +133,7 @@ export function useOfficeImages() {
   const fetchImages = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await fetch("/api/office-images")
+      const response = await fetch("/api/office-images", { cache: "no-store" })
       if (!response.ok) throw new Error("Error al cargar las imágenes de oficinas")
       const data = (await response.json()) as OfficeImage[]
       setImages(data)

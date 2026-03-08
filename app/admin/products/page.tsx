@@ -177,6 +177,7 @@ export default function ProductsPage() {
   const [newContentItem, setNewContentItem] = useState({ item: "", quantity: "" })
   const [newFeature, setNewFeature] = useState("")
   const [newIncludeItem, setNewIncludeItem] = useState({ item: "", quantity: "" })
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -198,6 +199,7 @@ export default function ProductsPage() {
     
     if (product) {
       setEditingProduct(product)
+      setSelectedImageFile(null)
       const detailContent = parseProductDetailContent(product.content)
       setFormData({
         name: product.name,
@@ -218,6 +220,7 @@ export default function ProductsPage() {
       })
     } else {
       setEditingProduct(null)
+      setSelectedImageFile(null)
       setFormData({
         name: "",
         description: "",
@@ -244,12 +247,33 @@ export default function ProductsPage() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      setSelectedImageFile(file)
       const reader = new FileReader()
       reader.onload = (event) => {
-        setFormData({ ...formData, image: event.target?.result as string })
+        setFormData((prev) => ({ ...prev, image: event.target?.result as string }))
       }
       reader.readAsDataURL(file)
     }
+  }
+
+  const uploadImage = async (): Promise<string | null> => {
+    if (!selectedImageFile) return formData.image || null
+
+    const formDataUpload = new FormData()
+    formDataUpload.append("file", selectedImageFile)
+
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      body: formDataUpload,
+    })
+
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null)
+      throw new Error(payload?.error || "Error al subir la imagen")
+    }
+
+    const data = await response.json()
+    return data.url
   }
 
   const handleAddContentItem = () => {
@@ -305,6 +329,7 @@ export default function ProductsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
+      const uploadedImageUrl = await uploadImage()
       const contentPayload = buildProductDetailContent({
         boxItems: formData.content,
         features: formData.features,
@@ -319,7 +344,7 @@ export default function ProductsPage() {
         description: formData.description || null,
         price: parseFloat(formData.price) || 0,
         costPrice: formData.costPrice ? parseFloat(formData.costPrice) : null,
-        image: formData.image || null,
+        image: uploadedImageUrl,
         categoryId: formData.categoryId,
         spiceLevel: formData.spiceLevel,
         available: formData.available,

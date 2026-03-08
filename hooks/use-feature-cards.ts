@@ -20,7 +20,7 @@ export function useAdminFeatureCards(): UseFeatureCardsReturn {
   const fetchCards = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/feature-cards')
+      const response = await fetch('/api/feature-cards', { cache: 'no-store' })
       if (!response.ok) throw new Error('Error al cargar las tarjetas')
       const data = await response.json()
       setCards(data)
@@ -125,7 +125,7 @@ export function useFeatureCards() {
   const fetchCards = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/feature-cards')
+      const response = await fetch('/api/feature-cards', { cache: 'no-store' })
       if (!response.ok) throw new Error('Error al cargar las tarjetas')
       const data = await response.json()
       setCards(data)

@@ -89,6 +89,7 @@ export default function FeatureCardsAdmin() {
 
   const handleClearImage = () => {
     setSelectedImage(null)
+    setFormData((prev) => ({ ...prev, imageUrl: '' }))
   }
 
   const uploadImage = async (): Promise<string | null> => {
@@ -209,7 +210,7 @@ export default function FeatureCardsAdmin() {
               <div className="relative aspect-video">
                 {card.imageUrl ? (
                   <img
-                    src={`/api/feature-cards/${card.id}/serve`}
+                    src={`/api/feature-cards/${card.id}/serve?v=${encodeURIComponent(String(card.updatedAt))}`}
                     alt={card.altText}
                     className="w-full h-full object-cover rounded-t-lg"
                   />
@@ -270,7 +271,7 @@ export default function FeatureCardsAdmin() {
               <ImageUploadZone
                 onImageSelect={handleImageSelect}
                 selectedImage={selectedImage}
-                imageUrl={editingCard ? `/api/feature-cards/${editingCard.id}/serve` : formData.imageUrl}
+                imageUrl={formData.imageUrl}
                 onClear={handleClearImage}
               />
             </div>

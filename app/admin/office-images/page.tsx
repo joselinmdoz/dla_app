@@ -74,6 +74,7 @@ export default function OfficeImagesAdmin() {
 
   const handleClearImage = () => {
     setSelectedImage(null)
+    setFormData((prev) => ({ ...prev, imageUrl: "" }))
   }
 
   const uploadImage = async (): Promise<string | null> => {
@@ -191,7 +192,7 @@ export default function OfficeImagesAdmin() {
               <div className="relative aspect-video">
                 {image.imageUrl ? (
                   <img
-                    src={`/api/office-images/${image.id}/serve`}
+                    src={`/api/office-images/${image.id}/serve?v=${encodeURIComponent(String(image.updatedAt))}`}
                     alt={image.altText}
                     className="w-full h-full object-cover rounded-t-lg"
                   />
@@ -242,7 +243,7 @@ export default function OfficeImagesAdmin() {
               <ImageUploadZone
                 onImageSelect={handleImageSelect}
                 selectedImage={selectedImage}
-                imageUrl={editingImage ? `/api/office-images/${editingImage.id}/serve` : formData.imageUrl}
+                imageUrl={formData.imageUrl}
                 onClear={handleClearImage}
               />
             </div>
