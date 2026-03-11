@@ -140,14 +140,14 @@ export function OfficeGallery() {
           onMouseLeave={() => setIsPaused(false)}
         >
           <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-[70%] h-24 bg-primary/15 blur-3xl pointer-events-none" />
-          <div className="relative h-[340px] sm:h-[500px] lg:h-[620px] [perspective:1600px] overflow-hidden">
+          <div className="relative h-[360px] sm:h-[560px] lg:h-[700px] [perspective:1600px] overflow-hidden">
             {sortedImages.map((image, index) => {
               const relative = getRelativePosition(index)
               const isCenter = relative === 0
               const isSide = Math.abs(relative) === 1
               const isHidden = Math.abs(relative) > 1
-              const translateX = relative === 0 ? 0 : relative < 0 ? -52 : 52
-              const scale = relative === 0 ? 1 : isSide ? 0.84 : 0.72
+              const translateX = relative === 0 ? 0 : relative < 0 ? -58 : 58
+              const scale = relative === 0 ? 1 : isSide ? 0.86 : 0.74
               const rotateY = relative === 0 ? 0 : relative < 0 ? 10 : -10
               const opacity = relative === 0 ? 1 : isSide ? 0.64 : 0
               const filter = relative === 0 ? "none" : isSide ? "blur(3.2px) saturate(0.82) brightness(0.78) contrast(0.92)" : "blur(12px)"
@@ -172,8 +172,8 @@ export function OfficeGallery() {
                   <img
                     src={imageSrc}
                     alt={image.altText || image.title || "Imagen de oficina"}
-                    className={`relative z-10 w-full h-full object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(.22,1,.36,1)] ${
-                      isCenter ? "scale-[1.01]" : "scale-[1.05]"
+                    className={`relative z-10 w-full h-full object-contain p-2 sm:p-3 transition-transform duration-[1100ms] ease-[cubic-bezier(.22,1,.36,1)] ${
+                      isCenter ? "scale-100" : "scale-[1.02]"
                     }`}
                     loading="lazy"
                   />
@@ -197,7 +197,7 @@ export function OfficeGallery() {
               return (
                 <div
                   key={image.id}
-                  className={`absolute top-1/2 left-1/2 w-[86%] sm:w-[70%] lg:w-[60%] xl:w-[56%] aspect-[16/10] max-h-[88%] rounded-3xl overflow-hidden transform-gpu will-change-[transform,opacity,filter] transition-[transform,opacity,filter,box-shadow,border-color] duration-[950ms] ease-[cubic-bezier(.22,1,.36,1)] ${
+                  className={`absolute top-1/2 left-1/2 w-[66%] sm:w-[52%] lg:w-[42%] xl:w-[36%] aspect-[1509/2000] max-h-[92%] rounded-3xl overflow-hidden transform-gpu will-change-[transform,opacity,filter] transition-[transform,opacity,filter,box-shadow,border-color] duration-[950ms] ease-[cubic-bezier(.22,1,.36,1)] ${
                     isCenter
                       ? "ring-1 ring-primary/40 border border-border/70 shadow-2xl"
                       : "border border-white/20 shadow-[0_18px_50px_rgba(0,0,0,0.5)]"
