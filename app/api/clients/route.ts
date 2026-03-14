@@ -1,8 +1,17 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.CLIENTS_MANAGE,
+      ADMIN_PERMISSIONS.DATA_MANAGE,
+      ADMIN_PERMISSIONS.SHIPMENTS_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
+
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
@@ -47,8 +56,15 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.CLIENTS_MANAGE,
+      ADMIN_PERMISSIONS.DATA_MANAGE,
+      ADMIN_PERMISSIONS.SHIPMENTS_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
+
     const body = await request.json()
     const { name, email, phone, address, province, city, notes } = body
 

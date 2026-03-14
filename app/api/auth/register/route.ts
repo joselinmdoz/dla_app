@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { hashPassword, generateToken, setAuthCookie } from '@/lib/auth'
+import {
+  canAccessAdminPanel,
+  getEffectivePermissions,
+  getFirstAccessibleAdminPath,
+} from '@/lib/admin-permissions'
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,7 +41,12 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    const token = generateToken(user.id, user.role)
+    const permissions = getEffectivePermissions(user.role, [])
+    const token = generateToken({
+      id: user.id,
+      role: user.role,
+      permissions,
+    })
 
     await setAuthCookie(token)
 
@@ -46,6 +56,10 @@ export async function POST(request: NextRequest) {
         email: user.email,
         name: user.name,
         role: user.role,
+        permissions,
+        isActive: true,
+        canAccessAdmin: canAccessAdminPanel(user.role, permissions),
+        adminEntryPath: getFirstAccessibleAdminPath(user.role, permissions),
       },
     })
   } catch (error) {

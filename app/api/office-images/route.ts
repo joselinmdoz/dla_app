@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { randomUUID } from "node:crypto"
-import { verifyToken } from "@/lib/auth"
+import { requireAdminPermissions } from "@/lib/admin-auth"
+import { ADMIN_PERMISSIONS } from "@/lib/admin-permissions"
 
 type OfficeImageRow = {
   id: string
@@ -35,18 +36,18 @@ async function ensureOfficeImagesTable() {
   await prisma.$executeRawUnsafe(CREATE_TABLE_SQL)
 }
 
-function isAdminRequest(request: NextRequest): boolean {
-  const token = request.cookies.get("auth-token")?.value
-  if (!token) return false
-  const session = verifyToken(token)
-  return session?.role === "ADMIN"
-}
-
 export async function GET(request: NextRequest) {
   try {
     await ensureOfficeImagesTable()
     const includeInactive = request.nextUrl.searchParams.get("includeInactive") === "true"
-    const canListInactive = includeInactive && isAdminRequest(request)
+    let canListInactive = false
+    if (includeInactive) {
+      const auth = await requireAdminPermissions(
+        request,
+        ADMIN_PERMISSIONS.OFFICE_IMAGES_MANAGE
+      )
+      canListInactive = auth.authorized
+    }
     const images = canListInactive
       ? await prisma.$queryRaw<OfficeImageRow[]>`
           SELECT
@@ -92,9 +93,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!isAdminRequest(request)) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 })
-    }
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.OFFICE_IMAGES_MANAGE
+    )
+    if (!auth.authorized) return auth.response
 
     const body = await request.json()
     const { imageUrl, altText, title, description, linkUrl, sortOrder, isActive } = body
@@ -165,9 +168,11 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    if (!isAdminRequest(request)) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 })
-    }
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.OFFICE_IMAGES_MANAGE
+    )
+    if (!auth.authorized) return auth.response
 
     const imagesBody = await request.json()
 
@@ -211,9 +216,11 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    if (!isAdminRequest(request)) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 })
-    }
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.OFFICE_IMAGES_MANAGE
+    )
+    if (!auth.authorized) return auth.response
 
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")

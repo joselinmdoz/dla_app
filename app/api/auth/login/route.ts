@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { verifyPassword, generateToken, setAuthCookie } from '@/lib/auth'
+import {
+  generateToken,
+  getUserAccessRow,
+  setAuthCookie,
+  verifyPassword,
+} from '@/lib/auth'
+import {
+  canAccessAdminPanel,
+  getEffectivePermissions,
+  getFirstAccessibleAdminPath,
+} from '@/lib/admin-permissions'
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,7 +44,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const token = generateToken(user.id, user.role)
+    const access = await getUserAccessRow(user.id)
+    const isActive = access?.isActive ?? true
+
+    if (!isActive) {
+      return NextResponse.json(
+        { error: 'Usuario inactivo' },
+        { status: 403 }
+      )
+    }
+
+    const permissions = getEffectivePermissions(user.role, access?.permissions)
+    const token = generateToken({
+      id: user.id,
+      role: user.role,
+      permissions,
+    })
 
     await setAuthCookie(token)
 
@@ -44,6 +69,10 @@ export async function POST(request: NextRequest) {
         email: user.email,
         name: user.name,
         role: user.role,
+        permissions,
+        isActive,
+        canAccessAdmin: canAccessAdminPanel(user.role, permissions),
+        adminEntryPath: getFirstAccessibleAdminPath(user.role, permissions),
       },
     })
   } catch (error) {

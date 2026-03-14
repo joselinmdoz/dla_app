@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { randomUUID } from 'node:crypto'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
 type FeatureCardRow = {
   id: string
@@ -68,6 +70,12 @@ export async function GET() {
 // POST - Crear nueva tarjeta
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.FEATURE_CARDS_MANAGE
+    )
+    if (!auth.authorized) return auth.response
+
     const body = await request.json()
     const { imageUrl, altText, title, description, linkUrl, sortOrder, isActive } = body
 
@@ -138,6 +146,12 @@ export async function POST(request: NextRequest) {
 // PUT - Actualizar todas las tarjetas (para reorder)
 export async function PUT(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.FEATURE_CARDS_MANAGE
+    )
+    if (!auth.authorized) return auth.response
+
     const cardsBody = await request.json()
 
     if (!Array.isArray(cardsBody)) {
@@ -182,6 +196,12 @@ export async function PUT(request: NextRequest) {
 // DELETE - Eliminar una tarjeta
 export async function DELETE(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.FEATURE_CARDS_MANAGE
+    )
+    if (!auth.authorized) return auth.response
+
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
 

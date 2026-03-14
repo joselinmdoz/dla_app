@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
 // GET - Obtener una slide por ID
 export async function GET(
@@ -7,6 +9,12 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.HERO_SLIDES_MANAGE
+    )
+    if (!auth.authorized) return auth.response
+
     const { id } = await params
     const slide = await prisma.heroSlide.findUnique({
       where: { id }
@@ -35,6 +43,12 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.HERO_SLIDES_MANAGE
+    )
+    if (!auth.authorized) return auth.response
+
     const { id } = await params
     const body = await request.json()
     const { imageUrl, altText, title, linkUrl, sortOrder, isActive } = body
@@ -67,6 +81,12 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.HERO_SLIDES_MANAGE
+    )
+    if (!auth.authorized) return auth.response
+
     const { id } = await params
 
     await prisma.heroSlide.delete({

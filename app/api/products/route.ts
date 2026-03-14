@@ -1,14 +1,25 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')
-    const showAll = searchParams.get('showAll') === 'true'
+    const showAllRequested = searchParams.get('showAll') === 'true'
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
     const skip = (page - 1) * limit
+
+    let showAll = false
+    if (showAllRequested) {
+      const auth = await requireAdminPermissions(request, [
+        ADMIN_PERMISSIONS.PRODUCTS_MANAGE,
+        ADMIN_PERMISSIONS.DATA_MANAGE,
+      ])
+      showAll = auth.authorized
+    }
     
     const where = {
       ...(category ? { category: { slug: category } } : {}),
@@ -51,8 +62,14 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.PRODUCTS_MANAGE,
+      ADMIN_PERMISSIONS.DATA_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
+
     const body = await request.json()
     const { 
       name, 

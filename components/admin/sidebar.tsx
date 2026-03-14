@@ -5,7 +5,6 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
   LayoutDashboard,
-  Package,
   ShoppingCart,
   Folder,
   Users,
@@ -21,28 +20,123 @@ import {
   Building2,
   CreditCard,
   FileText,
+  QrCode,
 } from "lucide-react"
+import {
+  AdminPermission,
+  ADMIN_PERMISSIONS,
+  hasAnyPermission,
+} from "@/lib/admin-permissions"
 
 const navItems = [
-  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { label: "Slides Carrusel", href: "/admin/hero-slides", icon: Image },
-  { label: "Tarjetas Info", href: "/admin/feature-cards", icon: CreditCard },
-  { label: "Oficinas", href: "/admin/office-images", icon: Building2 },
-  { label: "Contenido Landing", href: "/admin/content", icon: FileText },
-  { label: "Envíos", href: "/admin/shipments", icon: Truck },
-  { label: "Gestión Datos", href: "/admin/data", icon: Database },
-  { label: "Importar/Exportar", href: "/admin/import", icon: FileSpreadsheet },
-  { label: "Productos", href: "/admin/products", icon: ShoppingCart },
-  { label: "Categorías", href: "/admin/categories", icon: Folder },
-  { label: "Clientes", href: "/admin/clients", icon: Users },
-  { label: "Usuarios", href: "/admin/users", icon: UserCog },
-  { label: "Configuración", href: "/admin/settings", icon: Settings },
+  {
+    label: "Dashboard",
+    href: "/admin",
+    icon: LayoutDashboard,
+    permissions: [ADMIN_PERMISSIONS.DASHBOARD_VIEW],
+  },
+  {
+    label: "Slides Carrusel",
+    href: "/admin/hero-slides",
+    icon: Image,
+    permissions: [ADMIN_PERMISSIONS.HERO_SLIDES_MANAGE],
+  },
+  {
+    label: "Tarjetas Info",
+    href: "/admin/feature-cards",
+    icon: CreditCard,
+    permissions: [ADMIN_PERMISSIONS.FEATURE_CARDS_MANAGE],
+  },
+  {
+    label: "Oficinas",
+    href: "/admin/office-images",
+    icon: Building2,
+    permissions: [ADMIN_PERMISSIONS.OFFICE_IMAGES_MANAGE],
+  },
+  {
+    label: "Contenido Landing",
+    href: "/admin/content",
+    icon: FileText,
+    permissions: [ADMIN_PERMISSIONS.LANDING_CONTENT_MANAGE],
+  },
+  {
+    label: "Envíos",
+    href: "/admin/shipments",
+    icon: Truck,
+    permissions: [ADMIN_PERMISSIONS.SHIPMENTS_MANAGE],
+  },
+  {
+    label: "Gestión Datos",
+    href: "/admin/data",
+    icon: Database,
+    permissions: [ADMIN_PERMISSIONS.DATA_MANAGE],
+  },
+  {
+    label: "Importar/Exportar",
+    href: "/admin/import",
+    icon: FileSpreadsheet,
+    permissions: [ADMIN_PERMISSIONS.IMPORT_EXPORT_MANAGE],
+  },
+  {
+    label: "Productos",
+    href: "/admin/products",
+    icon: ShoppingCart,
+    permissions: [ADMIN_PERMISSIONS.PRODUCTS_MANAGE],
+  },
+  {
+    label: "Categorías",
+    href: "/admin/categories",
+    icon: Folder,
+    permissions: [ADMIN_PERMISSIONS.CATEGORIES_MANAGE],
+  },
+  {
+    label: "Clientes",
+    href: "/admin/clients",
+    icon: Users,
+    permissions: [ADMIN_PERMISSIONS.CLIENTS_MANAGE],
+  },
+  {
+    label: "Usuarios",
+    href: "/admin/users",
+    icon: UserCog,
+    permissions: [ADMIN_PERMISSIONS.USERS_MANAGE],
+  },
+  {
+    label: "Promociones QR",
+    href: "/admin/promotions",
+    icon: QrCode,
+    permissions: [
+      ADMIN_PERMISSIONS.PROMOTIONS_ISSUE,
+      ADMIN_PERMISSIONS.PROMOTIONS_REDEEM,
+      ADMIN_PERMISSIONS.PROMOTIONS_AUDIT,
+      ADMIN_PERMISSIONS.PROMOTIONS_MANAGE,
+    ],
+  },
+  {
+    label: "Configuración",
+    href: "/admin/settings",
+    icon: Settings,
+    permissions: [ADMIN_PERMISSIONS.SETTINGS_MANAGE],
+  },
 ]
 
-export function AdminSidebar() {
+export function AdminSidebar({
+  user,
+}: {
+  user: {
+    name: string | null
+    email: string
+    role: string
+    permissions: AdminPermission[]
+  }
+}) {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const pathname = usePathname()
+  const visibleNavItems = navItems.filter((item) =>
+    hasAnyPermission(user.role, user.permissions, item.permissions)
+  )
+  const initials = (user.name || user.email || "A").trim().charAt(0).toUpperCase()
 
   async function handleLogout() {
     if (isLoggingOut) return
@@ -100,8 +194,11 @@ export function AdminSidebar() {
 
           {/* Navigation */}
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href
+            {visibleNavItems.map((item) => {
+              const isActive =
+                item.href === "/admin"
+                  ? pathname === "/admin"
+                  : pathname.startsWith(item.href)
               const Icon = item.icon
               return (
                 <Link
@@ -122,17 +219,22 @@ export function AdminSidebar() {
                 </Link>
               )
             })}
+            {visibleNavItems.length === 0 && (
+              <div className="px-4 py-3 text-sm text-muted-foreground">
+                Sin módulos asignados para esta cuenta.
+              </div>
+            )}
           </nav>
 
           {/* User section */}
           <div className="p-4 border-t border-border">
             <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-accent/50">
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">A</span>
+                <span className="text-primary-foreground font-bold text-sm">{initials}</span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">Admin</p>
-                <p className="text-xs text-muted-foreground truncate">admin@dla.com</p>
+                <p className="text-sm font-medium truncate">{user.name || "Usuario"}</p>
+                <p className="text-xs text-muted-foreground truncate">{user.email}</p>
               </div>
               <button
                 onClick={handleLogout}

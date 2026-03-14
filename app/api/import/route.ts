@@ -9,6 +9,8 @@ import {
 } from '@/lib/import/validator'
 import { transformProduct, transformCategory } from '@/lib/import/transformer'
 import { prisma } from '@/lib/prisma'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
 type EntityType = 'PRODUCT' | 'CATEGORY' | 'CLIENT' | 'SHIPMENT'
 
@@ -16,6 +18,12 @@ type CSVRow = Record<string, string>
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.IMPORT_EXPORT_MANAGE,
+      ADMIN_PERMISSIONS.DATA_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
+
     const formData = await request.formData()
     const file = formData.get('file') as File | null
     const entity = formData.get('entity') as EntityType | null

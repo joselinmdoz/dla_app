@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { randomUUID } from 'node:crypto'
-import { verifyToken } from '@/lib/auth'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
 type SettingRow = {
   key: string
@@ -19,13 +20,6 @@ const CREATE_TABLE_SQL = `
 
 async function ensureSiteSettingsTable() {
   await prisma.$executeRawUnsafe(CREATE_TABLE_SQL)
-}
-
-function isAdminRequest(request: NextRequest): boolean {
-  const token = request.cookies.get('auth-token')?.value
-  if (!token) return false
-  const session = verifyToken(token)
-  return session?.role === 'ADMIN'
 }
 
 // GET - Obtener todas las configuraciones
@@ -56,12 +50,11 @@ export async function GET() {
 // POST - Actualizar configuración
 export async function POST(request: NextRequest) {
   try {
-    if (!isAdminRequest(request)) {
-      return NextResponse.json(
-        { error: 'No autorizado' },
-        { status: 401 }
-      )
-    }
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.SETTINGS_MANAGE,
+      ADMIN_PERMISSIONS.LANDING_CONTENT_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
 
     const body = await request.json()
     const { key, value } = body
@@ -99,12 +92,11 @@ export async function POST(request: NextRequest) {
 // PUT - Actualizar múltiples configuraciones
 export async function PUT(request: NextRequest) {
   try {
-    if (!isAdminRequest(request)) {
-      return NextResponse.json(
-        { error: 'No autorizado' },
-        { status: 401 }
-      )
-    }
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.SETTINGS_MANAGE,
+      ADMIN_PERMISSIONS.LANDING_CONTENT_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
 
     const settingsBody = await request.json()
 

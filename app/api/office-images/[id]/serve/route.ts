@@ -22,6 +22,12 @@ const CREATE_TABLE_SQL = `
   );
 `
 
+function isNodeErrorWithCode(
+  error: unknown
+): error is NodeJS.ErrnoException {
+  return typeof error === "object" && error !== null && "code" in error
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -57,7 +63,22 @@ export async function GET(
       ".svg": "image/svg+xml",
     }
 
-    const fileBuffer = await readFile(fullPath)
+    let fileBuffer: ArrayBuffer
+    try {
+      const rawBuffer = await readFile(fullPath)
+      fileBuffer = rawBuffer.buffer.slice(
+        rawBuffer.byteOffset,
+        rawBuffer.byteOffset + rawBuffer.byteLength
+      )
+    } catch (error) {
+      if (isNodeErrorWithCode(error) && error.code === "ENOENT") {
+        return NextResponse.json(
+          { error: "Archivo de imagen no encontrado en disco" },
+          { status: 404 }
+        )
+      }
+      throw error
+    }
 
     return new NextResponse(fileBuffer, {
       headers: {

@@ -48,8 +48,8 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           : 'Tu cuenta ha sido creada exitosamente',
       })
 
-      if (data.user.role === 'ADMIN') {
-        window.location.href = '/admin'
+      if (data.user.canAccessAdmin) {
+        window.location.href = data.user.adminEntryPath || '/admin'
       } else if (onSuccess) {
         onSuccess()
       } else {

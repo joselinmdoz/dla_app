@@ -1,5 +1,7 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
 export async function GET(
   request: Request,
@@ -37,10 +39,16 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.PRODUCTS_MANAGE,
+      ADMIN_PERMISSIONS.DATA_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
+
     const { id } = await params
     const body = await request.json()
     
@@ -94,10 +102,16 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.PRODUCTS_MANAGE,
+      ADMIN_PERMISSIONS.DATA_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
+
     const { id } = await params
     
     await prisma.product.delete({

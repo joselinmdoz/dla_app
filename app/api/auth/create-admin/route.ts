@@ -1,9 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { hashPassword, generateToken, setAuthCookie } from '@/lib/auth'
+import {
+  ADMIN_PERMISSIONS,
+  canAccessAdminPanel,
+  getEffectivePermissions,
+  getFirstAccessibleAdminPath,
+} from '@/lib/admin-permissions'
+import { requireAdminPermissions } from '@/lib/admin-auth'
 
 export async function POST(request: NextRequest) {
   try {
+    const adminsCount = await prisma.user.count({
+      where: { role: 'ADMIN' },
+    })
+
+    if (adminsCount > 0) {
+      const auth = await requireAdminPermissions(
+        request,
+        ADMIN_PERMISSIONS.USERS_MANAGE
+      )
+      if (!auth.authorized) return auth.response
+    }
+
     const body = await request.json()
     const { email, password, name } = body
 
@@ -37,7 +56,12 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    const token = generateToken(user.id, user.role)
+    const permissions = getEffectivePermissions(user.role, [])
+    const token = generateToken({
+      id: user.id,
+      role: user.role,
+      permissions,
+    })
 
     await setAuthCookie(token)
 
@@ -47,6 +71,10 @@ export async function POST(request: NextRequest) {
         email: user.email,
         name: user.name,
         role: user.role,
+        permissions,
+        isActive: true,
+        canAccessAdmin: canAccessAdminPanel(user.role, permissions),
+        adminEntryPath: getFirstAccessibleAdminPath(user.role, permissions),
       },
     })
   } catch (error) {

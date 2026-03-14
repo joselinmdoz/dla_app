@@ -1,5 +1,7 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
 export async function GET(request: Request) {
   try {
@@ -38,8 +40,14 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.CATEGORIES_MANAGE,
+      ADMIN_PERMISSIONS.DATA_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
+
     const body = await request.json()
     const { name, sortOrder } = body
 

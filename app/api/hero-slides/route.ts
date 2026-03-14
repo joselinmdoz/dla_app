@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { HeroSlide } from '@prisma/client'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
 // GET - Obtener todas las slides activas ordenadas
 export async function GET() {
@@ -26,6 +28,12 @@ export async function GET() {
 // POST - Crear nueva slide
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.HERO_SLIDES_MANAGE
+    )
+    if (!auth.authorized) return auth.response
+
     const body = await request.json()
     const { imageUrl, altText, title, linkUrl, sortOrder, isActive } = body
 
@@ -53,6 +61,12 @@ export async function POST(request: NextRequest) {
 // PUT - Actualizar todas las slides (para reorder)
 export async function PUT(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.HERO_SLIDES_MANAGE
+    )
+    if (!auth.authorized) return auth.response
+
     const slides: HeroSlide[] = await request.json()
 
     // Usar transaction para actualizar todas las slides
@@ -85,6 +99,12 @@ export async function PUT(request: NextRequest) {
 // DELETE - Eliminar una slide
 export async function DELETE(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(
+      request,
+      ADMIN_PERMISSIONS.HERO_SLIDES_MANAGE
+    )
+    if (!auth.authorized) return auth.response
+
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
 

@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.SHIPMENTS_MANAGE,
+      ADMIN_PERMISSIONS.DATA_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
+
     const items = await prisma.paymentCatalog.findMany({
       orderBy: { sortOrder: 'asc' }
     })
@@ -19,6 +27,12 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.SHIPMENTS_MANAGE,
+      ADMIN_PERMISSIONS.DATA_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
+
     const body = await request.json()
     const { name, code, description, isActive, sortOrder } = body
 

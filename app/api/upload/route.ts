@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.HERO_SLIDES_MANAGE,
+      ADMIN_PERMISSIONS.FEATURE_CARDS_MANAGE,
+      ADMIN_PERMISSIONS.OFFICE_IMAGES_MANAGE,
+      ADMIN_PERMISSIONS.LANDING_CONTENT_MANAGE,
+      ADMIN_PERMISSIONS.PRODUCTS_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
+
     const formData = await request.formData()
     const file = formData.get('file') as File
 

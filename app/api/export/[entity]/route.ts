@@ -1,19 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { stringify } from 'csv-stringify'
+import { requireAdminPermissions } from '@/lib/admin-auth'
+import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 
 type EntityType = 'products' | 'categories' | 'clients' | 'shipments'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { entity: string } }
+  { params }: { params: Promise<{ entity: string }> }
 ) {
   try {
-    const entity = params.entity.toLowerCase() as EntityType
+    const auth = await requireAdminPermissions(request, [
+      ADMIN_PERMISSIONS.IMPORT_EXPORT_MANAGE,
+      ADMIN_PERMISSIONS.DATA_MANAGE,
+    ])
+    if (!auth.authorized) return auth.response
+
+    const { entity: rawEntity } = await params
+    const entity = rawEntity.toLowerCase() as EntityType
 
     if (!['products', 'categories', 'clients', 'shipments'].includes(entity)) {
       return NextResponse.json(
-        { error: `Tipo de entidad no válida: ${params.entity}` },
+        { error: `Tipo de entidad no válida: ${rawEntity}` },
         { status: 400 }
       )
     }

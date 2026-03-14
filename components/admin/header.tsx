@@ -2,7 +2,11 @@
 
 import { Bell, Search, User } from "lucide-react"
 
-export function AdminHeader() {
+export function AdminHeader({
+  user,
+}: {
+  user: { name: string | null; email: string; role: string }
+}) {
   return (
     <header className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="flex items-center justify-between h-16 px-6">
@@ -31,7 +35,9 @@ export function AdminHeader() {
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
               <User className="w-4 h-4 text-primary-foreground" />
             </div>
-            <span className="text-sm font-medium hidden sm:block">Admin</span>
+            <span className="text-sm font-medium hidden sm:block">
+              {user.name || user.email}
+            </span>
           </button>
         </div>
       </div>
