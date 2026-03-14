@@ -1,18 +1,7 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Oswald, Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-
-const oswald = Oswald({
-  subsets: ["latin"],
-  variable: "--font-oswald",
-})
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://dlaenvios.com'),
@@ -108,7 +97,7 @@ export default function RootLayout({
       <head>
         <link rel="canonical" href="https://dlaenvios.com" />
       </head>
-      <body className={`${oswald.variable} ${playfair.variable} font-sans antialiased`}>
+      <body className="font-sans antialiased">
         {children}
         <Analytics />
       </body>

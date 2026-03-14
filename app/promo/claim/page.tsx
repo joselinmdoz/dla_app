@@ -1,15 +1,17 @@
-"use client"
+type PromoClaimPageProps = {
+  searchParams: Promise<{
+    code?: string | string[]
+  }>
+}
 
-import { useMemo } from "react"
-import { useSearchParams } from "next/navigation"
-
-export default function PromoClaimPage() {
-  const searchParams = useSearchParams()
-
-  const code = useMemo(() => {
-    const raw = searchParams.get("code")
-    return raw ? raw.toUpperCase() : null
-  }, [searchParams])
+export default async function PromoClaimPage({
+  searchParams,
+}: PromoClaimPageProps) {
+  const resolvedSearchParams = await searchParams
+  const rawCode = resolvedSearchParams.code
+  const code = Array.isArray(rawCode)
+    ? rawCode[0]?.toUpperCase() || null
+    : rawCode?.toUpperCase() || null
 
   return (
     <main className="min-h-screen bg-background text-foreground flex items-center justify-center px-4">
