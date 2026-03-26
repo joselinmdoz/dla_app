@@ -132,7 +132,7 @@ export default function AdminDashboard() {
                     </span>
                   </td>
                   <td className="p-4 text-sm text-right">
-                    ${shipment.price.toLocaleString()}
+                    ${shipment.price.toLocaleString('en-US')}
                   </td>
                   <td className="p-4 text-right">
                     <Link

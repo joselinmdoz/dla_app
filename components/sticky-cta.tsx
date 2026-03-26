@@ -23,7 +23,7 @@ export function StickyCTA() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-primary border-t-4 border-amber-600 shadow-2xl animate-in slide-in-from-bottom duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           {/* Location Info with Truck */}
           <div className="flex items-center gap-2 text-primary-foreground">

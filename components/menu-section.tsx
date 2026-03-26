@@ -56,7 +56,7 @@ export function MenuSection() {
   if (loading || loadingCategories) {
     return (
       <section id="menu" className="py-20 md:py-32 bg-card">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-primary tracking-tighter mb-4">
               {content.menu.title}
@@ -73,7 +73,7 @@ export function MenuSection() {
   if (error) {
     return (
       <section id="menu" className="py-20 md:py-32 bg-card">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-red-500">Error al cargar productos: {error}</p>
           </div>
@@ -90,7 +90,7 @@ export function MenuSection() {
 
   return (
     <section id="menu" className="py-20 md:py-32 bg-card">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header - Restaurant Style */}
         <div className="text-center mb-12">
           <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-primary tracking-tighter mb-4">

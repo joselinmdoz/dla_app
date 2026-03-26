@@ -605,7 +605,7 @@ export default function ShipmentFormPage() {
                         {availableProducts.length > 0 ? (
                           availableProducts.map((product) => (
                             <SelectItem key={product.id} value={product.id}>
-                              {product.name} - ${parseFloat(product.price.toString()).toLocaleString()}
+                              {product.name} - ${parseFloat(product.price.toString()).toLocaleString('en-US')}
                             </SelectItem>
                           ))
                         ) : (
@@ -633,7 +633,7 @@ export default function ShipmentFormPage() {
                         <div className="flex-1">
                           <p className="font-medium">{sp.product.name}</p>
                           <p className="text-sm text-muted-foreground">
-                            ${sp.unitPrice.toLocaleString()} c/u
+                            ${sp.unitPrice.toLocaleString('en-US')} c/u
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
@@ -661,7 +661,7 @@ export default function ShipmentFormPage() {
                     <div className="flex justify-between items-center pt-2 border-t">
                       <span className="font-medium">Total:</span>
                       <span className="text-lg font-bold">
-                        ${calculateTotal().toLocaleString()}
+                        ${calculateTotal().toLocaleString('en-US')}
                       </span>
                     </div>
                   </div>

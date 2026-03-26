@@ -21,6 +21,7 @@ import {
   CreditCard,
   FileText,
   QrCode,
+  UserPlus,
 } from "lucide-react"
 import {
   AdminPermission,
@@ -93,6 +94,12 @@ const navItems = [
     label: "Clientes",
     href: "/admin/clients",
     icon: Users,
+    permissions: [ADMIN_PERMISSIONS.CLIENTS_MANAGE],
+  },
+  {
+    label: "Referidos",
+    href: "/admin/referrals",
+    icon: UserPlus,
     permissions: [ADMIN_PERMISSIONS.CLIENTS_MANAGE],
   },
   {

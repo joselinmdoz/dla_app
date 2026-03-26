@@ -82,7 +82,7 @@ export function OfficeGallery() {
   if (isLoading) {
     return (
       <section id="offices" className="py-16 bg-gradient-to-b from-background to-muted/20">
-        <div className="container mx-auto px-4">
+        <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
               <div key={i} className="h-72 bg-muted rounded-2xl animate-pulse"></div>
@@ -123,7 +123,7 @@ export function OfficeGallery() {
 
   return (
     <section id="offices" className="py-20 bg-gradient-to-b from-background via-background to-muted/10">
-      <div className="container mx-auto px-4">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full mb-4">
             <Building2 className="w-4 h-4 text-primary" />

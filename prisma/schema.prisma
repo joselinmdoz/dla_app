@@ -155,6 +155,16 @@ model Client {
   city        String?
   notes       String?
   
+  // Código único de referido
+  referralCode String?  @unique
+  
+  // Relación de referido (quién me refiere)
+  referredById String?
+  referredBy   Client?  @relation("Referrals", fields: [referredById], references: [id], onDelete: SetNull)
+  
+  // Clientes que he referido
+  referredClients Client[] @relation("Referrals")
+  
   // Relación con provincia
   provinceId  String?
   province    Province?  @relation(fields: [provinceId], references: [id])

@@ -123,7 +123,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       <div className="text-center">
         <button
           type="button"
-          onClick={() => setIsLogin(!isLogin)}
+          onClick={() => router.push('/register')}
           className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           {isLogin

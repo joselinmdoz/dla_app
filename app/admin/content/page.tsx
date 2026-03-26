@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { Save, RefreshCw } from "lucide-react"
+import { Save, RefreshCw, Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/components/ui/use-toast"
-import { defaultLandingContent, LandingContent, parseLandingContent } from "@/lib/landing-content"
+import { defaultLandingContent, HeaderNavButton, LandingContent, parseLandingContent } from "@/lib/landing-content"
 
 type SectionKey = keyof LandingContent
 
@@ -37,6 +37,16 @@ const visibilityDefaults = {
 
 type VisibilityKey = keyof typeof visibilityDefaults
 type VisibilitySettings = Record<VisibilityKey, boolean>
+
+function createHeaderNavButton(order: number): HeaderNavButton {
+  return {
+    id: `header-nav-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    text: `Boton ${order}`,
+    url: "#menu",
+    isVisible: true,
+    position: order,
+  }
+}
 
 const visibilityFields: Array<{
   key: VisibilityKey
@@ -168,6 +178,75 @@ export default function AdminContentPage() {
   const updateVisibility = (key: VisibilityKey, checked: boolean) => {
     setVisibility((prev) => ({ ...prev, [key]: checked }))
   }
+
+  const updateHeaderButton = useCallback(
+    (id: string, field: "text" | "url", value: string) => {
+      setFormData((prev) => ({
+        ...prev,
+        header: {
+          ...prev.header,
+          navButtons: prev.header.navButtons.map((button) =>
+            button.id === id ? { ...button, [field]: value } : button
+          ),
+        },
+      }))
+    },
+    []
+  )
+
+  const updateHeaderButtonVisibility = useCallback((id: string, checked: boolean) => {
+    setFormData((prev) => ({
+      ...prev,
+      header: {
+        ...prev.header,
+        navButtons: prev.header.navButtons.map((button) =>
+          button.id === id ? { ...button, isVisible: checked } : button
+        ),
+      },
+    }))
+  }, [])
+
+  const addHeaderButton = useCallback(() => {
+    setFormData((prev) => ({
+      ...prev,
+      header: {
+        ...prev.header,
+        navButtons: [
+          ...prev.header.navButtons,
+          createHeaderNavButton(
+            prev.header.navButtons.length > 0
+              ? Math.max(...prev.header.navButtons.map((button) => button.position || 0)) + 1
+              : 1
+          ),
+        ],
+      },
+    }))
+  }, [])
+
+  const removeHeaderButton = useCallback((id: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      header: {
+        ...prev.header,
+        navButtons: prev.header.navButtons.filter((button) => button.id !== id),
+      },
+    }))
+  }, [])
+
+  const updateHeaderButtonPosition = useCallback((id: string, value: string) => {
+    const parsed = Number(value)
+    const safePosition = Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : 1
+
+    setFormData((prev) => ({
+      ...prev,
+      header: {
+        ...prev.header,
+        navButtons: prev.header.navButtons.map((button) =>
+          button.id === id ? { ...button, position: safePosition } : button
+        ),
+      },
+    }))
+  }, [])
 
   if (isLoading) {
     return (
@@ -347,41 +426,96 @@ export default function AdminContentPage() {
         <CardHeader>
           <CardTitle>Header</CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2">
-          <div>
-            <Label>Texto boton tracking</Label>
-            <Input
-              value={formData.header.trackingButtonText}
-              onChange={(e) => updateField("header", "trackingButtonText", e.target.value)}
-            />
+        <CardContent className="space-y-6">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label>Texto boton tracking</Label>
+              <Input
+                value={formData.header.trackingButtonText}
+                onChange={(e) => updateField("header", "trackingButtonText", e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Texto boton login</Label>
+              <Input
+                value={formData.header.loginButtonText}
+                onChange={(e) => updateField("header", "loginButtonText", e.target.value)}
+              />
+            </div>
           </div>
-          <div>
-            <Label>Texto boton login</Label>
-            <Input
-              value={formData.header.loginButtonText}
-              onChange={(e) => updateField("header", "loginButtonText", e.target.value)}
-            />
-          </div>
-          <div>
-            <Label>Menu item 1</Label>
-            <Input
-              value={formData.header.navShipmentsText}
-              onChange={(e) => updateField("header", "navShipmentsText", e.target.value)}
-            />
-          </div>
-          <div>
-            <Label>Menu item 2</Label>
-            <Input
-              value={formData.header.navBoxesText}
-              onChange={(e) => updateField("header", "navBoxesText", e.target.value)}
-            />
-          </div>
-          <div>
-            <Label>Menu item 3</Label>
-            <Input
-              value={formData.header.navElectronicsText}
-              onChange={(e) => updateField("header", "navElectronicsText", e.target.value)}
-            />
+
+          <div className="space-y-3">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <Label className="text-base font-semibold">Botones del menu</Label>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Configura texto, URL y visibilidad. Puedes agregar los que necesites.
+                </p>
+              </div>
+              <Button type="button" variant="outline" onClick={addHeaderButton}>
+                <Plus className="w-4 h-4 mr-2" />
+                Anadir boton
+              </Button>
+            </div>
+
+            <div className="space-y-3">
+              {formData.header.navButtons
+                .slice()
+                .sort((a, b) => a.position - b.position)
+                .map((button, index) => (
+                <div key={button.id} className="rounded-lg border border-border p-4 space-y-3">
+                  <div className="grid gap-3 md:grid-cols-[1fr_1fr_120px_auto] md:items-end">
+                    <div>
+                      <Label>Texto</Label>
+                      <Input
+                        value={button.text}
+                        onChange={(e) => updateHeaderButton(button.id, "text", e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label>URL</Label>
+                      <Input
+                        placeholder="#menu o https://..."
+                        value={button.url}
+                        onChange={(e) => updateHeaderButton(button.id, "url", e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label>Posicion</Label>
+                      <Input
+                        type="number"
+                        min={1}
+                        value={button.position}
+                        onChange={(e) => updateHeaderButtonPosition(button.id, e.target.value)}
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="text-destructive hover:text-destructive"
+                      onClick={() => removeHeaderButton(button.id)}
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Eliminar
+                    </Button>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground">Boton #{index + 1} · Posicion {button.position}</p>
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor={`header-button-visible-${button.id}`} className="text-sm">
+                        Mostrar
+                      </Label>
+                      <Switch
+                        id={`header-button-visible-${button.id}`}
+                        checked={button.isVisible}
+                        onCheckedChange={(checked) => updateHeaderButtonVisibility(button.id, checked)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>

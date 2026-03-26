@@ -1,3 +1,11 @@
+export interface HeaderNavButton {
+  id: string
+  text: string
+  url: string
+  isVisible: boolean
+  position: number
+}
+
 export interface LandingContent {
   business: {
     brandName: string
@@ -15,10 +23,8 @@ export interface LandingContent {
   }
   header: {
     trackingButtonText: string
-    navShipmentsText: string
-    navBoxesText: string
-    navElectronicsText: string
     loginButtonText: string
+    navButtons: HeaderNavButton[]
   }
   hero: {
     titlePrimary: string
@@ -97,10 +103,30 @@ export const defaultLandingContent: LandingContent = {
   },
   header: {
     trackingButtonText: "Rastrear envio",
-    navShipmentsText: "Envios",
-    navBoxesText: "Cajas Super Express",
-    navElectronicsText: "Electronicos",
     loginButtonText: "Iniciar Sesion",
+    navButtons: [
+      {
+        id: "header-nav-shipments",
+        text: "Envios",
+        url: "#menu",
+        isVisible: true,
+        position: 1,
+      },
+      {
+        id: "header-nav-boxes",
+        text: "Cajas Super Express",
+        url: "#menu",
+        isVisible: true,
+        position: 2,
+      },
+      {
+        id: "header-nav-electronics",
+        text: "Electronicos",
+        url: "#menu",
+        isVisible: true,
+        position: 3,
+      },
+    ],
   },
   hero: {
     titlePrimary: "DLA",
@@ -179,6 +205,76 @@ function mergeSection<T extends Record<string, string>>(defaults: T, source: unk
   return output
 }
 
+function parseHeaderNavButtons(source: unknown): HeaderNavButton[] {
+  if (!source || typeof source !== "object") {
+    return defaultLandingContent.header.navButtons
+  }
+
+  const record = source as Record<string, unknown>
+  const rawButtons = record.navButtons
+
+  if (Array.isArray(rawButtons)) {
+    const parsedButtons = rawButtons
+      .map((item, index) => {
+        if (!item || typeof item !== "object") return null
+        const button = item as Record<string, unknown>
+        const text = typeof button.text === "string" ? button.text.trim() : ""
+        if (!text) return null
+
+        const id =
+          typeof button.id === "string" && button.id.trim().length > 0
+            ? button.id
+            : `header-nav-${index + 1}`
+        const url = typeof button.url === "string" && button.url.trim().length > 0 ? button.url : "#menu"
+        const isVisible = typeof button.isVisible === "boolean" ? button.isVisible : true
+        const rawPosition = typeof button.position === "number" ? button.position : Number(button.position)
+        const position = Number.isFinite(rawPosition) && rawPosition > 0 ? Math.floor(rawPosition) : index + 1
+
+        return { id, text, url, isVisible, position }
+      })
+      .filter((button): button is HeaderNavButton => button !== null)
+
+    return parsedButtons
+  }
+
+  const legacyButtons: HeaderNavButton[] = []
+  const legacyFieldMapping = [
+    { key: "navShipmentsText", fallback: "Envios" },
+    { key: "navBoxesText", fallback: "Cajas Super Express" },
+    { key: "navElectronicsText", fallback: "Electronicos" },
+  ]
+
+  legacyFieldMapping.forEach((legacyField, index) => {
+    const value = record[legacyField.key]
+    const text = typeof value === "string" && value.trim().length > 0 ? value : legacyField.fallback
+    legacyButtons.push({
+      id: `header-nav-legacy-${index + 1}`,
+      text,
+      url: "#menu",
+      isVisible: true,
+      position: index + 1,
+    })
+  })
+
+  return legacyButtons.length > 0 ? legacyButtons : defaultLandingContent.header.navButtons
+}
+
+function mergeHeaderSection(source: unknown): LandingContent["header"] {
+  const defaults = defaultLandingContent.header
+  if (!source || typeof source !== "object") {
+    return defaults
+  }
+
+  const record = source as Record<string, unknown>
+
+  return {
+    trackingButtonText:
+      typeof record.trackingButtonText === "string" ? record.trackingButtonText : defaults.trackingButtonText,
+    loginButtonText: typeof record.loginButtonText === "string" ? record.loginButtonText : defaults.loginButtonText,
+    navButtons: parseHeaderNavButtons(record),
+  }
+}
+
 export function parseLandingContent(raw: string | null | undefined): LandingContent {
   if (!raw) return defaultLandingContent
 
@@ -186,7 +282,7 @@ export function parseLandingContent(raw: string | null | undefined): LandingCont
     const parsed = JSON.parse(raw) as Partial<LandingContent>
     return {
       business: mergeSection(defaultLandingContent.business, parsed.business),
-      header: mergeSection(defaultLandingContent.header, parsed.header),
+      header: mergeHeaderSection(parsed.header),
       hero: mergeSection(defaultLandingContent.hero, parsed.hero),
       featureCards: mergeSection(defaultLandingContent.featureCards, parsed.featureCards),
       menu: mergeSection(defaultLandingContent.menu, parsed.menu),

@@ -169,7 +169,7 @@ export default function ShipmentsPage() {
                     </span>
                   </TableCell>
                   <TableCell className="text-right font-medium">
-                    ${parseFloat(shipment.price.toString()).toLocaleString()}
+                    ${parseFloat(shipment.price.toString()).toLocaleString('en-US')}
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     {new Date(shipment.createdAt).toLocaleDateString()}
