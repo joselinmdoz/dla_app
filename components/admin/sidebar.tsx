@@ -193,7 +193,7 @@ export function AdminSidebar({
                 className="w-10 h-10"
               />
               <div>
-                <h1 className="text-primary font-bold text-lg">DLA</h1>
+             
                 <p className="text-muted-foreground text-xs">Panel Admin</p>
               </div>
             </Link>

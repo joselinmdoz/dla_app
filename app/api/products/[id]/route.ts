@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdminPermissions } from '@/lib/admin-auth'
 import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
+import { resolveProductImage } from '@/lib/product-image'
 
 export async function GET(
   request: Request,
@@ -25,7 +26,8 @@ export async function GET(
     const productWithStringPrice = {
       ...product,
       price: product.price.toString(),
-      costPrice: product.costPrice ? product.costPrice.toString() : null
+      costPrice: product.costPrice ? product.costPrice.toString() : null,
+      image: resolveProductImage(product.image),
     }
     
     return NextResponse.json(productWithStringPrice)

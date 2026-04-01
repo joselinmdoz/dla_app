@@ -16,11 +16,13 @@ interface MenuCategoryProps {
 }
 
 export function MenuCategory({ items }: MenuCategoryProps) {
+  const fallbackImage = "/graphics/product-no-image.svg"
+
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
       {items.map((item) => {
         const hasImage = typeof item.image === "string" && item.image.trim().length > 0
-        const imageSrc = hasImage ? item.image! : "/graphics/product-no-image.svg"
+        const imageSrc = hasImage ? item.image! : fallbackImage
 
         return (
           <Link
@@ -44,6 +46,12 @@ export function MenuCategory({ items }: MenuCategoryProps) {
                   className="object-contain drop-shadow-[0_20px_60px_rgba(0,0,0,0.4)] group-hover:drop-shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all duration-500"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   style={{ filter: "drop-shadow(0 10px 30px rgba(251, 191, 36, 0.3))" }}
+                  onError={(event) => {
+                    const target = event.currentTarget as HTMLImageElement
+                    if (!target.src.includes(fallbackImage)) {
+                      target.src = fallbackImage
+                    }
+                  }}
                 />
               </div>
             </div>
