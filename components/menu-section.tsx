@@ -6,6 +6,7 @@ import { useProducts, useCategories } from "@/hooks/use-products"
 import { BoxIcon } from "lucide-react"
 import { ElectronicsChip, Cycling } from "iconoir-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export function MenuSection() {
   const { content, isSectionEnabled } = useLandingContent()
@@ -98,8 +99,35 @@ export function MenuSection() {
           </h2>
         </div>
 
-        {/* Category Tabs - Bold Restaurant Style */}
-        <div className="flex flex-wrap justify-center gap-3 mb-16">
+        {/* Mobile Category Selector */}
+        <div className="md:hidden mb-10">
+          <div className="max-w-sm mx-auto">
+            <label htmlFor="menu-category-select" className="block text-sm font-semibold text-muted-foreground mb-2">
+              Categoría
+            </label>
+            <Select
+              value={activeCategory}
+              onValueChange={setActiveCategory}
+            >
+              <SelectTrigger
+                id="menu-category-select"
+                className="w-full h-12 rounded-xl border-2 border-border bg-card px-4 text-base font-semibold text-foreground focus:border-primary"
+              >
+                <SelectValue placeholder="Selecciona una categoría" />
+              </SelectTrigger>
+              <SelectContent className="bg-card border-border text-foreground">
+                {allCategories.map((category) => (
+                  <SelectItem key={category.id} value={category.slug}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Desktop Category Tabs - Bold Restaurant Style */}
+        <div className="hidden md:flex flex-wrap justify-center gap-3 mb-16">
           {allCategories.map((category) => {
             const Icon = category.slug === "all" ? BoxIcon : (iconMap[category.slug] || BoxIcon)
             return (
