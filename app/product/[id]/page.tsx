@@ -98,6 +98,16 @@ function parseProductContent(raw: unknown): ParsedProductContent {
   }
 }
 
+function sanitizeFeatures(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return []
+  return raw.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+}
+
+function sanitizeIncludes(raw: unknown): ContentItem[] {
+  if (!Array.isArray(raw)) return []
+  return raw.filter(isContentItem).filter((item) => item.item.trim().length > 0 || item.quantity.trim().length > 0)
+}
+
 export default function ProductPage() {
   const { isSectionEnabled, content: landingContent } = useLandingContent()
   const params = useParams()
@@ -160,13 +170,18 @@ export default function ProductPage() {
   const price = parseFloat(product.price.toString())
   const spiceLevel = product.spiceLevel || 0
   const parsedContent = parseProductContent(product.content)
-  const features = parsedContent.features.length > 0 ? parsedContent.features : product.features || []
-  const includes = parsedContent.includes.length > 0 ? parsedContent.includes : product.includes || []
+  const features = parsedContent.features.length > 0 ? parsedContent.features : sanitizeFeatures(product.features)
+  const includes = parsedContent.includes.length > 0 ? parsedContent.includes : sanitizeIncludes(product.includes)
   const boxItems = parsedContent.boxItems
-  const rating = parsedContent.rating ?? product.rating ?? 4.5
-  const reviews = parsedContent.reviews ?? product.reviews ?? 0
-  const deliveryTime = parsedContent.deliveryTime || product.deliveryTime || "5-7 días hábiles"
-  const ratingStars = Math.max(0, Math.min(5, Math.round(rating)))
+  const rating = parsedContent.rating ?? product.rating ?? null
+  const reviews = parsedContent.reviews ?? product.reviews ?? null
+  const deliveryTime = (parsedContent.deliveryTime || product.deliveryTime || "").trim()
+  const description = typeof product.description === "string" && product.description.trim().length > 0
+    ? product.description.trim()
+    : null
+  const ratingStars = rating !== null ? Math.max(0, Math.min(5, Math.round(rating))) : 0
+  const hasRatingData = rating !== null
+  const hasDeliveryData = deliveryTime.length > 0 || typeof product.available === "boolean"
   const breadcrumbEnabled = isSectionEnabled("productDetailBreadcrumbEnabled")
   const imageEnabled = isSectionEnabled("productDetailImageEnabled")
   const ratingEnabled = isSectionEnabled("productDetailRatingEnabled")
@@ -239,7 +254,7 @@ export default function ProductPage() {
                 </h1>
                 
                 {/* Rating */}
-                {ratingEnabled && (
+                {ratingEnabled && hasRatingData && (
                   <div className="flex items-center gap-4 mb-6">
                     <div className="flex items-center gap-1">
                       {Array.from({ length: 5 }).map((_, i) => (
@@ -250,14 +265,15 @@ export default function ProductPage() {
                       ))}
                     </div>
                     <span className="text-foreground font-medium">
-                      {rating.toFixed(1)} ({reviews} reseñas)
+                      {rating.toFixed(1)}
+                      {reviews !== null ? ` (${reviews} reseñas)` : ""}
                     </span>
                   </div>
                 )}
 
-                {descriptionEnabled && (
+                {descriptionEnabled && description && (
                   <p className="text-lg text-muted-foreground leading-relaxed">
-                    {product.description || "Sin descripción disponible"}
+                    {description}
                   </p>
                 )}
               </div>
@@ -312,26 +328,30 @@ export default function ProductPage() {
               )}
 
               {/* Delivery Info */}
-              {deliveryEnabled && (
+              {deliveryEnabled && hasDeliveryData && (
                 <div className="flex flex-wrap gap-6">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 rounded-full bg-primary/10">
-                      <Truck className="w-6 h-6 text-primary" />
+                  {deliveryTime.length > 0 && (
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 rounded-full bg-primary/10">
+                        <Truck className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Tiempo de entrega</p>
+                        <p className="font-bold text-foreground">{deliveryTime}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Tiempo de entrega</p>
-                      <p className="font-bold text-foreground">{deliveryTime}</p>
+                  )}
+                  {typeof product.available === "boolean" && (
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 rounded-full bg-primary/10">
+                        <ShieldCheck className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Disponible</p>
+                        <p className="font-bold text-foreground">{product.available ? "Sí" : "No"}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 rounded-full bg-primary/10">
-                      <ShieldCheck className="w-6 h-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Disponible</p>
-                      <p className="font-bold text-foreground">{product.available !== false ? "Sí" : "No"}</p>
-                    </div>
-                  </div>
+                  )}
                 </div>
               )}
 

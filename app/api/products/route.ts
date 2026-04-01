@@ -8,9 +8,14 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')
     const showAllRequested = searchParams.get('showAll') === 'true'
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '10')
-    const skip = (page - 1) * limit
+    const pageParam = searchParams.get('page')
+    const limitParam = searchParams.get('limit')
+    const parsedPage = Number.parseInt(pageParam || '1', 10)
+    const parsedLimit = limitParam ? Number.parseInt(limitParam, 10) : NaN
+    const usePagination = Number.isFinite(parsedLimit) && parsedLimit > 0
+    const page = Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1
+    const limit = usePagination ? parsedLimit : undefined
+    const skip = usePagination && limit ? (page - 1) * limit : undefined
 
     let showAll = false
     if (showAllRequested) {
@@ -26,16 +31,13 @@ export async function GET(request: NextRequest) {
       ...(showAll ? {} : { available: true })
     }
 
-    const [products, total] = await Promise.all([
-      prisma.product.findMany({
-        where,
-        include: { category: true },
-        orderBy: { sortOrder: 'asc' },
-        skip,
-        take: limit
-      }),
-      prisma.product.count({ where })
-    ])
+    const products = await prisma.product.findMany({
+      where,
+      include: { category: true },
+      orderBy: { sortOrder: 'asc' },
+      ...(usePagination ? { skip, take: limit } : {}),
+    })
+    const total = usePagination ? await prisma.product.count({ where }) : products.length
     
     // Convertir Decimal a string para JSON
     const productsWithStringPrice = products.map(product => ({
@@ -48,9 +50,9 @@ export async function GET(request: NextRequest) {
       products: productsWithStringPrice,
       pagination: {
         page,
-        limit,
+        limit: limit ?? productsWithStringPrice.length,
         total,
-        totalPages: Math.ceil(total / limit)
+        totalPages: usePagination && limit ? Math.ceil(total / limit) : 1
       }
     })
   } catch (error) {

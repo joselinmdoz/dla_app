@@ -9,7 +9,7 @@ import { useLandingContent } from "@/hooks/use-landing-content"
 
 export function MenuSection() {
   const { content, isSectionEnabled } = useLandingContent()
-  const [activeCategory, setActiveCategory] = useState<string>("beef")
+  const [activeCategory, setActiveCategory] = useState<string>("all")
   const { products, loading, error } = useProducts(activeCategory === "all" ? undefined : activeCategory)
   const { categories, loading: loadingCategories } = useCategories()
   const menuEnabled = isSectionEnabled("menuSectionEnabled")
@@ -84,7 +84,7 @@ export function MenuSection() {
 
   // Combine default "all" with API categories
   const allCategories = [
-   // { id: "all", name: "Todos", slug: "all" },
+    { id: "all", name: "Todos", slug: "all" },
     ...categories
   ]
 

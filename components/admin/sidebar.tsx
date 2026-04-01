@@ -79,7 +79,7 @@ const navItems = [
     permissions: [ADMIN_PERMISSIONS.IMPORT_EXPORT_MANAGE],
   },
   {
-    label: "Productos",
+    label: "Mercado",
     href: "/admin/products",
     icon: ShoppingCart,
     permissions: [ADMIN_PERMISSIONS.PRODUCTS_MANAGE],

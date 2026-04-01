@@ -35,14 +35,8 @@ export function useProducts(categorySlug?: string) {
     async function fetchProducts() {
       try {
         setLoading(true)
-        // Optimización: solo cargar productos si hay una categoría seleccionada
-        if (!categorySlug) {
-          setProducts([])
-          setLoading(false)
-          return
-        }
-        
-        const url = `/api/products?category=${categorySlug}`
+        const query = categorySlug ? `?category=${encodeURIComponent(categorySlug)}` : ""
+        const url = `/api/products${query}`
         const res = await fetch(url)
         
         if (!res.ok) {
