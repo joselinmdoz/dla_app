@@ -92,6 +92,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const shouldLoadVercelAnalytics = process.env.VERCEL === "1"
+
   return (
     <html lang="de">
       <head>
@@ -99,7 +101,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         {children}
-        <Analytics />
+        {shouldLoadVercelAnalytics ? <Analytics /> : null}
       </body>
     </html>
   )
