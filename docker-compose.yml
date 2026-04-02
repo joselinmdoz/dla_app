@@ -51,7 +51,7 @@ services:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/dla_db?schema=public
     volumes:
-      - ./public:/app/public
+      - ./public:/app/public:shared
     networks: 
       - proxy
       - app_network
