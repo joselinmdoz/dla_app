@@ -67,3 +67,6 @@ networks:
 
 volumes:
   postgres_data:
+    external: true
+    name: dla_postgres_data
+
