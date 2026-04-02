@@ -53,3 +53,7 @@ docker exec -it next_app_dev sh
 - El puerto **3001** se usa para producción
 - El puerto **5440** se expone para PostgreSQL (conexión desde host)
 - Los cambios en código se reflejan automáticamente en desarrollo gracias al volume mount
+
+
+hacer salva en produccion 
+ocker exec postgres_dla_db pg_dump -U postgres -d dla_db > /opt/backups/dla/dla_db_$(date +%F_%H-%M-%S).sql

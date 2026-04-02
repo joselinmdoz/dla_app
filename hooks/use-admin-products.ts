@@ -24,6 +24,7 @@ export interface Product {
   price: number
   costPrice: number | null
   image: string | null
+  imagePreviewUrl?: string | null
   spiceLevel: number
   available: boolean
   sortOrder: number
@@ -56,7 +57,9 @@ export function useAdminProducts() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`/api/products?page=${page}&limit=${limit}&showAll=true`)
+      const res = await fetch(`/api/products?page=${page}&limit=${limit}&showAll=true`, {
+        cache: 'no-store',
+      })
       if (!res.ok) throw new Error('Error al cargar productos')
       const data = await res.json()
       setProducts(data.products || [])

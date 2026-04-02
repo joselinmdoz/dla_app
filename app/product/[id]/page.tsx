@@ -20,6 +20,7 @@ interface ProductDetails {
   description: string | null
   price: string
   image: string | null
+  imagePreviewUrl?: string | null
   spiceLevel: number
   category?: { id: string; name: string; slug: string }
   features?: string[]
@@ -120,7 +121,7 @@ export default function ProductPage() {
     async function fetchProduct() {
       try {
         setLoading(true)
-        const res = await fetch(`/api/products/${productId}`)
+        const res = await fetch(`/api/products/${productId}`, { cache: "no-store" })
         if (!res.ok) {
           throw new Error("Producto no encontrado")
         }
@@ -182,6 +183,7 @@ export default function ProductPage() {
   const ratingStars = rating !== null ? Math.max(0, Math.min(5, Math.round(rating))) : 0
   const hasRatingData = rating !== null
   const hasDeliveryData = deliveryTime.length > 0 || typeof product.available === "boolean"
+  const productImage = product.imagePreviewUrl || product.image
   const breadcrumbEnabled = isSectionEnabled("productDetailBreadcrumbEnabled")
   const imageEnabled = isSectionEnabled("productDetailImageEnabled")
   const ratingEnabled = isSectionEnabled("productDetailRatingEnabled")
@@ -217,9 +219,9 @@ export default function ProductPage() {
             {imageEnabled && (
               <div className="relative">
                 <div className="relative w-full aspect-square bg-card rounded-3xl overflow-hidden shadow-2xl">
-                  {product.image ? (
+                  {productImage ? (
                     <Image
-                      src={product.image}
+                      src={productImage}
                       alt={product.name}
                       fill
                       className="object-contain p-8"

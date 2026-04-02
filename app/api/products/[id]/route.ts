@@ -4,6 +4,9 @@ import { requireAdminPermissions } from '@/lib/admin-auth'
 import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 import { resolveProductImage } from '@/lib/product-image'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -28,6 +31,7 @@ export async function GET(
       price: product.price.toString(),
       costPrice: product.costPrice ? product.costPrice.toString() : null,
       image: resolveProductImage(product.image),
+      imagePreviewUrl: `/api/products/${product.id}/image?v=${encodeURIComponent(product.updatedAt.toISOString())}`,
     }
     
     return NextResponse.json(productWithStringPrice)
@@ -92,7 +96,9 @@ export async function PUT(
     return NextResponse.json({
       ...product,
       price: product.price.toString(),
-      costPrice: product.costPrice ? product.costPrice.toString() : null
+      costPrice: product.costPrice ? product.costPrice.toString() : null,
+      image: resolveProductImage(product.image),
+      imagePreviewUrl: `/api/products/${product.id}/image?v=${encodeURIComponent(product.updatedAt.toISOString())}`,
     })
   } catch (error) {
     console.error('Error updating product:', error)

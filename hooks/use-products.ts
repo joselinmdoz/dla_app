@@ -6,6 +6,7 @@ export interface Product {
   description: string | null
   price: string
   image: string | null
+  imagePreviewUrl?: string | null
   spiceLevel: number
   category: {
     id: string
@@ -37,7 +38,7 @@ export function useProducts(categorySlug?: string) {
         setLoading(true)
         const query = categorySlug ? `?category=${encodeURIComponent(categorySlug)}` : ""
         const url = `/api/products${query}`
-        const res = await fetch(url)
+        const res = await fetch(url, { cache: "no-store" })
         
         if (!res.ok) {
           throw new Error('Error al obtener productos')

@@ -33,7 +33,7 @@ export function MenuSection() {
             price: `$${parseFloat(product.price).toFixed(2)}`,
             description: product.description || "",
             spiceLevel: product.spiceLevel,
-            image: product.image || undefined,
+            image: product.imagePreviewUrl || product.image || undefined,
           }))
       })).filter(group => group.items.length > 0)
     : []
@@ -46,7 +46,7 @@ export function MenuSection() {
         price: `$${parseFloat(product.price).toFixed(2)}`,
         description: product.description || "",
         spiceLevel: product.spiceLevel,
-        image: product.image || undefined,
+        image: product.imagePreviewUrl || product.image || undefined,
       }))
     : []
 

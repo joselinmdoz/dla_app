@@ -4,6 +4,9 @@ import { requireAdminPermissions } from '@/lib/admin-auth'
 import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 import { resolveProductImage } from '@/lib/product-image'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -46,6 +49,7 @@ export async function GET(request: NextRequest) {
       price: product.price.toString(),
       costPrice: product.costPrice ? product.costPrice.toString() : null,
       image: resolveProductImage(product.image),
+      imagePreviewUrl: `/api/products/${product.id}/image?v=${encodeURIComponent(product.updatedAt.toISOString())}`,
     }))
     
     return NextResponse.json({
@@ -127,7 +131,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       ...product,
       price: product.price.toString(),
-      costPrice: product.costPrice ? product.costPrice.toString() : null
+      costPrice: product.costPrice ? product.costPrice.toString() : null,
+      image: resolveProductImage(product.image),
+      imagePreviewUrl: `/api/products/${product.id}/image?v=${encodeURIComponent(product.updatedAt.toISOString())}`,
     })
   } catch (error) {
     console.error('Error creating product:', error)

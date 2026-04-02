@@ -444,7 +444,7 @@ export default function ProductsPage() {
                   <TableCell>
                     {product.image ? (
                       <img
-                        src={product.image}
+                        src={product.imagePreviewUrl || product.image}
                         alt={product.name}
                         className="w-12 h-12 object-contain rounded bg-muted"
                       />
@@ -652,7 +652,11 @@ export default function ProductsPage() {
                 />
                 <div className="w-full h-full bg-muted rounded-lg flex items-center justify-center overflow-hidden border border-border">
                   {formData.image ? (
-                    <img src={formData.image} alt="Preview" className="w-full h-full object-contain" />
+                    <img
+                      src={selectedImageFile ? formData.image : (editingProduct?.imagePreviewUrl || formData.image)}
+                      alt="Preview"
+                      className="w-full h-full object-contain"
+                    />
                   ) : (
                     <div className="flex flex-col items-center text-muted-foreground">
                       <ImageIcon className="w-12 h-12" />
