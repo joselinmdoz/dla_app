@@ -16,9 +16,22 @@ async function main() {
     return
   }
 
-  const adminsCount = await prisma.user.count({
-    where: { role: "ADMIN" },
-  })
+  let adminsCount
+
+  try {
+    adminsCount = await prisma.user.count({
+      where: { role: "ADMIN" },
+    })
+  } catch (error) {
+    if (error?.code === "P2021" && error?.meta?.table === 'public.User') {
+      console.warn(
+        'User table is missing in the current database. Skipping default admin bootstrap.'
+      )
+      return
+    }
+
+    throw error
+  }
 
   if (adminsCount > 0) {
     console.log("Admin user already exists, skipping bootstrap")

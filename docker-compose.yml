@@ -46,7 +46,7 @@ services:
     container_name: dla_app_prod
     restart: unless-stopped
     ports:
-      - "3000"
+      - "3000:3000"
     env_file:
       - .env.docker
     environment:
@@ -54,16 +54,13 @@ services:
       - BOOTSTRAP_DEFAULT_ADMIN=true
     volumes:
       - ./public:/app/public:shared
-    networks: 
-      - proxy
+    networks:
       - app_network
     depends_on:
       postgres:
         condition: service_healthy
 
 networks:
-  proxy:
-    external: true
   app_network:
     driver: bridge
 
