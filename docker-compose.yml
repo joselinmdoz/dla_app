@@ -51,6 +51,7 @@ services:
       - .env.docker
     environment:
       - NODE_ENV=production
+      - BOOTSTRAP_DEFAULT_ADMIN=true
     volumes:
       - ./public:/app/public:shared
     networks: 

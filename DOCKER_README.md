@@ -52,6 +52,8 @@ docker exec -it next_app_dev sh
 
 - El puerto **3000** se usa para desarrollo
 - En `prod`, las variables se cargan desde `.env.docker`
+- En el primer arranque de `prod` se ejecuta `prisma migrate deploy`
+- Si no existe ningún admin, se crea uno usando `DEFAULT_ADMIN_*` de `.env.docker`
 - El puerto **5440** se expone para PostgreSQL (conexión desde host)
 - Los cambios en código se reflejan automáticamente en desarrollo gracias al volume mount
 
