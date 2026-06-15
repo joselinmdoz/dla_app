@@ -47,9 +47,10 @@ services:
     restart: unless-stopped
     ports:
       - "3000"
+    env_file:
+      - .env.docker
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/dla_db?schema=public
     volumes:
       - ./public:/app/public:shared
     networks: 
@@ -67,6 +68,4 @@ networks:
 
 volumes:
   postgres_data:
-    external: true
-    name: dla_postgres_data
-
+    
