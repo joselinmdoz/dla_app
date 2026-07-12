@@ -18,21 +18,33 @@ const CREATE_TABLE_SQL = `
   );
 `
 
+function hasDatabaseUrl() {
+  return Boolean(process.env.DATABASE_URL?.trim())
+}
+
 async function ensureSiteSettingsTable() {
+  if (!hasDatabaseUrl()) return
   await prisma.$executeRawUnsafe(CREATE_TABLE_SQL)
 }
 
 export const getSiteSettings = cache(async () => {
-  await ensureSiteSettingsTable()
-  const settings = await prisma.$queryRaw<SettingRow[]>`
-    SELECT "key", "value"
-    FROM "SiteSettings"
-  `
+  if (!hasDatabaseUrl()) return {}
 
-  return settings.reduce<Record<string, string>>((acc, setting) => {
-    acc[setting.key] = setting.value
-    return acc
-  }, {})
+  try {
+    await ensureSiteSettingsTable()
+    const settings = await prisma.$queryRaw<SettingRow[]>`
+      SELECT "key", "value"
+      FROM "SiteSettings"
+    `
+
+    return settings.reduce<Record<string, string>>((acc, setting) => {
+      acc[setting.key] = setting.value
+      return acc
+    }, {})
+  } catch (error) {
+    console.warn("Falling back to default site settings:", error)
+    return {}
+  }
 })
 
 export const getLandingContentServer = cache(async () => {
@@ -50,4 +62,3 @@ export function getStructuredDataFromContent(structuredDataJson: string) {
     return JSON.parse(defaultLandingContent.seo.structuredDataJson)
   }
 }
-
