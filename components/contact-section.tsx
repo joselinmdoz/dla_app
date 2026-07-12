@@ -1,10 +1,13 @@
 "use client"
 
-import { Phone, Mail, Whatsapp } from "iconoir-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
+import { resolveLandingIcon } from "@/lib/landing-icons"
 
 export function ContactSection() {
   const { content, isSectionEnabled } = useLandingContent()
+  const PhoneIcon = resolveLandingIcon(content.contact.phoneIconName, "Phone")
+  const EmailIcon = resolveLandingIcon(content.contact.emailIconName, "Mail")
+  const WhatsappIcon = resolveLandingIcon(content.contact.whatsappIconName, "Whatsapp")
   const contactEnabled = isSectionEnabled("contactSectionEnabled")
 
   if (!contactEnabled) {
@@ -26,7 +29,7 @@ export function ContactSection() {
           {/* Phone Card */}
           <div className="p-8 bg-secondary rounded-2xl flex flex-col items-center text-center space-y-4 border-2 border-border hover:border-primary transition-colors">
             <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
-              <Phone className="w-8 h-8 text-primary-foreground" />
+              <PhoneIcon className="w-8 h-8 text-primary-foreground" />
             </div>
             <div>
               <p className="text-muted-foreground text-sm mb-2">{content.contact.phoneLabel}</p>
@@ -43,7 +46,7 @@ export function ContactSection() {
           {/* Email Card */}
           <div className="p-8 bg-secondary rounded-2xl flex flex-col items-center text-center space-y-4 border-2 border-border hover:border-primary transition-colors">
             <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
-              <Mail className="w-8 h-8 text-primary-foreground" />
+              <EmailIcon className="w-8 h-8 text-primary-foreground" />
             </div>
             <div>
               <p className="text-muted-foreground text-sm mb-2">{content.contact.emailLabel}</p>
@@ -57,10 +60,10 @@ export function ContactSection() {
             <p className="text-sm text-muted-foreground">{content.contact.emailHelp}</p>
           </div>
 
-          {/* Instagram Card */}
+          {/* WhatsApp Card */}
           <div className="p-8 bg-secondary rounded-2xl flex flex-col items-center text-center space-y-4 border-2 border-border hover:border-primary transition-colors">
             <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
-              <Whatsapp className="w-8 h-8 text-primary-foreground" />
+              <WhatsappIcon className="w-8 h-8 text-primary-foreground" />
             </div>
             <div>
               <p className="text-muted-foreground text-sm mb-2">{content.contact.whatsappLabel}</p>

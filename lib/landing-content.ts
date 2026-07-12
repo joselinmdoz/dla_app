@@ -20,10 +20,15 @@ export interface LandingContent {
     facebookUrl: string
     instagramUrl: string
     tiktokUrl: string
+    logoUrl: string
+    logoAlt: string
+    supportImageUrl: string
+    supportImageAlt: string
   }
   header: {
     trackingButtonText: string
     loginButtonText: string
+    loginUrl: string
     navButtons: HeaderNavButton[]
   }
   hero: {
@@ -34,14 +39,32 @@ export interface LandingContent {
     weekSchedule: string
     saturdaySchedule: string
     fallbackImageUrl: string
+    fallbackImageAlt: string
+    addressPrefix: string
   }
   featureCards: {
     badgeText: string
     titleLine1: string
     titleLine2: string
+    iconName: string
+    ctaText: string
+    ctaUrl: string
+  }
+  officeGallery: {
+    badgeText: string
+    title: string
+    iconName: string
   }
   menu: {
     title: string
+    allCategoryLabel: string
+    categorySelectLabel: string
+    categorySelectPlaceholder: string
+    allCategoryIconName: string
+    defaultCategoryIconName: string
+    errorText: string
+    emptyAllText: string
+    emptyCategoryText: string
   }
   location: {
     sectionTitle: string
@@ -57,6 +80,9 @@ export interface LandingContent {
     bannerDescription: string
     mapImageUrl: string
     mapImageAlt: string
+    mapLinkLabel: string
+    visitIconName: string
+    scheduleIconName: string
   }
   contact: {
     sectionTitle: string
@@ -67,23 +93,108 @@ export interface LandingContent {
     emailHelp: string
     whatsappLabel: string
     whatsappHelp: string
+    phoneIconName: string
+    emailIconName: string
+    whatsappIconName: string
   }
   footer: {
     linksTitle: string
     menuLinkText: string
+    menuLinkUrl: string
     locationLinkText: string
+    locationLinkUrl: string
     contactLinkText: string
+    contactLinkUrl: string
     contactTitle: string
     transportBadgeText: string
     rightsText: string
     privacyLinkText: string
+    privacyLinkUrl: string
     termsLinkText: string
+    termsLinkUrl: string
   }
   stickyCta: {
     findUsText: string
     buttonText: string
+    buttonUrl: string
+  }
+  seo: {
+    siteUrl: string
+    canonicalUrl: string
+    siteName: string
+    defaultTitle: string
+    titleTemplate: string
+    description: string
+    keywords: string
+    locale: string
+    siteLanguage: string
+    themeColor: string
+    ogImageUrl: string
+    ogImageAlt: string
+    twitterImageUrl: string
+    faviconUrl: string
+    shortcutIconUrl: string
+    appleIconUrl: string
+    manifestUrl: string
+    structuredDataJson: string
   }
 }
+
+const defaultStructuredData = JSON.stringify(
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://dlaenvios.com/#organization",
+        name: "DLA Viajes y envios",
+        url: "https://dlaenvios.com",
+        logo: "https://dlaenvios.com/graphics/logo.svg",
+        email: "info@dlaenvios.com",
+        telephone: "+1 (407) 639-4011",
+        sameAs: [
+          "https://www.facebook.com/share/17so3zSUeL/?mibextid=wwXIfr",
+          "https://www.instagram.com/dlaviajesyenvios?igsh=MWZzeWRmaTljYTYyZg==&utm_source=ig_contact_invite",
+          "https://www.tiktok.com/@dla.viajes.y.envi?_r=1&_t=ZP-93ff0dcsaTu",
+        ],
+      },
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://dlaenvios.com/#localbusiness",
+        name: "DLA Viajes y envios",
+        description: "Agencia de viajes y envios en Orlando, Florida.",
+        url: "https://dlaenvios.com",
+        image: "https://dlaenvios.com/graphics/slide1.svg",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "4913 S Orange ave",
+          addressLocality: "Orlando",
+          addressRegion: "FL",
+          postalCode: "32806",
+          addressCountry: "US",
+        },
+        contactPoint: [
+          {
+            "@type": "ContactPoint",
+            telephone: "+1 (407) 639-4011",
+            contactType: "customer support",
+            email: "info@dlaenvios.com",
+          },
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://dlaenvios.com/#website",
+        url: "https://dlaenvios.com",
+        name: "DLA Viajes y envios",
+        description: "Sitio oficial de DLA Viajes y envios.",
+        inLanguage: "es",
+      },
+    ],
+  },
+  null,
+  2
+)
 
 export const defaultLandingContent: LandingContent = {
   business: {
@@ -100,10 +211,15 @@ export const defaultLandingContent: LandingContent = {
     instagramUrl:
       "https://www.instagram.com/dlaviajesyenvios?igsh=MWZzeWRmaTljYTYyZg==&utm_source=ig_contact_invite",
     tiktokUrl: "https://www.tiktok.com/@dla.viajes.y.envi?_r=1&_t=ZP-93ff0dcsaTu",
+    logoUrl: "/graphics/logo.svg",
+    logoAlt: "DLA Viajes y Envios",
+    supportImageUrl: "/graphics/truck.svg",
+    supportImageAlt: "Camion de DLA",
   },
   header: {
     trackingButtonText: "Rastrear envio",
     loginButtonText: "Iniciar Sesion",
+    loginUrl: "/login",
     navButtons: [
       {
         id: "header-nav-shipments",
@@ -136,14 +252,32 @@ export const defaultLandingContent: LandingContent = {
     weekSchedule: "Lunes a Viernes: 10:00 a.m. - 6:00 p.m.",
     saturdaySchedule: "Sabados: 10:00 a.m. - 2:00 p.m.",
     fallbackImageUrl: "/graphics/slide1.svg",
+    fallbackImageAlt: "Imagen principal de DLA",
+    addressPrefix: "En",
   },
   featureCards: {
     badgeText: "Ofertas de servicio",
     titleLine1: "Descubre Nuestros",
     titleLine2: "Servicios",
+    iconName: "Car",
+    ctaText: "Ver todas las ofertas",
+    ctaUrl: "/products",
+  },
+  officeGallery: {
+    badgeText: "Nuestras oficinas",
+    title: "Conoce Nuestros Espacios",
+    iconName: "Building2",
   },
   menu: {
     title: "Nuestras ofertas",
+    allCategoryLabel: "Todos",
+    categorySelectLabel: "Categoria",
+    categorySelectPlaceholder: "Selecciona una categoría",
+    allCategoryIconName: "BoxIcon",
+    defaultCategoryIconName: "BoxIcon",
+    errorText: "Error al cargar productos:",
+    emptyAllText: "No hay productos disponibles",
+    emptyCategoryText: "No hay productos disponibles en esta categoría",
   },
   location: {
     sectionTitle: "ORLANDO",
@@ -160,8 +294,11 @@ export const defaultLandingContent: LandingContent = {
     bannerTitle: "Recogemos su paquete en la puerta de su casa",
     bannerDescription:
       "Obtenga servicio de recogida para sus envios y disfrute de la comodidad de enviar desde su hogar.",
-    mapImageUrl: "/map-of-ingolstadt-germany-westpark-area-street-map.jpg",
-    mapImageAlt: "Mapa de ubicacion",
+    mapImageUrl: "/placeholder.svg",
+    mapImageAlt: "Mapa de ubicacion de DLA",
+    mapLinkLabel: "Abrir mapa",
+    visitIconName: "Calendar",
+    scheduleIconName: "Clock",
   },
   contact: {
     sectionTitle: "Contactenos",
@@ -173,21 +310,50 @@ export const defaultLandingContent: LandingContent = {
     emailHelp: "Escribenos un correo electronico",
     whatsappLabel: "WhatsApp",
     whatsappHelp: "Escribenos por WhatsApp",
+    phoneIconName: "Phone",
+    emailIconName: "Mail",
+    whatsappIconName: "Whatsapp",
   },
   footer: {
     linksTitle: "LINKS",
     menuLinkText: "Nuestras ofertas",
+    menuLinkUrl: "#menu",
     locationLinkText: "Ubicacion",
+    locationLinkUrl: "#location",
     contactLinkText: "Contactenos",
+    contactLinkUrl: "#contact",
     contactTitle: "Contactenos",
     transportBadgeText: "Transporte seguro",
     rightsText: "Todos los derechos reservados.",
     privacyLinkText: "Politica de privacidad",
+    privacyLinkUrl: "/datenschutz",
     termsLinkText: "Terminos y condiciones",
+    termsLinkUrl: "/agb",
   },
   stickyCta: {
     findUsText: "Encuentranos en",
     buttonText: "WhatsApp",
+    buttonUrl: "https://wa.me/14076394011",
+  },
+  seo: {
+    siteUrl: "https://dlaenvios.com",
+    canonicalUrl: "https://dlaenvios.com",
+    siteName: "DLA Viajes y Envios",
+    defaultTitle: "DLA Viajes y Envios",
+    titleTemplate: "%s | DLA Viajes y Envios",
+    description: "DLA Viajes y Envios. Agencia de viajes, envios y servicios en Orlando.",
+    keywords: "dla envios, viajes, envios, orlando, agencia de viajes, paqueteria",
+    locale: "es_US",
+    siteLanguage: "es",
+    themeColor: "#1a1a1a",
+    ogImageUrl: "/graphics/slide1.svg",
+    ogImageAlt: "DLA Viajes y Envios",
+    twitterImageUrl: "/graphics/slide1.svg",
+    faviconUrl: "/favicon.ico",
+    shortcutIconUrl: "/favicon-16x16.png",
+    appleIconUrl: "/apple-touch-icon.png",
+    manifestUrl: "/site.webmanifest",
+    structuredDataJson: defaultStructuredData,
   },
 }
 
@@ -271,6 +437,7 @@ function mergeHeaderSection(source: unknown): LandingContent["header"] {
     trackingButtonText:
       typeof record.trackingButtonText === "string" ? record.trackingButtonText : defaults.trackingButtonText,
     loginButtonText: typeof record.loginButtonText === "string" ? record.loginButtonText : defaults.loginButtonText,
+    loginUrl: typeof record.loginUrl === "string" ? record.loginUrl : defaults.loginUrl,
     navButtons: parseHeaderNavButtons(record),
   }
 }
@@ -285,11 +452,13 @@ export function parseLandingContent(raw: string | null | undefined): LandingCont
       header: mergeHeaderSection(parsed.header),
       hero: mergeSection(defaultLandingContent.hero, parsed.hero),
       featureCards: mergeSection(defaultLandingContent.featureCards, parsed.featureCards),
+      officeGallery: mergeSection(defaultLandingContent.officeGallery, parsed.officeGallery),
       menu: mergeSection(defaultLandingContent.menu, parsed.menu),
       location: mergeSection(defaultLandingContent.location, parsed.location),
       contact: mergeSection(defaultLandingContent.contact, parsed.contact),
       footer: mergeSection(defaultLandingContent.footer, parsed.footer),
       stickyCta: mergeSection(defaultLandingContent.stickyCta, parsed.stickyCta),
+      seo: mergeSection(defaultLandingContent.seo, parsed.seo),
     }
   } catch {
     return defaultLandingContent

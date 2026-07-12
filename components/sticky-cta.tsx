@@ -28,8 +28,8 @@ export function StickyCTA() {
           {/* Location Info with Truck */}
           <div className="flex items-center gap-2 text-primary-foreground">
             <img
-              src="/graphics/truck.svg"
-              alt="Food Truck"
+              src={content.business.supportImageUrl}
+              alt={content.business.supportImageAlt}
               className="h-8 w-8 object-contain hidden md:block"
             />
             <div className="flex items-center gap-2 text-sm">
@@ -41,7 +41,7 @@ export function StickyCTA() {
 
           {/* Call to Action */}
           <a
-            href={content.business.whatsappUrl} target="_blank" rel="noopener noreferrer"
+            href={content.stickyCta.buttonUrl} target="_blank" rel="noopener noreferrer"
             className="group flex items-center gap-2 px-6 py-2.5 bg-primary-foreground text-primary font-black tracking-wider rounded-lg hover:scale-105 transition-transform shadow-lg"
           >
             <Phone className="w-5 h-5 animate-pulse" />

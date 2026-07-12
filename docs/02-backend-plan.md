@@ -284,8 +284,8 @@ async function main() {
   // Crear categorías
   const categorias = await prisma.category.createMany({
     data: [
-      { name: 'Cajas Super Express', slug: 'beef', icon: 'BoxIcon', sortOrder: 1 },
-      { name: 'Electrónicos', slug: 'chicken', icon: 'ElectronicsChip', sortOrder: 2 },
+      { name: 'Cajas Super Express', slug: 'cajas-super-express', icon: 'BoxIcon', sortOrder: 1 },
+      { name: 'Electrónicos', slug: 'electronicos', icon: 'ElectronicsChip', sortOrder: 2 },
       { name: 'Motos', slug: 'motos', icon: 'Cycling', sortOrder: 3 },
     ]
   })
@@ -299,7 +299,7 @@ async function main() {
         price: 125.24,
         image: '/products/CajasSE/cajaSE1.svg',
         spiceLevel: 0,
-        categoryId: (await prisma.category.findUnique({ where: { slug: 'beef' } }))!.id
+        categoryId: (await prisma.category.findUnique({ where: { slug: 'cajas-super-express' } }))!.id
       },
       // ... más productos
     ]

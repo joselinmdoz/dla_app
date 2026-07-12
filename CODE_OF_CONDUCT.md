@@ -2,7 +2,7 @@
 
 ## Our Pledge
 
-We as members, contributors, and leaders pledge to make participation in The Foodie Wagon project a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+We as members, contributors, and leaders pledge to make participation in the DLA Viajes y Envios project a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
 We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
 
@@ -104,10 +104,10 @@ Community Impact Guidelines were inspired by [Mozilla's code of conduct enforcem
 
 If you have questions about this Code of Conduct, please contact:
 
-**FlavorBytes GmbH - The Foodie Wagon**
+**DLA Viajes y Envios**
 Email: info@dlaenvios.com
 Phone: +1 (407) 639-4011
 
 ---
 
-**Last Updated:** December 2025
+**Last Updated:** July 2026

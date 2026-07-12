@@ -1,11 +1,11 @@
-# robots.txt for The Foodie Wagon
-# Allow all bots to crawl everything
+# robots.txt for DLA Viajes y Envios
+# Allow all bots to crawl public pages
 
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://foodiewagon.de/sitemap.xml
+Sitemap: https://dlaenvios.com/sitemap.xml
 
 # Specific bot directives for better AI/LLM crawling
 User-agent: Googlebot

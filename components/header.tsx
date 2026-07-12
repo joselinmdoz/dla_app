@@ -34,8 +34,8 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
             <img
-              src="/graphics/logo.svg"
-              alt="DLA"
+              src={business.logoUrl}
+              alt={business.logoAlt}
               className="h-10 md:h-12 w-auto"
             />
             <div className="hidden sm:block">
@@ -81,22 +81,13 @@ export function Header() {
               <span className="text-[1rem] font-medium">{business.cityLabel}</span>
             </div>
             <Link
-              href="/login"
+              href={header.loginUrl}
               className="shrink-0 whitespace-nowrap flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium text-[1rem]"
             >
               <User className="w-4 h-4" />
               {header.loginButtonText}
             </Link>
           </nav>
-
-          {/* Halal Badge */}
-          {/* <div className="hidden lg:flex items-center gap-4">
-            <img
-              src="/graphics/halal logo.svg"
-              alt="100% Halal"
-              className="h-12 w-auto"
-            />
-          </div> */}
 
           {/* Mobile Actions */}
           <div className="flex items-center gap-2">
@@ -184,7 +175,7 @@ export function Header() {
               <div className="flex items-center justify-between pt-2">
                 <div></div>
                 <Link
-                  href="/login"
+                  href={header.loginUrl}
                   className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm"
                   onClick={() => setIsOpen(false)}
                 >

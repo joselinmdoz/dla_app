@@ -88,7 +88,7 @@ export function ImageUploadZone({
   // Mostrar imagen seleccionada o desde URL
   if (selectedImage || imageUrl) {
     return (
-      <div className="relative border-2 border-green-500 rounded-lg overflow-hidden bg-green-50">
+      <div className="relative overflow-hidden rounded-xl border-2 border-primary/40 bg-card shadow-lg shadow-primary/10">
         <input
           type="file"
           accept={accept}
@@ -98,8 +98,9 @@ export function ImageUploadZone({
         />
         <label
           htmlFor={inputId}
-          className="absolute top-2 left-2 px-2 py-1 text-xs font-medium bg-white/90 hover:bg-white rounded cursor-pointer transition-colors z-10"
+          className="absolute top-3 left-3 z-10 inline-flex items-center gap-2 rounded-full bg-primary px-3 py-1.5 text-xs font-bold tracking-wide text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:scale-[1.02] hover:bg-primary/90 cursor-pointer"
         >
+          <Upload className="h-3.5 w-3.5" />
           Cambiar imagen
         </label>
         <button
@@ -107,10 +108,10 @@ export function ImageUploadZone({
             onClear()
             setError(null)
           }}
-          className="absolute top-2 right-2 p-1 hover:bg-green-200 rounded-full transition-colors z-10"
+          className="absolute top-3 right-3 z-10 rounded-full border border-destructive/30 bg-background/90 p-2 text-destructive shadow-md backdrop-blur-sm transition-all hover:bg-destructive hover:text-destructive-foreground"
           aria-label="Eliminar imagen"
         >
-          <X className="w-5 h-5 text-green-700" />
+          <X className="w-4 h-4" />
         </button>
         <div className="relative aspect-video">
           <img
@@ -120,9 +121,9 @@ export function ImageUploadZone({
           />
         </div>
         {selectedImage && (
-          <div className="p-3 bg-white/80">
-            <p className="font-medium text-green-800 truncate">{selectedImage.name}</p>
-            <p className="text-sm text-green-600">{formatFileSize(selectedImage.size)}</p>
+          <div className="border-t border-border bg-background/95 p-3 backdrop-blur-sm">
+            <p className="truncate font-medium text-foreground">{selectedImage.name}</p>
+            <p className="text-sm text-muted-foreground">{formatFileSize(selectedImage.size)}</p>
           </div>
         )}
       </div>

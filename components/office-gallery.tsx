@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Building2, ChevronLeft, ChevronRight } from "lucide-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
+import { resolveLandingIcon } from "@/lib/landing-icons"
 
 interface OfficeImage {
   id: string
@@ -17,7 +17,10 @@ interface OfficeImage {
 }
 
 export function OfficeGallery() {
-  const { isSectionEnabled, isLoading: isContentLoading } = useLandingContent()
+  const { content, isSectionEnabled, isLoading: isContentLoading } = useLandingContent()
+  const BadgeIcon = resolveLandingIcon(content.officeGallery.iconName, "Building2")
+  const PrevIcon = resolveLandingIcon("ChevronLeft", "ChevronLeft")
+  const NextIcon = resolveLandingIcon("ChevronRight", "ChevronRight")
   const [images, setImages] = useState<OfficeImage[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -126,11 +129,11 @@ export function OfficeGallery() {
       <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full mb-4">
-            <Building2 className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Nuestras oficinas</span>
+            <BadgeIcon className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-primary">{content.officeGallery.badgeText}</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
-            Conoce Nuestros Espacios
+            {content.officeGallery.title}
           </h2>
         </div>
 
@@ -232,14 +235,14 @@ export function OfficeGallery() {
                 className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-40 p-2 sm:p-3 rounded-full bg-black/55 text-white hover:bg-primary transition-colors"
                 aria-label="Imagen anterior"
               >
-                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                <PrevIcon className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
               <button
                 onClick={nextSlide}
                 className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-40 p-2 sm:p-3 rounded-full bg-black/55 text-white hover:bg-primary transition-colors"
                 aria-label="Siguiente imagen"
               >
-                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                <NextIcon className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
 
               <div className="flex items-center justify-center gap-2 mt-5">

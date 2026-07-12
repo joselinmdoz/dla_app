@@ -15,7 +15,7 @@
 ## 🏗️ Estructura del Proyecto
 
 ```
-foodie-wagon/
+dla-app/
 ├── app/                          # Next.js App Router
 │   ├── layout.tsx                # Root layout con metadata global
 │   ├── page.tsx                  # Homepage principal
@@ -39,7 +39,6 @@ foodie-wagon/
 │   ├── contact-section.tsx       # Sección de contacto
 │   ├── footer.tsx                # Footer con enlaces legales
 │   ├── sticky-cta.tsx            # Barra CTA fija
-│   ├── burger-3d.tsx             # Componente 3D (React Three Fiber)
 │   ├── theme-provider.tsx        # Provider de temas
 │   └── ui/                       # Componentes UI (shadcn/ui style)
 │       ├── button.tsx
@@ -62,9 +61,6 @@ foodie-wagon/
 │   ├── products/                 # Imágenes de productos
 │   │   ├── CajasSE/              # Cajas Super Express
 │   │   └── Electronics/          # Electrónicos
-│   ├── burgers/                  # (Legacy) Imágenes de burgers
-│   ├── Appetizers/               # (Legacy) Aperitivos
-│   ├── Fried-Chicken/            # (Legacy) Pollo frito
 │   ├── robots.txt                # Directivas SEO
 │   ├── sitemap.xml               # Mapa del sitio
 │   └── site.webmanifest          # PWA manifest
@@ -163,7 +159,7 @@ DATABASE_URL="postgresql://postgres:password@localhost:5432/dla_db?schema=public
 
 ### 1. Homepage (`app/page.tsx`)
 - **Components principales:** Header, Hero, MenuSection, LocationSection, ContactSection, Footer, StickyCTA
-- **SEO:** JSON-LD structured data (Restaurant, FoodEstablishment, LocalBusiness, WebSite)
+- **SEO:** JSON-LD structured data (Organization, LocalBusiness, WebSite)
 - **Categorías mostradas:**
   - Cajas Super Express
   - Electrónicos
@@ -201,8 +197,8 @@ DATABASE_URL="postgresql://postgres:password@localhost:5432/dla_db?schema=public
 - **Tipo:** Client Component
 - **State:** `activeCategory` - categoría seleccionada
 - **Categorías:**
-  - `beef` → Cajas Super Express
-  - `chicken` → Electrónicos
+  - `cajas-super-express` → Cajas Super Express
+  - `electronicos` → Electrónicos
   - `motos` → Motos
 - **Data:** `menuItems` object con arrays por categoría
 
@@ -411,7 +407,7 @@ pnpm lint         # Ejecutar ESLint
 - Title template: `%s | DLA Viajes y envíos`
 - Keywords: 20+ keywords en alemán
 - Open Graph: Configurado con imagen y descripción
-- JSON-LD: Restaurant, FoodEstablishment, LocalBusiness, WebSite
+- JSON-LD: Organization, LocalBusiness, WebSite
 
 ### Robots
 - Indexación permitida

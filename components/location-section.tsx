@@ -1,10 +1,13 @@
 "use client"
 
-import { MapPin, Clock, Calendar } from "iconoir-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
+import { resolveLandingIcon } from "@/lib/landing-icons"
 
 export function LocationSection() {
   const { content, isSectionEnabled } = useLandingContent()
+  const MapIcon = resolveLandingIcon("MapPin", "MapPin")
+  const VisitIcon = resolveLandingIcon(content.location.visitIconName, "Calendar")
+  const ScheduleIcon = resolveLandingIcon(content.location.scheduleIconName, "Clock")
   const locationEnabled = isSectionEnabled("locationSectionEnabled")
 
   if (!locationEnabled) {
@@ -18,14 +21,14 @@ export function LocationSection() {
         <div className="text-center mb-12 md:mb-16">
           <div className="flex items-center justify-center gap-4 mb-6">
             <img
-              src="/graphics/truck.svg"
-              alt="Food Truck"
+              src={content.business.supportImageUrl}
+              alt={content.business.supportImageAlt}
               className="h-16 w-16 object-contain"
             />
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight">{content.location.sectionTitle}</h2>
             <img
-              src="/graphics/truck.svg"
-              alt="Food Truck"
+              src={content.business.supportImageUrl}
+              alt={content.business.supportImageAlt}
               className="h-16 w-16 object-contain transform scale-x-[-1]"
             />
           </div>
@@ -48,9 +51,9 @@ export function LocationSection() {
                 target="_blank"
                 rel="noopener noreferrer"
              
-                aria-label="Google"
+                aria-label={content.location.mapLinkLabel}
                  >
-                  <MapPin className="w-6 h-6 text-accent-foreground" />
+                  <MapIcon className="w-6 h-6 text-accent-foreground" />
                   </a>
                 </div>
               </div>
@@ -68,9 +71,9 @@ export function LocationSection() {
                 target="_blank"
                 rel="noopener noreferrer"
              
-                aria-label="Google"
+                aria-label={content.location.mapLinkLabel}
                  >
-                  <MapPin className="w-6 h-6 text-accent-foreground" />
+                  <MapIcon className="w-6 h-6 text-accent-foreground" />
                 </a>  
                 </div>
                 <div>
@@ -83,7 +86,7 @@ export function LocationSection() {
 
               <div className="flex items-start gap-4 mb-6">
                 <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Calendar className="w-6 h-6 text-primary" />
+                  <VisitIcon className="w-6 h-6 text-primary" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-foreground mb-2">{content.location.visitTitle}</h3>
@@ -93,7 +96,7 @@ export function LocationSection() {
 
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-6 h-6 text-primary" />
+                  <ScheduleIcon className="w-6 h-6 text-primary" />
                 </div>
                 <div>
               <h3 className="text-xl font-bold text-foreground mb-2">{content.location.scheduleTitle}</h3>

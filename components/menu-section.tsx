@@ -3,10 +3,9 @@
 import { useState } from "react"
 import { MenuCategory } from "./menu-category"
 import { useProducts, useCategories } from "@/hooks/use-products"
-import { BoxIcon } from "lucide-react"
-import { ElectronicsChip, Cycling } from "iconoir-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { resolveLandingIcon } from "@/lib/landing-icons"
 
 export function MenuSection() {
   const { content, isSectionEnabled } = useLandingContent()
@@ -14,12 +13,6 @@ export function MenuSection() {
   const { products, loading, error } = useProducts(activeCategory === "all" ? undefined : activeCategory)
   const { categories, loading: loadingCategories } = useCategories()
   const menuEnabled = isSectionEnabled("menuSectionEnabled")
-
-  const iconMap: Record<string, any> = {
-    beef: BoxIcon,
-    chicken: ElectronicsChip,
-    motos: Cycling,
-  }
 
   // Group products by category when showing all
   const groupedProducts = activeCategory === "all" 
@@ -76,7 +69,7 @@ export function MenuSection() {
       <section id="menu" className="py-20 md:py-32 bg-card">
         <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-red-500">Error al cargar productos: {error}</p>
+            <p className="text-red-500">{content.menu.errorText} {error}</p>
           </div>
         </div>
       </section>
@@ -85,14 +78,14 @@ export function MenuSection() {
 
   // Combine default "all" with API categories
   const allCategories = [
-    { id: "all", name: "Todos", slug: "all" },
+    { id: "all", name: content.menu.allCategoryLabel, slug: "all", icon: content.menu.allCategoryIconName },
     ...categories
   ]
 
   return (
     <section id="menu" className="py-20 md:py-32 bg-card">
       <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header - Restaurant Style */}
+        {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-primary tracking-tighter mb-4">
             {content.menu.title}
@@ -103,7 +96,7 @@ export function MenuSection() {
         <div className="md:hidden mb-10">
           <div className="max-w-sm mx-auto">
             <label htmlFor="menu-category-select" className="block text-sm font-semibold text-muted-foreground mb-2">
-              Categoría
+              {content.menu.categorySelectLabel}
             </label>
             <Select
               value={activeCategory}
@@ -113,7 +106,7 @@ export function MenuSection() {
                 id="menu-category-select"
                 className="w-full h-12 rounded-xl border-2 border-border bg-card px-4 text-base font-semibold text-foreground focus:border-primary"
               >
-                <SelectValue placeholder="Selecciona una categoría" />
+                <SelectValue placeholder={content.menu.categorySelectPlaceholder} />
               </SelectTrigger>
               <SelectContent className="bg-card border-border text-foreground">
                 {allCategories.map((category) => (
@@ -126,10 +119,10 @@ export function MenuSection() {
           </div>
         </div>
 
-        {/* Desktop Category Tabs - Bold Restaurant Style */}
+        {/* Desktop Category Tabs */}
         <div className="hidden md:flex flex-wrap justify-center gap-3 mb-16">
           {allCategories.map((category) => {
-            const Icon = category.slug === "all" ? BoxIcon : (iconMap[category.slug] || BoxIcon)
+            const Icon = resolveLandingIcon(category.icon, content.menu.defaultCategoryIconName)
             return (
               <button
                 key={category.id}
@@ -163,7 +156,7 @@ export function MenuSection() {
             </div>
           ) : (
             <div className="text-center py-20 text-muted-foreground">
-              No hay productos disponibles
+              {content.menu.emptyAllText}
             </div>
           )
         ) : (
@@ -172,7 +165,7 @@ export function MenuSection() {
             <MenuCategory items={menuItems} />
           ) : (
             <div className="text-center py-20 text-muted-foreground">
-              No hay productos disponibles en esta categoría
+              {content.menu.emptyCategoryText}
             </div>
           )
         )}

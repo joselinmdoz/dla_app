@@ -48,7 +48,7 @@ export async function PUT(
     const { id } = await params
     const body = await request.json()
     
-    const { name, sortOrder } = body
+    const { name, description, icon, sortOrder } = body
 
     const category = await prisma.category.update({
       where: { id },
@@ -57,6 +57,8 @@ export async function PUT(
           name,
           slug: name.toLowerCase().replace(/\s+/g, '-')
         }),
+        ...(description !== undefined && { description: description || null }),
+        ...(icon !== undefined && { icon: icon || null }),
         ...(sortOrder !== undefined && { sortOrder }),
       },
       include: {

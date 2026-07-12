@@ -6,6 +6,8 @@ export interface Category {
   id: string
   name: string
   slug: string
+  description?: string | null
+  icon?: string | null
   sortOrder: number
   _count?: { products: number }
   createdAt: string
@@ -47,7 +49,9 @@ export function useAdminCategories() {
     }
   }, [])
 
-  const createCategory = async (category: Omit<Category, 'id' | 'createdAt' | 'updatedAt' | 'slug'>) => {
+  const createCategory = async (
+    category: Omit<Category, 'id' | 'createdAt' | 'updatedAt' | 'slug'>
+  ) => {
     setLoading(true)
     try {
       const res = await fetch('/api/categories', {

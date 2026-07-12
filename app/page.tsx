@@ -7,152 +7,20 @@ import { LocationSection } from "@/components/location-section"
 import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
 import { StickyCTA } from "@/components/sticky-cta"
+import { getLandingContentServer, getStructuredDataFromContent } from "@/lib/site-settings"
 
-export default function Home() {
-  // Structured Data for SEO (JSON-LD)
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Agencia",
-        "@id": "https://dlaenvios.com/#restaurant",
-        "name": "DLA Viajes y envíos",
-        "description": "Premium Halal Burger Food Truck in Ingolstadt - Hausgemachte Beef Patties, Fried Chicken, Currywurst und authentisches Street Food",
-        "url": "https://dlaenvios.com",
-        "telephone": "+49-XXX-XXXXXXX",
-        "servesCuisine": ["Burger", "Halal", "Street Food", "Fast Food", "American", "German"],
-        "priceRange": "€€",
-        "image": "https://dlaenvios.com/graphics/web comida.svg",
-        "logo": "https://dlaenvios.com/graphics/fooiewagen logo.svg",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Ingolstadt",
-          "addressRegion": "Bayern",
-          "addressCountry": "DE"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": "48.7665",
-          "longitude": "11.4257"
-        },
-        "openingHoursSpecification": [
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-            "opens": "11:00",
-            "closes": "22:00"
-          }
-        ],
-        "paymentAccepted": "Cash, Credit Card",
-        "currenciesAccepted": "EUR"
-      },
-      {
-        "@type": "FoodEstablishment",
-        "@id": "https://dlaenvios.com/#foodestablishment",
-        "name": "DLA Viajes y envíos",
-        "hasMenu": {
-          "@type": "Menu",
-          "hasMenuSection": [
-            {
-              "@type": "MenuSection",
-              "name": "Beef Burgers",
-              "description": "Hausgemachte 140g Beef Patties, 100% Halal",
-              "hasMenuItem": [
-                {
-                  "@type": "MenuItem",
-                  "name": "Cheesy Buffalo",
-                  "description": "Brioche Bun, Beef Patty 140g, Käse, Burger Sauce, Gurke, Zwiebel, Tomaten, Salat",
-                  "offers": {
-                    "@type": "Offer",
-                    "price": "10.50",
-                    "priceCurrency": "EUR"
-                  },
-                  "suitableForDiet": "https://schema.org/HalalDiet"
-                },
-                {
-                  "@type": "MenuItem",
-                  "name": "Angry Bull",
-                  "description": "Brioche Bun, Beef Patty 140g, Käse, Chili Cheese Sauce, Jalapeno",
-                  "offers": {
-                    "@type": "Offer",
-                    "price": "12.00",
-                    "priceCurrency": "EUR"
-                  },
-                  "suitableForDiet": "https://schema.org/HalalDiet"
-                }
-              ]
-            },
-            {
-              "@type": "MenuSection",
-              "name": "Chicken Burgers",
-              "description": "Knusprige Chicken Strips, 100% Halal",
-              "hasMenuItem": [
-                {
-                  "@type": "MenuItem",
-                  "name": "Crunchy Chicken",
-                  "description": "Brioche Bun, Chicken Strips, Käse, Burger Sauce, Salat",
-                  "offers": {
-                    "@type": "Offer",
-                    "price": "8.50",
-                    "priceCurrency": "EUR"
-                  },
-                  "suitableForDiet": "https://schema.org/HalalDiet"
-                }
-              ]
-            },
-            {
-              "@type": "MenuSection",
-              "name": "Fried Chicken",
-              "description": "Knuspriges Fried Chicken - Wings & Strips",
-              "hasMenuItem": [
-                {
-                  "@type": "MenuItem",
-                  "name": "Chicken Wings",
-                  "description": "Knusprige Chicken Wings - 6, 10 oder 20 Stück",
-                  "offers": {
-                    "@type": "Offer",
-                    "price": "7.50",
-                    "priceCurrency": "EUR"
-                  },
-                  "suitableForDiet": "https://schema.org/HalalDiet"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "@type": "LocalBusiness",
-        "@id": "https://dlaenvios.com/#localbusiness",
-        "name": "DLA Viajes y envíos",
-        "description": "Mobile Food Truck für Halal Burger und Street Food in Ingolstadt",
-        "slogan": "Donde conectamos con tu destino",
-        "hasCredential": {
-          "@type": "EducationalOccupationalCredential",
-          "credentialCategory": "Halal Certification",
-          "name": "100% Halal Certified"
-        }
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://dlaenvios.com/#website",
-        "url": "https://dlaenvios.com",
-        "name": "DLA Viajes y envíos",
-        "description": "Premium Halal Burgers & Street Food in Ingolstadt",
-        "publisher": {
-          "@id": "https://dlaenvios.com/#restaurant"
-        },
-        "inLanguage": "de-DE"
-      }
-    ]
-  };
+export default async function Home() {
+  const content = await getLandingContentServer()
+  const structuredData = getStructuredDataFromContent(content.seo.structuredDataJson)
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      ) : null}
       <main className="min-h-screen bg-background">
         <Header />
         <Hero />

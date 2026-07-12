@@ -1,4 +1,4 @@
-# Sistema de Gestión de Datos - Foodie Wagon
+# Sistema de Gestión de Datos - DLA Viajes y Envios
 
 ## Análisis del Esquema Actual
 
@@ -21,18 +21,18 @@
 
 ```csv
 NOMBRE,SLUG,DESCRIPCIÓN,PRECIO,COSTE,IMAGEN,CATEGORÍA,NIVEL PICANTE,DISPONIBLE,ORDEN
-Cheese Burger,cheese-burger,Delicioso burger con queso,7.00,3.50,cheese-burger.webp,Burgers,1,true,1
-Blazing Nacho Beef,blazing-nacho-beef,Burger con nachos y jalapeños,13.00,6.00,blazing-nacho.webp,Burgers,3,true,2
+Caja Super Express 1,caja-se1,Caja con artículos de envío,125.24,90.00,caja-se1.svg,Cajas Super Express,0,true,1
+EcoFlow Delta 2,ecoflow-delta-2,Estación de energía portátil,599.00,520.00,ecoflow-delta-2.svg,Electrónicos,0,true,2
 ```
 
 ### B) Importación de Categorías
 
 ```csv
 NOMBRE,SLUG,DESCRIPCIÓN,ICONO,ORDEN
-Burgers,burgers,Hamburguesas clásicas y especiales,burger,1
-Chicken,chicken,Pollo frito y ligeras,chicken,2
-Sides,sides,Guarniciones y complementos,fries,3
-Drinks,drinks,Bebidas y refrescos,cup,4
+Cajas Super Express,cajas-super-express,Paquetes y combos de envío,box,1
+Electrónicos,electronicos,Equipos y electrodomésticos,electronics,2
+Motos,motos,Modelos y opciones para transporte,cycle,3
+Servicios,servicios,Servicios complementarios,briefcase,4
 ```
 
 ### C) Importación de Clientes

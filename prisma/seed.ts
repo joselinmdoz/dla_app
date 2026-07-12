@@ -69,19 +69,19 @@ async function main() {
 
   // Crear categorías
   console.log('🏷️ Creating categories...')
-  const categoryBeef = await prisma.category.create({
+  const categoryBoxes = await prisma.category.create({
     data: {
       name: 'Cajas Super Express',
-      slug: 'beef',
+      slug: 'cajas-super-express',
       icon: 'BoxIcon',
       sortOrder: 1,
     }
   })
 
-  const categoryChicken = await prisma.category.create({
+  const categoryElectronics = await prisma.category.create({
     data: {
       name: 'Electrónicos',
-      slug: 'chicken',
+      slug: 'electronicos',
       icon: 'ElectronicsChip',
       sortOrder: 2,
     }
@@ -97,7 +97,7 @@ async function main() {
   })
 
   // Crear productos de Cajas Super Express
-  console.log('🍔 Creating products...')
+  console.log('📦 Creating products...')
   await prisma.product.createMany({
     data: [
       {
@@ -106,7 +106,7 @@ async function main() {
         price: 125.24,
         image: '/products/CajasSE/cajaSE1.svg',
         spiceLevel: 0,
-        categoryId: categoryBeef.id,
+        categoryId: categoryBoxes.id,
         sortOrder: 1,
       },
       {
@@ -115,7 +115,7 @@ async function main() {
         price: 162.84,
         image: '/products/CajasSE/cajaSE2.svg',
         spiceLevel: 0,
-        categoryId: categoryBeef.id,
+        categoryId: categoryBoxes.id,
         sortOrder: 2,
       },
       {
@@ -124,7 +124,7 @@ async function main() {
         price: 157.36,
         image: '/products/CajasSE/cajaSE3.svg',
         spiceLevel: 0,
-        categoryId: categoryBeef.id,
+        categoryId: categoryBoxes.id,
         sortOrder: 3,
       },
     ]
@@ -140,7 +140,7 @@ async function main() {
         description: 'Estación de Energía Portátil (1800W - 2700W Pico)',
         image: '/products/Electronics/ecoflowd2.svg',
         spiceLevel: 0,
-        categoryId: categoryChicken.id,
+        categoryId: categoryElectronics.id,
         sortOrder: 1,
       },
       {
@@ -149,7 +149,7 @@ async function main() {
         price: 619.00,
         image: '/products/Electronics/ecoflowd3.png',
         spiceLevel: 0,
-        categoryId: categoryChicken.id,
+        categoryId: categoryElectronics.id,
         sortOrder: 2,
       },
       {
@@ -158,7 +158,7 @@ async function main() {
         price: 70.00,
         image: '/products/Electronics/ollareyna.svg',
         spiceLevel: 0,
-        categoryId: categoryChicken.id,
+        categoryId: categoryElectronics.id,
         sortOrder: 3,
       },
       {
@@ -167,7 +167,7 @@ async function main() {
         price: 42.00,
         image: '/products/Electronics/ollaarrocera.svg',
         spiceLevel: 0,
-        categoryId: categoryChicken.id,
+        categoryId: categoryElectronics.id,
         sortOrder: 4,
       },
       {
@@ -176,7 +176,7 @@ async function main() {
         price: 55.00,
         image: '/products/Electronics/ventilador.svg',
         spiceLevel: 0,
-        categoryId: categoryChicken.id,
+        categoryId: categoryElectronics.id,
         sortOrder: 5,
       },
       {
@@ -185,7 +185,7 @@ async function main() {
         price: 310.00,
         image: '/products/Electronics/nevera.svg',
         spiceLevel: 0,
-        categoryId: categoryChicken.id,
+        categoryId: categoryElectronics.id,
         sortOrder: 6,
       },
       {
@@ -194,7 +194,7 @@ async function main() {
         price: 330.00,
         image: '/products/Electronics/split.svg',
         spiceLevel: 0,
-        categoryId: categoryChicken.id,
+        categoryId: categoryElectronics.id,
         sortOrder: 7,
       },
       {
@@ -203,7 +203,7 @@ async function main() {
         price: 380.00,
         image: '/products/Electronics/refrigerador.svg',
         spiceLevel: 0,
-        categoryId: categoryChicken.id,
+        categoryId: categoryElectronics.id,
         sortOrder: 8,
       },
     ]

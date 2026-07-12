@@ -20,8 +20,8 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img
-                src="/graphics/logo.svg"
-                alt="DLA Viajes y Envíos"
+                src={content.business.logoUrl}
+                alt={content.business.logoAlt}
                 className="h-12 w-12 object-contain"
               />
               <div>
@@ -29,13 +29,10 @@ export function Footer() {
                 <p className="text-muted-foreground text-xs tracking-widest">{content.business.brandTagline}</p>
               </div>
             </div>
-            {/* <p className="text-muted-foreground text-sm mb-3">
-              Premium Halal Street Food in Ingolstadt. Burger, Fried Chicken, Currywurst und mehr.
-            </p> */}
             <div className="flex items-center gap-2 text-muted-foreground">
               <img
-                src="/graphics/truck.svg"
-                alt="Food Truck"
+                src={content.business.supportImageUrl}
+                alt={content.business.supportImageAlt}
                 className="h-8 w-8 object-contain"
               />
               <span className="text-xs font-medium">{content.footer.transportBadgeText}</span>
@@ -46,13 +43,13 @@ export function Footer() {
           <div>
             <h4 className="text-foreground font-bold mb-4 tracking-wide">{content.footer.linksTitle}</h4>
             <nav className="space-y-2">
-              <Link href="#menu" className="block text-muted-foreground hover:text-primary transition-colors">
+              <Link href={content.footer.menuLinkUrl} className="block text-muted-foreground hover:text-primary transition-colors">
                 {content.footer.menuLinkText}
               </Link>
-              <Link href="#location" className="block text-muted-foreground hover:text-primary transition-colors">
+              <Link href={content.footer.locationLinkUrl} className="block text-muted-foreground hover:text-primary transition-colors">
                 {content.footer.locationLinkText}
               </Link>
-              <Link href="#contact" className="block text-muted-foreground hover:text-primary transition-colors">
+              <Link href={content.footer.contactLinkUrl} className="block text-muted-foreground hover:text-primary transition-colors">
                 {content.footer.contactLinkText}
               </Link>
             </nav>
@@ -94,20 +91,15 @@ export function Footer() {
                 Impressum
               </Link> */}
               <span>•</span>
-              <Link href="/datenschutz" className="hover:text-primary transition-colors">
+              <Link href={content.footer.privacyLinkUrl} className="hover:text-primary transition-colors">
                 {content.footer.privacyLinkText}
               </Link>
               <span>•</span>
-              <Link href="/agb" className="hover:text-primary transition-colors">
+              <Link href={content.footer.termsLinkUrl} className="hover:text-primary transition-colors">
                 {content.footer.termsLinkText}
               </Link>
             </div>
             <div className="flex items-center justify-center md:justify-end gap-4 mt-4 md:mt-0">
-              {/* <img
-                src="/graphics/halal logo.svg"
-                alt="100% Halal Certified"
-                className="h-10 md:h-12 w-auto"
-              /> */}
               <a
                 href={content.business.facebookUrl}
                 target="_blank"

@@ -30,6 +30,7 @@ import {
 import { toast } from "sonner"
 import { Toaster } from "@/components/ui/sonner"
 import { Plus, Edit, Trash2 } from "lucide-react"
+import { IconSelectField } from "@/components/admin/content/icon-select-field"
 
 export default function CategoriesPage() {
   const {
@@ -47,6 +48,7 @@ export default function CategoriesPage() {
   const [editingCategory, setEditingCategory] = useState<any>(null)
   const [formData, setFormData] = useState({
     name: "",
+    icon: "",
     sortOrder: 0,
   })
 
@@ -59,12 +61,14 @@ export default function CategoriesPage() {
       setEditingCategory(category)
       setFormData({
         name: category.name,
+        icon: category.icon || "",
         sortOrder: category.sortOrder || 0,
       })
     } else {
       setEditingCategory(null)
       setFormData({
         name: "",
+        icon: "",
         sortOrder: categories.length + 1,
       })
     }
@@ -126,6 +130,7 @@ export default function CategoriesPage() {
               <TableRow>
                 <TableHead>Nombre</TableHead>
                 <TableHead>Slug</TableHead>
+                <TableHead>Icono</TableHead>
                 <TableHead className="text-right">Orden</TableHead>
                 <TableHead className="text-right">Productos</TableHead>
                 <TableHead className="text-right">Acciones</TableHead>
@@ -137,6 +142,9 @@ export default function CategoriesPage() {
                   <TableCell className="font-medium">{category.name}</TableCell>
                   <TableCell className="text-muted-foreground">
                     {category.slug}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {category.icon || "-"}
                   </TableCell>
                   <TableCell className="text-right">
                     {category.sortOrder}
@@ -240,6 +248,13 @@ export default function CategoriesPage() {
                 }
               />
             </div>
+            <IconSelectField
+              label="Icono"
+              value={formData.icon}
+              onChange={(value) => setFormData({ ...formData, icon: value })}
+              allowEmpty
+              emptyLabel="Sin icono"
+            />
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
                 Cancelar

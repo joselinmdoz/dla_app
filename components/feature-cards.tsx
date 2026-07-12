@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { Car } from 'iconoir-react'
 import { useLandingContent } from "@/hooks/use-landing-content"
+import { resolveLandingIcon } from "@/lib/landing-icons"
 
 interface FeatureCard {
   id: string
@@ -19,6 +19,7 @@ interface FeatureCard {
 
 export function FeatureCards() {
   const { content, isSectionEnabled, isLoading: isContentLoading } = useLandingContent()
+  const BadgeIcon = resolveLandingIcon(content.featureCards.iconName, "Car")
   const [cards, setCards] = useState<FeatureCard[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -81,7 +82,7 @@ export function FeatureCards() {
         {/* Section Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full mb-4">
-            <Car className="w-4 h-4 text-primary fill-primary" />
+            <BadgeIcon className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary">{content.featureCards.badgeText}</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
@@ -111,13 +112,13 @@ export function FeatureCards() {
         
 
         {/* View All Link */}
-        {sortedCards.some(card => card.linkUrl) && (
+        {content.featureCards.ctaText.trim().length > 0 && content.featureCards.ctaUrl.trim().length > 0 && (
           <div className="text-center mt-12">
             <Link 
-              href="/products" 
+              href={content.featureCards.ctaUrl}
               className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-all duration-300 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:scale-105"
             >
-              Ver todas las ofertas
+              {content.featureCards.ctaText}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

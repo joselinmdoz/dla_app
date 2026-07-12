@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/components/ui/use-toast"
 import { defaultLandingContent, HeaderNavButton, LandingContent, parseLandingContent } from "@/lib/landing-content"
+import { ImageUploadField } from "@/components/admin/content/image-upload-field"
+import { IconSelectField } from "@/components/admin/content/icon-select-field"
 
 type SectionKey = keyof LandingContent
 
@@ -262,7 +264,7 @@ export default function AdminContentPage() {
         <div>
           <h1 className="text-3xl font-bold">Contenido del Landing</h1>
           <p className="text-muted-foreground mt-1">
-            Edita textos y enlaces de todas las secciones visibles de la pagina principal.
+            Edita textos, enlaces, assets e informacion SEO de la pagina principal.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -405,6 +407,19 @@ export default function AdminContentPage() {
               onChange={(e) => updateField("business", "facebookUrl", e.target.value)}
             />
           </div>
+          <ImageUploadField
+            label="Logo del sitio"
+            value={formData.business.logoUrl}
+            onChange={(value) => updateField("business", "logoUrl", value)}
+            helperText="Selecciona el logo desde tu equipo o móvil. Se subirá automáticamente al servidor."
+          />
+          <div>
+            <Label>Logo alt</Label>
+            <Input
+              value={formData.business.logoAlt}
+              onChange={(e) => updateField("business", "logoAlt", e.target.value)}
+            />
+          </div>
           <div>
             <Label>Instagram URL</Label>
             <Input
@@ -417,6 +432,19 @@ export default function AdminContentPage() {
             <Input
               value={formData.business.tiktokUrl}
               onChange={(e) => updateField("business", "tiktokUrl", e.target.value)}
+            />
+          </div>
+          <ImageUploadField
+            label="Imagen de apoyo / truck"
+            value={formData.business.supportImageUrl}
+            onChange={(value) => updateField("business", "supportImageUrl", value)}
+            helperText="Usa esta imagen en hero, ubicación, footer y barra sticky."
+          />
+          <div>
+            <Label>Alt imagen de apoyo</Label>
+            <Input
+              value={formData.business.supportImageAlt}
+              onChange={(e) => updateField("business", "supportImageAlt", e.target.value)}
             />
           </div>
         </CardContent>
@@ -440,6 +468,13 @@ export default function AdminContentPage() {
               <Input
                 value={formData.header.loginButtonText}
                 onChange={(e) => updateField("header", "loginButtonText", e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>URL login</Label>
+              <Input
+                value={formData.header.loginUrl}
+                onChange={(e) => updateField("header", "loginUrl", e.target.value)}
               />
             </div>
           </div>
@@ -567,11 +602,24 @@ export default function AdminContentPage() {
               onChange={(e) => updateField("hero", "saturdaySchedule", e.target.value)}
             />
           </div>
+          <ImageUploadField
+            label="Imagen fallback del hero"
+            value={formData.hero.fallbackImageUrl}
+            onChange={(value) => updateField("hero", "fallbackImageUrl", value)}
+            helperText="Se usa cuando no hay slides activas o como imagen principal de respaldo."
+          />
           <div>
-            <Label>Imagen fallback del hero</Label>
+            <Label>Alt imagen fallback</Label>
             <Input
-              value={formData.hero.fallbackImageUrl}
-              onChange={(e) => updateField("hero", "fallbackImageUrl", e.target.value)}
+              value={formData.hero.fallbackImageAlt}
+              onChange={(e) => updateField("hero", "fallbackImageAlt", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Prefijo dirección</Label>
+            <Input
+              value={formData.hero.addressPrefix}
+              onChange={(e) => updateField("hero", "addressPrefix", e.target.value)}
             />
           </div>
         </CardContent>
@@ -603,6 +651,25 @@ export default function AdminContentPage() {
               onChange={(e) => updateField("featureCards", "titleLine2", e.target.value)}
             />
           </div>
+          <IconSelectField
+            label="Icono feature cards"
+            value={formData.featureCards.iconName}
+            onChange={(value) => updateField("featureCards", "iconName", value)}
+          />
+          <div>
+            <Label>Texto CTA feature cards</Label>
+            <Input
+              value={formData.featureCards.ctaText}
+              onChange={(e) => updateField("featureCards", "ctaText", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>URL CTA feature cards</Label>
+            <Input
+              value={formData.featureCards.ctaUrl}
+              onChange={(e) => updateField("featureCards", "ctaUrl", e.target.value)}
+            />
+          </div>
           <div>
             <Label>Titulo seccion menu</Label>
             <Input
@@ -610,6 +677,85 @@ export default function AdminContentPage() {
               onChange={(e) => updateField("menu", "title", e.target.value)}
             />
           </div>
+          <div>
+            <Label>Texto categoría "todos"</Label>
+            <Input
+              value={formData.menu.allCategoryLabel}
+              onChange={(e) => updateField("menu", "allCategoryLabel", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Etiqueta selector mobile</Label>
+            <Input
+              value={formData.menu.categorySelectLabel}
+              onChange={(e) => updateField("menu", "categorySelectLabel", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Placeholder selector mobile</Label>
+            <Input
+              value={formData.menu.categorySelectPlaceholder}
+              onChange={(e) => updateField("menu", "categorySelectPlaceholder", e.target.value)}
+            />
+          </div>
+          <IconSelectField
+            label='Icono categoría "todos"'
+            value={formData.menu.allCategoryIconName}
+            onChange={(value) => updateField("menu", "allCategoryIconName", value)}
+          />
+          <IconSelectField
+            label="Icono por defecto categorías"
+            value={formData.menu.defaultCategoryIconName}
+            onChange={(value) => updateField("menu", "defaultCategoryIconName", value)}
+          />
+          <div>
+            <Label>Texto error menú</Label>
+            <Input
+              value={formData.menu.errorText}
+              onChange={(e) => updateField("menu", "errorText", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Texto vacío menú general</Label>
+            <Input
+              value={formData.menu.emptyAllText}
+              onChange={(e) => updateField("menu", "emptyAllText", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Texto vacío menú por categoría</Label>
+            <Input
+              value={formData.menu.emptyCategoryText}
+              onChange={(e) => updateField("menu", "emptyCategoryText", e.target.value)}
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Galería de Oficinas</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4 md:grid-cols-2">
+          <div>
+            <Label>Badge galería oficinas</Label>
+            <Input
+              value={formData.officeGallery.badgeText}
+              onChange={(e) => updateField("officeGallery", "badgeText", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Título galería oficinas</Label>
+            <Input
+              value={formData.officeGallery.title}
+              onChange={(e) => updateField("officeGallery", "title", e.target.value)}
+            />
+          </div>
+          <IconSelectField
+            label="Icono galería oficinas"
+            value={formData.officeGallery.iconName}
+            onChange={(value) => updateField("officeGallery", "iconName", value)}
+          />
         </CardContent>
       </Card>
 
@@ -695,13 +841,12 @@ export default function AdminContentPage() {
               onChange={(e) => updateField("location", "bannerDescription", e.target.value)}
             />
           </div>
-          <div>
-            <Label>Imagen de mapa</Label>
-            <Input
-              value={formData.location.mapImageUrl}
-              onChange={(e) => updateField("location", "mapImageUrl", e.target.value)}
-            />
-          </div>
+          <ImageUploadField
+            label="Imagen de mapa"
+            value={formData.location.mapImageUrl}
+            onChange={(value) => updateField("location", "mapImageUrl", value)}
+            helperText="Puedes subir una captura, mapa o imagen ilustrativa de la ubicación."
+          />
           <div>
             <Label>Alt de imagen de mapa</Label>
             <Input
@@ -709,6 +854,23 @@ export default function AdminContentPage() {
               onChange={(e) => updateField("location", "mapImageAlt", e.target.value)}
             />
           </div>
+          <div>
+            <Label>Aria label enlace mapa</Label>
+            <Input
+              value={formData.location.mapLinkLabel}
+              onChange={(e) => updateField("location", "mapLinkLabel", e.target.value)}
+            />
+          </div>
+          <IconSelectField
+            label="Icono bloque visita"
+            value={formData.location.visitIconName}
+            onChange={(value) => updateField("location", "visitIconName", value)}
+          />
+          <IconSelectField
+            label="Icono bloque horario"
+            value={formData.location.scheduleIconName}
+            onChange={(value) => updateField("location", "scheduleIconName", value)}
+          />
         </CardContent>
       </Card>
 
@@ -773,6 +935,21 @@ export default function AdminContentPage() {
               onChange={(e) => updateField("contact", "whatsappHelp", e.target.value)}
             />
           </div>
+          <IconSelectField
+            label="Icono teléfono"
+            value={formData.contact.phoneIconName}
+            onChange={(value) => updateField("contact", "phoneIconName", value)}
+          />
+          <IconSelectField
+            label="Icono email"
+            value={formData.contact.emailIconName}
+            onChange={(value) => updateField("contact", "emailIconName", value)}
+          />
+          <IconSelectField
+            label="Icono WhatsApp"
+            value={formData.contact.whatsappIconName}
+            onChange={(value) => updateField("contact", "whatsappIconName", value)}
+          />
         </CardContent>
       </Card>
 
@@ -803,6 +980,13 @@ export default function AdminContentPage() {
             />
           </div>
           <div>
+            <Label>URL link menu</Label>
+            <Input
+              value={formData.footer.menuLinkUrl}
+              onChange={(e) => updateField("footer", "menuLinkUrl", e.target.value)}
+            />
+          </div>
+          <div>
             <Label>Texto link ubicacion</Label>
             <Input
               value={formData.footer.locationLinkText}
@@ -810,10 +994,24 @@ export default function AdminContentPage() {
             />
           </div>
           <div>
+            <Label>URL link ubicación</Label>
+            <Input
+              value={formData.footer.locationLinkUrl}
+              onChange={(e) => updateField("footer", "locationLinkUrl", e.target.value)}
+            />
+          </div>
+          <div>
             <Label>Texto link contacto</Label>
             <Input
               value={formData.footer.contactLinkText}
               onChange={(e) => updateField("footer", "contactLinkText", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>URL link contacto</Label>
+            <Input
+              value={formData.footer.contactLinkUrl}
+              onChange={(e) => updateField("footer", "contactLinkUrl", e.target.value)}
             />
           </div>
           <div>
@@ -838,10 +1036,24 @@ export default function AdminContentPage() {
             />
           </div>
           <div>
+            <Label>URL enlace privacidad</Label>
+            <Input
+              value={formData.footer.privacyLinkUrl}
+              onChange={(e) => updateField("footer", "privacyLinkUrl", e.target.value)}
+            />
+          </div>
+          <div>
             <Label>Texto enlace terminos</Label>
             <Input
               value={formData.footer.termsLinkText}
               onChange={(e) => updateField("footer", "termsLinkText", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>URL enlace términos</Label>
+            <Input
+              value={formData.footer.termsLinkUrl}
+              onChange={(e) => updateField("footer", "termsLinkUrl", e.target.value)}
             />
           </div>
           <div>
@@ -856,6 +1068,151 @@ export default function AdminContentPage() {
             <Input
               value={formData.stickyCta.buttonText}
               onChange={(e) => updateField("stickyCta", "buttonText", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>URL botón sticky</Label>
+            <Input
+              value={formData.stickyCta.buttonUrl}
+              onChange={(e) => updateField("stickyCta", "buttonUrl", e.target.value)}
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>SEO y Metadatos</CardTitle>
+          <CardDescription>
+            Controla titulo, descripcion, favicon, Open Graph y JSON-LD del landing.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4 md:grid-cols-2">
+          <div>
+            <Label>URL base del sitio</Label>
+            <Input
+              value={formData.seo.siteUrl}
+              onChange={(e) => updateField("seo", "siteUrl", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>URL canónica</Label>
+            <Input
+              value={formData.seo.canonicalUrl}
+              onChange={(e) => updateField("seo", "canonicalUrl", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Nombre del sitio</Label>
+            <Input
+              value={formData.seo.siteName}
+              onChange={(e) => updateField("seo", "siteName", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Titulo por defecto</Label>
+            <Input
+              value={formData.seo.defaultTitle}
+              onChange={(e) => updateField("seo", "defaultTitle", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Plantilla de título</Label>
+            <Input
+              value={formData.seo.titleTemplate}
+              onChange={(e) => updateField("seo", "titleTemplate", e.target.value)}
+              placeholder="%s | DLA Viajes y Envios"
+            />
+          </div>
+          <div>
+            <Label>Locale Open Graph</Label>
+            <Input
+              value={formData.seo.locale}
+              onChange={(e) => updateField("seo", "locale", e.target.value)}
+              placeholder="es_US"
+            />
+          </div>
+          <div>
+            <Label>Idioma del sitio</Label>
+            <Input
+              value={formData.seo.siteLanguage}
+              onChange={(e) => updateField("seo", "siteLanguage", e.target.value)}
+              placeholder="es"
+            />
+          </div>
+          <div>
+            <Label>Color del tema</Label>
+            <Input
+              value={formData.seo.themeColor}
+              onChange={(e) => updateField("seo", "themeColor", e.target.value)}
+              placeholder="#1a1a1a"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label>Descripcion SEO</Label>
+            <Textarea
+              value={formData.seo.description}
+              onChange={(e) => updateField("seo", "description", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label>Keywords</Label>
+            <Textarea
+              value={formData.seo.keywords}
+              onChange={(e) => updateField("seo", "keywords", e.target.value)}
+              placeholder="separa por comas"
+            />
+          </div>
+          <ImageUploadField
+            label="Imagen Open Graph"
+            value={formData.seo.ogImageUrl}
+            onChange={(value) => updateField("seo", "ogImageUrl", value)}
+            helperText="Es la imagen que se comparte en redes sociales y WhatsApp."
+          />
+          <div>
+            <Label>Alt imagen Open Graph</Label>
+            <Input
+              value={formData.seo.ogImageAlt}
+              onChange={(e) => updateField("seo", "ogImageAlt", e.target.value)}
+            />
+          </div>
+          <ImageUploadField
+            label="Imagen Twitter"
+            value={formData.seo.twitterImageUrl}
+            onChange={(value) => updateField("seo", "twitterImageUrl", value)}
+          />
+          <ImageUploadField
+            label="Favicon"
+            value={formData.seo.faviconUrl}
+            onChange={(value) => updateField("seo", "faviconUrl", value)}
+            accept="image/*,.ico"
+            helperText="Icono principal del navegador."
+          />
+          <ImageUploadField
+            label="Shortcut icon"
+            value={formData.seo.shortcutIconUrl}
+            onChange={(value) => updateField("seo", "shortcutIconUrl", value)}
+            accept="image/*,.ico"
+          />
+          <ImageUploadField
+            label="Apple touch icon"
+            value={formData.seo.appleIconUrl}
+            onChange={(value) => updateField("seo", "appleIconUrl", value)}
+            accept="image/*"
+          />
+          <div>
+            <Label>Manifest</Label>
+            <Input
+              value={formData.seo.manifestUrl}
+              onChange={(e) => updateField("seo", "manifestUrl", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label>Structured data JSON-LD</Label>
+            <Textarea
+              value={formData.seo.structuredDataJson}
+              onChange={(e) => updateField("seo", "structuredDataJson", e.target.value)}
+              className="min-h-[320px] font-mono text-xs"
             />
           </div>
         </CardContent>

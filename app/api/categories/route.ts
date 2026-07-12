@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     if (!auth.authorized) return auth.response
 
     const body = await request.json()
-    const { name, sortOrder } = body
+    const { name, description, icon, sortOrder } = body
 
     if (!name) {
       return NextResponse.json(
@@ -64,6 +64,8 @@ export async function POST(request: NextRequest) {
       data: {
         name,
         slug,
+        description: description || null,
+        icon: icon || null,
         sortOrder: sortOrder || 0
       }
     })

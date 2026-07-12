@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2025 FlavorBytes GmbH - The Foodie Wagon
+Copyright (c) 2025 DLA Viajes y Envios
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,15 +24,14 @@ SOFTWARE.
 
 ADDITIONAL TERMS FOR BUSINESS USE:
 
-This codebase is the property of FlavorBytes GmbH and powers The Foodie Wagon
+This codebase is associated with the DLA Viajes y Envios
 website. While the code is open source under MIT License, the following assets
 are proprietary and NOT covered by this license:
 
-- The Foodie Wagon brand name, logos, and trademarks
-- All food photography and product images
-- Halal certification logos and branding
-- Menu content, pricing, and product descriptions
-- FlavorBytes GmbH company information
+- DLA Viajes y Envios brand name, logos, and trademarks
+- Business images, uploaded assets, and proprietary media
+- Private commercial content and internal business information
+- Customer, logistics, and operational data
 
-These proprietary assets remain the exclusive property of FlavorBytes GmbH and
+These proprietary assets remain the exclusive property of their respective owners and
 may not be used without explicit written permission.
