@@ -14,6 +14,28 @@ import { ImageUploadField } from "@/components/admin/content/image-upload-field"
 import { IconSelectField } from "@/components/admin/content/icon-select-field"
 
 type SectionKey = keyof LandingContent
+type ImageFieldKey =
+  | "business.logoUrl"
+  | "business.supportImageUrl"
+  | "hero.fallbackImageUrl"
+  | "location.mapImageUrl"
+  | "seo.ogImageUrl"
+  | "seo.twitterImageUrl"
+  | "seo.faviconUrl"
+  | "seo.shortcutIconUrl"
+  | "seo.appleIconUrl"
+
+const imageFieldConfigs: Record<ImageFieldKey, { section: SectionKey; field: string }> = {
+  "business.logoUrl": { section: "business", field: "logoUrl" },
+  "business.supportImageUrl": { section: "business", field: "supportImageUrl" },
+  "hero.fallbackImageUrl": { section: "hero", field: "fallbackImageUrl" },
+  "location.mapImageUrl": { section: "location", field: "mapImageUrl" },
+  "seo.ogImageUrl": { section: "seo", field: "ogImageUrl" },
+  "seo.twitterImageUrl": { section: "seo", field: "twitterImageUrl" },
+  "seo.faviconUrl": { section: "seo", field: "faviconUrl" },
+  "seo.shortcutIconUrl": { section: "seo", field: "shortcutIconUrl" },
+  "seo.appleIconUrl": { section: "seo", field: "appleIconUrl" },
+}
 
 const visibilityDefaults = {
   headerSectionEnabled: true,
@@ -89,6 +111,7 @@ export default function AdminContentPage() {
   const { toast } = useToast()
   const [formData, setFormData] = useState<LandingContent>(defaultLandingContent)
   const [visibility, setVisibility] = useState<VisibilitySettings>(visibilityDefaults)
+  const [pendingUploads, setPendingUploads] = useState<Partial<Record<ImageFieldKey, File | null>>>({})
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
 
@@ -124,9 +147,11 @@ export default function AdminContentPage() {
       const settings = (await response.json()) as Record<string, string>
       setFormData(parseLandingContent(settings.landingContent))
       setVisibility(parseVisibilitySettings(settings))
+      setPendingUploads({})
     } catch (error) {
       setFormData(defaultLandingContent)
       setVisibility(visibilityDefaults)
+      setPendingUploads({})
       toast({
         title: "Contenido no disponible",
         description: "Se cargaron valores por defecto del landing",
@@ -141,11 +166,55 @@ export default function AdminContentPage() {
     fetchContent()
   }, [fetchContent])
 
+  const setPendingImage = useCallback((key: ImageFieldKey, file: File | null) => {
+    setPendingUploads((prev) => ({
+      ...prev,
+      [key]: file,
+    }))
+  }, [])
+
+  const clearPendingImage = useCallback(
+    (key: ImageFieldKey) => {
+      const { section, field } = imageFieldConfigs[key]
+      setPendingImage(key, null)
+      updateField(section, field, "")
+    },
+    [setPendingImage, updateField]
+  )
+
+  const uploadImage = useCallback(async (file: File): Promise<string> => {
+    const formDataUpload = new FormData()
+    formDataUpload.append("file", file)
+
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      body: formDataUpload,
+    })
+
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null)
+      throw new Error(payload?.error || "No se pudo subir la imagen")
+    }
+
+    const data = await response.json()
+    return data.url as string
+  }, [])
+
   const handleSave = async () => {
     try {
       setIsSaving(true)
+      const nextFormData: LandingContent = JSON.parse(JSON.stringify(formData))
+
+      for (const [key, file] of Object.entries(pendingUploads) as Array<[ImageFieldKey, File | null | undefined]>) {
+        if (!file) continue
+
+        const uploadedUrl = await uploadImage(file)
+        const { section, field } = imageFieldConfigs[key]
+        ;(nextFormData[section] as Record<string, string>)[field] = uploadedUrl
+      }
+
       const payload: Record<string, string> = {
-        landingContent: JSON.stringify(formData),
+        landingContent: JSON.stringify(nextFormData),
       }
 
       for (const [key, value] of Object.entries(visibility) as Array<[VisibilityKey, boolean]>) {
@@ -167,12 +236,14 @@ export default function AdminContentPage() {
         title: "Contenido guardado",
         description: "Los cambios del landing fueron guardados correctamente",
       })
+      setFormData(nextFormData)
+      setPendingUploads({})
       await fetchContent()
     } catch (error) {
       console.error(error)
       toast({
         title: "Error",
-        description: "No se pudo guardar el contenido del landing",
+        description: error instanceof Error ? error.message : "No se pudo guardar el contenido del landing",
         variant: "destructive",
       })
     } finally {
@@ -413,8 +484,10 @@ export default function AdminContentPage() {
           <ImageUploadField
             label="Logo del sitio"
             value={formData.business.logoUrl}
-            onChange={(value) => updateField("business", "logoUrl", value)}
-            helperText="Selecciona el logo desde tu equipo o móvil. Se subirá automáticamente al servidor."
+            pendingFile={pendingUploads["business.logoUrl"] ?? null}
+            onFileSelect={(file) => setPendingImage("business.logoUrl", file)}
+            onClear={() => clearPendingImage("business.logoUrl")}
+            helperText="Selecciona el logo desde tu equipo o móvil."
           />
           <div>
             <Label>Logo alt</Label>
@@ -440,7 +513,9 @@ export default function AdminContentPage() {
           <ImageUploadField
             label="Imagen de apoyo / truck"
             value={formData.business.supportImageUrl}
-            onChange={(value) => updateField("business", "supportImageUrl", value)}
+            pendingFile={pendingUploads["business.supportImageUrl"] ?? null}
+            onFileSelect={(file) => setPendingImage("business.supportImageUrl", file)}
+            onClear={() => clearPendingImage("business.supportImageUrl")}
             helperText="Usa esta imagen en hero, ubicación, footer y barra sticky."
           />
           <div>
@@ -608,7 +683,9 @@ export default function AdminContentPage() {
           <ImageUploadField
             label="Imagen fallback del hero"
             value={formData.hero.fallbackImageUrl}
-            onChange={(value) => updateField("hero", "fallbackImageUrl", value)}
+            pendingFile={pendingUploads["hero.fallbackImageUrl"] ?? null}
+            onFileSelect={(file) => setPendingImage("hero.fallbackImageUrl", file)}
+            onClear={() => clearPendingImage("hero.fallbackImageUrl")}
             helperText="Se usa cuando no hay slides activas o como imagen principal de respaldo."
           />
           <div>
@@ -847,7 +924,9 @@ export default function AdminContentPage() {
           <ImageUploadField
             label="Imagen de mapa"
             value={formData.location.mapImageUrl}
-            onChange={(value) => updateField("location", "mapImageUrl", value)}
+            pendingFile={pendingUploads["location.mapImageUrl"] ?? null}
+            onFileSelect={(file) => setPendingImage("location.mapImageUrl", file)}
+            onClear={() => clearPendingImage("location.mapImageUrl")}
             helperText="Puedes subir una captura, mapa o imagen ilustrativa de la ubicación."
           />
           <div>
@@ -1169,7 +1248,9 @@ export default function AdminContentPage() {
           <ImageUploadField
             label="Imagen Open Graph"
             value={formData.seo.ogImageUrl}
-            onChange={(value) => updateField("seo", "ogImageUrl", value)}
+            pendingFile={pendingUploads["seo.ogImageUrl"] ?? null}
+            onFileSelect={(file) => setPendingImage("seo.ogImageUrl", file)}
+            onClear={() => clearPendingImage("seo.ogImageUrl")}
             helperText="Es la imagen que se comparte en redes sociales y WhatsApp."
           />
           <div>
@@ -1182,25 +1263,33 @@ export default function AdminContentPage() {
           <ImageUploadField
             label="Imagen Twitter"
             value={formData.seo.twitterImageUrl}
-            onChange={(value) => updateField("seo", "twitterImageUrl", value)}
+            pendingFile={pendingUploads["seo.twitterImageUrl"] ?? null}
+            onFileSelect={(file) => setPendingImage("seo.twitterImageUrl", file)}
+            onClear={() => clearPendingImage("seo.twitterImageUrl")}
           />
           <ImageUploadField
             label="Favicon"
             value={formData.seo.faviconUrl}
-            onChange={(value) => updateField("seo", "faviconUrl", value)}
+            pendingFile={pendingUploads["seo.faviconUrl"] ?? null}
+            onFileSelect={(file) => setPendingImage("seo.faviconUrl", file)}
+            onClear={() => clearPendingImage("seo.faviconUrl")}
             accept="image/*,.ico"
             helperText="Icono principal del navegador."
           />
           <ImageUploadField
             label="Shortcut icon"
             value={formData.seo.shortcutIconUrl}
-            onChange={(value) => updateField("seo", "shortcutIconUrl", value)}
+            pendingFile={pendingUploads["seo.shortcutIconUrl"] ?? null}
+            onFileSelect={(file) => setPendingImage("seo.shortcutIconUrl", file)}
+            onClear={() => clearPendingImage("seo.shortcutIconUrl")}
             accept="image/*,.ico"
           />
           <ImageUploadField
             label="Apple touch icon"
             value={formData.seo.appleIconUrl}
-            onChange={(value) => updateField("seo", "appleIconUrl", value)}
+            pendingFile={pendingUploads["seo.appleIconUrl"] ?? null}
+            onFileSelect={(file) => setPendingImage("seo.appleIconUrl", file)}
+            onClear={() => clearPendingImage("seo.appleIconUrl")}
             accept="image/*"
           />
           <div>
