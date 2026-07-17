@@ -3,6 +3,7 @@ import "server-only"
 import { cache } from "react"
 import prisma from "@/lib/prisma"
 import { defaultLandingContent, parseLandingContent } from "@/lib/landing-content"
+import { sanitizeLandingContentAssets } from "@/lib/landing-content-server"
 
 type SettingRow = {
   key: string
@@ -49,7 +50,7 @@ export const getSiteSettings = cache(async () => {
 
 export const getLandingContentServer = cache(async () => {
   const settings = await getSiteSettings()
-  return parseLandingContent(settings.landingContent)
+  return sanitizeLandingContentAssets(parseLandingContent(settings.landingContent))
 })
 
 export function getStructuredDataFromContent(structuredDataJson: string) {

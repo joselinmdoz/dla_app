@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma'
 import { randomUUID } from 'node:crypto'
 import { requireAdminPermissions } from '@/lib/admin-auth'
 import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
+import { parseLandingContent } from '@/lib/landing-content'
+import { sanitizeLandingContentAssets } from '@/lib/landing-content-server'
 
 type SettingRow = {
   key: string
@@ -36,6 +38,12 @@ export async function GET() {
       acc[setting.key] = setting.value
       return acc
     }, {})
+
+    if (settingsObject.landingContent) {
+      settingsObject.landingContent = JSON.stringify(
+        sanitizeLandingContentAssets(parseLandingContent(settingsObject.landingContent))
+      )
+    }
 
     return NextResponse.json(settingsObject)
   } catch (error) {
