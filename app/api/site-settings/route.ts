@@ -6,6 +6,9 @@ import { ADMIN_PERMISSIONS } from '@/lib/admin-permissions'
 import { parseLandingContent } from '@/lib/landing-content'
 import { sanitizeLandingContentAssets } from '@/lib/landing-content-server'
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 type SettingRow = {
   key: string
   value: string
@@ -57,7 +60,11 @@ export async function GET() {
       }
     }
 
-    return NextResponse.json(settingsObject)
+    return NextResponse.json(settingsObject, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+      },
+    })
   } catch (error) {
     console.error('Error fetching site settings:', error)
     return NextResponse.json(

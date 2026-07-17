@@ -16,7 +16,9 @@ export function useLandingContent() {
   const fetchSettings = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await fetch("/api/site-settings")
+      const response = await fetch("/api/site-settings", {
+        cache: "no-store",
+      })
       if (!response.ok) throw new Error("No se pudo cargar el contenido del sitio")
       const data = (await response.json()) as SiteSettings
 

@@ -108,7 +108,9 @@ export default function AdminContentPage() {
   const fetchContent = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await fetch("/api/site-settings")
+      const response = await fetch("/api/site-settings", {
+        cache: "no-store",
+      })
       if (!response.ok) {
         const payload = await response.json().catch(() => null)
         setFormData(defaultLandingContent)
@@ -165,6 +167,7 @@ export default function AdminContentPage() {
         title: "Contenido guardado",
         description: "Los cambios del landing fueron guardados correctamente",
       })
+      await fetchContent()
     } catch (error) {
       console.error(error)
       toast({
