@@ -4,7 +4,6 @@ import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { ImageUploadZone } from "@/components/admin/import/image-upload-zone"
 import { Label } from "@/components/ui/label"
-import { resolvePublicAssetUrl } from "@/lib/public-asset-url"
 
 interface ImageUploadFieldProps {
   label: string
@@ -64,7 +63,7 @@ export function ImageUploadField({
 
       <ImageUploadZone
         selectedImage={selectedImage}
-        imageUrl={resolvePublicAssetUrl(value)}
+        imageUrl={value}
         accept={accept}
         onImageSelect={uploadImage}
         onClear={() => {

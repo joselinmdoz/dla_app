@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { Phone, MapPin } from "iconoir-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
-import { resolvePublicAssetUrl } from "@/lib/public-asset-url"
 
 export function StickyCTA() {
   const { content, isSectionEnabled } = useLandingContent()
@@ -29,7 +28,7 @@ export function StickyCTA() {
           {/* Location Info with Truck */}
           <div className="flex items-center gap-2 text-primary-foreground">
             <img
-              src={resolvePublicAssetUrl(content.business.supportImageUrl)}
+              src={content.business.supportImageUrl}
               alt={content.business.supportImageAlt}
               className="h-8 w-8 object-contain hidden md:block"
             />

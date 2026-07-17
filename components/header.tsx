@@ -4,7 +4,6 @@ import { useState } from "react"
 import Link from "next/link"
 import { Menu, Xmark, MapPin, FastArrowRight, User, Facebook, Instagram, Tiktok } from "iconoir-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
-import { resolvePublicAssetUrl } from "@/lib/public-asset-url"
 
 function isExternalUrl(url: string) {
   return /^https?:\/\//i.test(url)
@@ -35,7 +34,7 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
             <img
-              src={resolvePublicAssetUrl(business.logoUrl)}
+              src={business.logoUrl}
               alt={business.logoAlt}
               className="h-10 md:h-12 w-auto"
             />

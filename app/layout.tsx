@@ -2,7 +2,6 @@ import type React from "react"
 import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { getLandingContentServer } from "@/lib/site-settings"
-import { resolvePublicAssetUrl } from "@/lib/public-asset-url"
 import "./globals.css"
 
 function parseKeywords(raw: string) {
@@ -52,7 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: resolvePublicAssetUrl(content.seo.ogImageUrl),
+          url: content.seo.ogImageUrl,
           alt: content.seo.ogImageAlt,
         },
       ],
@@ -61,7 +60,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: content.seo.defaultTitle,
       description: content.seo.description,
-      images: [resolvePublicAssetUrl(content.seo.twitterImageUrl || content.seo.ogImageUrl)],
+      images: [content.seo.twitterImageUrl || content.seo.ogImageUrl],
     },
     robots: {
       index: true,
@@ -75,11 +74,11 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     icons: {
-      icon: resolvePublicAssetUrl(content.seo.faviconUrl),
-      shortcut: resolvePublicAssetUrl(content.seo.shortcutIconUrl),
-      apple: resolvePublicAssetUrl(content.seo.appleIconUrl),
+      icon: content.seo.faviconUrl,
+      shortcut: content.seo.shortcutIconUrl,
+      apple: content.seo.appleIconUrl,
     },
-    manifest: resolvePublicAssetUrl(content.seo.manifestUrl),
+    manifest: content.seo.manifestUrl,
     generator: "v0.app",
   }
 }
