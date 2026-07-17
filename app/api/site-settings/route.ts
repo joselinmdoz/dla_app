@@ -24,6 +24,10 @@ async function ensureSiteSettingsTable() {
   await prisma.$executeRawUnsafe(CREATE_TABLE_SQL)
 }
 
+function sanitizeLandingContentValue(raw: string) {
+  return JSON.stringify(sanitizeLandingContentAssets(parseLandingContent(raw)))
+}
+
 // GET - Obtener todas las configuraciones
 export async function GET() {
   try {
@@ -40,9 +44,17 @@ export async function GET() {
     }, {})
 
     if (settingsObject.landingContent) {
-      settingsObject.landingContent = JSON.stringify(
-        sanitizeLandingContentAssets(parseLandingContent(settingsObject.landingContent))
-      )
+      const sanitizedLandingContent = sanitizeLandingContentValue(settingsObject.landingContent)
+      settingsObject.landingContent = sanitizedLandingContent
+
+      const currentLandingContent = settings.find((setting) => setting.key === "landingContent")?.value
+      if (currentLandingContent && currentLandingContent !== sanitizedLandingContent) {
+        await prisma.$executeRaw`
+          UPDATE "SiteSettings"
+          SET "value" = ${sanitizedLandingContent}, "updatedAt" = NOW()
+          WHERE "key" = ${"landingContent"}
+        `
+      }
     }
 
     return NextResponse.json(settingsObject)
@@ -76,7 +88,12 @@ export async function POST(request: NextRequest) {
 
     await ensureSiteSettingsTable()
 
-    const normalizedValue = value === null || value === undefined ? '' : String(value)
+    const normalizedValue =
+      key === "landingContent" && typeof value === "string"
+        ? sanitizeLandingContentValue(value)
+        : value === null || value === undefined
+        ? ''
+        : String(value)
 
     await prisma.$executeRaw`
       INSERT INTO "SiteSettings" ("id", "key", "value", "updatedAt")
@@ -124,7 +141,16 @@ export async function PUT(request: NextRequest) {
       settings.map(([key, value]) =>
         prisma.$executeRaw`
           INSERT INTO "SiteSettings" ("id", "key", "value", "updatedAt")
-          VALUES (${randomUUID()}, ${key}, ${String(value ?? '')}, NOW())
+          VALUES (
+            ${randomUUID()},
+            ${key},
+            ${
+              key === "landingContent" && typeof value === "string"
+                ? sanitizeLandingContentValue(value)
+                : String(value ?? '')
+            },
+            NOW()
+          )
           ON CONFLICT ("key")
           DO UPDATE SET
             "value" = EXCLUDED."value",
