@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Phone, Mail, MapPin } from "iconoir-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
+import { resolvePublicAssetUrl } from "@/lib/public-asset-url"
 
 export function Footer() {
   const { content, isSectionEnabled } = useLandingContent()
@@ -20,7 +21,7 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img
-                src={content.business.logoUrl}
+                src={resolvePublicAssetUrl(content.business.logoUrl)}
                 alt={content.business.logoAlt}
                 className="h-12 w-12 object-contain"
               />
@@ -31,7 +32,7 @@ export function Footer() {
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <img
-                src={content.business.supportImageUrl}
+                src={resolvePublicAssetUrl(content.business.supportImageUrl)}
                 alt={content.business.supportImageAlt}
                 className="h-8 w-8 object-contain"
               />

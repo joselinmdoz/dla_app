@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { ImageUploadZone } from "@/components/admin/import/image-upload-zone"
 import { Label } from "@/components/ui/label"
+import { resolvePublicAssetUrl } from "@/lib/public-asset-url"
 
 interface ImageUploadFieldProps {
   label: string
@@ -63,7 +64,7 @@ export function ImageUploadField({
 
       <ImageUploadZone
         selectedImage={selectedImage}
-        imageUrl={value}
+        imageUrl={resolvePublicAssetUrl(value)}
         accept={accept}
         onImageSelect={uploadImage}
         onClear={() => {
@@ -76,6 +77,9 @@ export function ImageUploadField({
       <div className="rounded-md border border-dashed border-border bg-muted/30 px-3 py-2">
         <p className="text-xs font-medium text-muted-foreground">Archivo actual</p>
         <p className="mt-1 break-all text-sm">{value || "Aun no se ha seleccionado ninguna imagen"}</p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          La imagen se sube al servidor al seleccionarla, pero el landing solo se actualiza al pulsar Guardar cambios.
+        </p>
       </div>
 
       {isUploading ? (
