@@ -22,8 +22,13 @@ export interface LandingContent {
     tiktokUrl: string
     logoUrl: string
     logoAlt: string
+    headerLogoHeightMobile: string
+    headerLogoHeightDesktop: string
+    footerLogoHeight: string
     supportImageUrl: string
     supportImageAlt: string
+    supportImageCompactHeight: string
+    supportImageFeaturedHeight: string
   }
   header: {
     trackingButtonText: string
@@ -41,6 +46,8 @@ export interface LandingContent {
     fallbackImageUrl: string
     fallbackImageAlt: string
     addressPrefix: string
+    imageHeightMobile: string
+    imageHeightDesktop: string
   }
   featureCards: {
     badgeText: string
@@ -80,6 +87,8 @@ export interface LandingContent {
     bannerDescription: string
     mapImageUrl: string
     mapImageAlt: string
+    mapImageHeightMobile: string
+    mapImageHeightDesktop: string
     mapLinkLabel: string
     visitIconName: string
     scheduleIconName: string
@@ -213,8 +222,13 @@ export const defaultLandingContent: LandingContent = {
     tiktokUrl: "https://www.tiktok.com/@dla.viajes.y.envi?_r=1&_t=ZP-93ff0dcsaTu",
     logoUrl: "/graphics/logo.svg",
     logoAlt: "DLA Viajes y Envios",
+    headerLogoHeightMobile: "40",
+    headerLogoHeightDesktop: "48",
+    footerLogoHeight: "48",
     supportImageUrl: "/graphics/truck.svg",
     supportImageAlt: "Camion de DLA",
+    supportImageCompactHeight: "32",
+    supportImageFeaturedHeight: "80",
   },
   header: {
     trackingButtonText: "Rastrear envio",
@@ -254,6 +268,8 @@ export const defaultLandingContent: LandingContent = {
     fallbackImageUrl: "/graphics/slide1.svg",
     fallbackImageAlt: "Imagen principal de DLA",
     addressPrefix: "En",
+    imageHeightMobile: "400",
+    imageHeightDesktop: "600",
   },
   featureCards: {
     badgeText: "Ofertas de servicio",
@@ -261,7 +277,7 @@ export const defaultLandingContent: LandingContent = {
     titleLine2: "Servicios",
     iconName: "Car",
     ctaText: "Ver todas las ofertas",
-    ctaUrl: "/products",
+    ctaUrl: "#menu",
   },
   officeGallery: {
     badgeText: "Nuestras oficinas",
@@ -296,6 +312,8 @@ export const defaultLandingContent: LandingContent = {
       "Obtenga servicio de recogida para sus envios y disfrute de la comodidad de enviar desde su hogar.",
     mapImageUrl: "/placeholder.svg",
     mapImageAlt: "Mapa de ubicacion de DLA",
+    mapImageHeightMobile: "320",
+    mapImageHeightDesktop: "560",
     mapLinkLabel: "Abrir mapa",
     visitIconName: "Calendar",
     scheduleIconName: "Clock",

@@ -50,6 +50,17 @@ function resolveLandingAsset(asset: string, fallback: string): string {
   return fileExistsInPublic(normalized) ? normalized : fallback
 }
 
+function normalizeLandingLink(value: string, fallback: string): string {
+  const trimmed = value.trim()
+  if (!trimmed) return fallback
+
+  if (trimmed === "/products" || trimmed.startsWith("/products?")) {
+    return "#menu"
+  }
+
+  return trimmed
+}
+
 export function isExternalLandingAsset(value: string): boolean {
   return isExternalAsset(value)
 }
@@ -87,6 +98,10 @@ export function sanitizeLandingContentAssets(content: LandingContent): LandingCo
         content.business.supportImageUrl,
         defaultLandingContent.business.supportImageUrl
       ),
+    },
+    featureCards: {
+      ...content.featureCards,
+      ctaUrl: normalizeLandingLink(content.featureCards.ctaUrl, defaultLandingContent.featureCards.ctaUrl),
     },
     hero: {
       ...content.hero,

@@ -1,12 +1,18 @@
 "use client"
 
+import type { CSSProperties } from "react"
 import Link from "next/link"
 import { Phone, Mail, MapPin } from "iconoir-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
+import { getSafePixelValue } from "@/lib/landing-media"
 
 export function Footer() {
   const { content, isSectionEnabled } = useLandingContent()
   const footerEnabled = isSectionEnabled("footerSectionEnabled")
+  const imageStyles = {
+    "--footer-logo-height": getSafePixelValue(content.business.footerLogoHeight, 48, 24, 180),
+    "--support-image-compact-height": getSafePixelValue(content.business.supportImageCompactHeight, 32, 16, 120),
+  } as CSSProperties
 
   if (!footerEnabled) {
     return null
@@ -22,7 +28,8 @@ export function Footer() {
               <img
                 src="/api/site-settings/assets/logo"
                 alt={content.business.logoAlt}
-                className="h-12 w-12 object-contain"
+                className="h-[var(--footer-logo-height)] w-auto max-w-[220px] object-contain shrink-0"
+                style={imageStyles}
               />
               <div>
                 <h3 className="text-primary font-bold text-lg tracking-wider uppercase">{content.business.brandName}</h3>
@@ -33,7 +40,8 @@ export function Footer() {
               <img
                 src="/api/site-settings/assets/support-image"
                 alt={content.business.supportImageAlt}
-                className="h-8 w-8 object-contain"
+                className="h-[var(--support-image-compact-height)] w-auto object-contain shrink-0"
+                style={imageStyles}
               />
               <span className="text-xs font-medium">{content.footer.transportBadgeText}</span>
             </div>

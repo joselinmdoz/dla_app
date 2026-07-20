@@ -490,6 +490,26 @@ export default function AdminContentPage() {
             helperText="Selecciona el logo desde tu equipo o móvil."
           />
           <div>
+            <Label>Alto logo header móvil (px)</Label>
+            <Input
+              type="number"
+              min="24"
+              max="120"
+              value={formData.business.headerLogoHeightMobile}
+              onChange={(e) => updateField("business", "headerLogoHeightMobile", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Alto logo header desktop (px)</Label>
+            <Input
+              type="number"
+              min="24"
+              max="160"
+              value={formData.business.headerLogoHeightDesktop}
+              onChange={(e) => updateField("business", "headerLogoHeightDesktop", e.target.value)}
+            />
+          </div>
+          <div>
             <Label>Logo alt</Label>
             <Input
               value={formData.business.logoAlt}
@@ -519,10 +539,40 @@ export default function AdminContentPage() {
             helperText="Usa esta imagen en hero, ubicación, footer y barra sticky."
           />
           <div>
+            <Label>Alto logo footer (px)</Label>
+            <Input
+              type="number"
+              min="24"
+              max="180"
+              value={formData.business.footerLogoHeight}
+              onChange={(e) => updateField("business", "footerLogoHeight", e.target.value)}
+            />
+          </div>
+          <div>
             <Label>Alt imagen de apoyo</Label>
             <Input
               value={formData.business.supportImageAlt}
               onChange={(e) => updateField("business", "supportImageAlt", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Alto imagen apoyo compacta (px)</Label>
+            <Input
+              type="number"
+              min="16"
+              max="120"
+              value={formData.business.supportImageCompactHeight}
+              onChange={(e) => updateField("business", "supportImageCompactHeight", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Alto imagen apoyo destacada (px)</Label>
+            <Input
+              type="number"
+              min="24"
+              max="220"
+              value={formData.business.supportImageFeaturedHeight}
+              onChange={(e) => updateField("business", "supportImageFeaturedHeight", e.target.value)}
             />
           </div>
         </CardContent>
@@ -700,6 +750,26 @@ export default function AdminContentPage() {
             <Input
               value={formData.hero.addressPrefix}
               onChange={(e) => updateField("hero", "addressPrefix", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Alto visual hero móvil (px)</Label>
+            <Input
+              type="number"
+              min="240"
+              max="900"
+              value={formData.hero.imageHeightMobile}
+              onChange={(e) => updateField("hero", "imageHeightMobile", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Alto visual hero desktop (px)</Label>
+            <Input
+              type="number"
+              min="320"
+              max="1200"
+              value={formData.hero.imageHeightDesktop}
+              onChange={(e) => updateField("hero", "imageHeightDesktop", e.target.value)}
             />
           </div>
         </CardContent>
@@ -934,6 +1004,26 @@ export default function AdminContentPage() {
             <Input
               value={formData.location.mapImageAlt}
               onChange={(e) => updateField("location", "mapImageAlt", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Alto mapa móvil (px)</Label>
+            <Input
+              type="number"
+              min="180"
+              max="720"
+              value={formData.location.mapImageHeightMobile}
+              onChange={(e) => updateField("location", "mapImageHeightMobile", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Alto mapa desktop (px)</Label>
+            <Input
+              type="number"
+              min="240"
+              max="900"
+              value={formData.location.mapImageHeightDesktop}
+              onChange={(e) => updateField("location", "mapImageHeightDesktop", e.target.value)}
             />
           </div>
           <div>

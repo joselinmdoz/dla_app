@@ -1,7 +1,9 @@
 "use client"
 
+import type { CSSProperties } from "react"
 import { useLandingContent } from "@/hooks/use-landing-content"
 import { resolveLandingIcon } from "@/lib/landing-icons"
+import { getSafePixelValue } from "@/lib/landing-media"
 
 export function LocationSection() {
   const { content, isSectionEnabled } = useLandingContent()
@@ -9,6 +11,16 @@ export function LocationSection() {
   const VisitIcon = resolveLandingIcon(content.location.visitIconName, "Calendar")
   const ScheduleIcon = resolveLandingIcon(content.location.scheduleIconName, "Clock")
   const locationEnabled = isSectionEnabled("locationSectionEnabled")
+  const locationStyles = {
+    "--support-image-featured-height": getSafePixelValue(
+      content.business.supportImageFeaturedHeight,
+      80,
+      24,
+      220
+    ),
+    "--map-image-height-mobile": getSafePixelValue(content.location.mapImageHeightMobile, 320, 180, 720),
+    "--map-image-height-desktop": getSafePixelValue(content.location.mapImageHeightDesktop, 560, 240, 900),
+  } as CSSProperties
 
   if (!locationEnabled) {
     return null
@@ -23,13 +35,15 @@ export function LocationSection() {
             <img
               src="/api/site-settings/assets/support-image"
               alt={content.business.supportImageAlt}
-              className="h-16 w-16 object-contain"
+              className="h-[var(--support-image-featured-height)] w-auto max-w-[200px] object-contain"
+              style={locationStyles}
             />
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight">{content.location.sectionTitle}</h2>
             <img
               src="/api/site-settings/assets/support-image"
               alt={content.business.supportImageAlt}
-              className="h-16 w-16 object-contain transform scale-x-[-1]"
+              className="h-[var(--support-image-featured-height)] w-auto max-w-[200px] object-contain transform scale-x-[-1]"
+              style={locationStyles}
             />
           </div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -39,7 +53,10 @@ export function LocationSection() {
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Map Placeholder */}
-          <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden bg-secondary">
+          <div
+            className="relative h-[var(--map-image-height-mobile)] md:h-[var(--map-image-height-desktop)] rounded-2xl overflow-hidden bg-secondary"
+            style={locationStyles}
+          >
             <img
               src="/api/site-settings/assets/location-map"
               alt={content.location.mapImageAlt}

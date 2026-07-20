@@ -1,16 +1,28 @@
 "use client"
 
+import type { CSSProperties } from "react"
 import { ArrowDown, FastArrowRight, Phone } from "iconoir-react"
 import Link from "next/link"
 import { useHeroSlides } from '@/hooks/use-hero-slides'
 import { useLandingContent } from "@/hooks/use-landing-content"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { getSafePixelValue } from "@/lib/landing-media"
 
 export function Hero() {
   const { content, isSectionEnabled } = useLandingContent()
   const { slides, currentSlide, isLoading, nextSlide, prevSlide, goToSlide } = useHeroSlides(5000)
   const heroEnabled = isSectionEnabled("heroSectionEnabled")
   const heroSlidesEnabled = isSectionEnabled("heroSlidesEnabled", true)
+  const heroStyles = {
+    "--support-image-featured-height": getSafePixelValue(
+      content.business.supportImageFeaturedHeight,
+      80,
+      24,
+      220
+    ),
+    "--hero-image-height-mobile": getSafePixelValue(content.hero.imageHeightMobile, 400, 240, 900),
+    "--hero-image-height-desktop": getSafePixelValue(content.hero.imageHeightDesktop, 600, 320, 1200),
+  } as CSSProperties
 
   if (!heroEnabled) {
     return null
@@ -63,7 +75,8 @@ export function Hero() {
                 <img
                   src="/api/site-settings/assets/support-image"
                   alt={content.business.supportImageAlt}
-                  className="h-16 w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
+                  className="h-[var(--support-image-featured-height)] w-auto max-w-[200px] object-contain flex-shrink-0"
+                  style={heroStyles}
                 />
                 <div className="text-left">
                   <p className="text-primary font-black text-2xl md:text-3xl lg:text-4xl mb-1">{content.hero.scheduleTitle}</p>
@@ -78,7 +91,10 @@ export function Hero() {
 
           {/* Right Content - Hero Carousel */}
           <div className="order-1 md:order-2 relative">
-            <div className="relative w-full h-[400px] md:h-[600px] flex items-center justify-center">
+            <div
+              className="relative w-full h-[var(--hero-image-height-mobile)] md:h-[var(--hero-image-height-desktop)] flex items-center justify-center"
+              style={heroStyles}
+            >
               {/* Glow Effects */}
               <div className="absolute inset-0 bg-gradient-radial from-primary/20 via-transparent to-transparent animate-pulse" />
 

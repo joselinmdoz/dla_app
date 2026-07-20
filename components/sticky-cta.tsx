@@ -1,13 +1,18 @@
 "use client"
 
+import type { CSSProperties } from "react"
 import { useState, useEffect } from "react"
 import { Phone, MapPin } from "iconoir-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
+import { getSafePixelValue } from "@/lib/landing-media"
 
 export function StickyCTA() {
   const { content, isSectionEnabled } = useLandingContent()
   const [isVisible, setIsVisible] = useState(false)
   const stickyEnabled = isSectionEnabled("stickyCtaEnabled")
+  const imageStyles = {
+    "--support-image-compact-height": getSafePixelValue(content.business.supportImageCompactHeight, 32, 16, 120),
+  } as CSSProperties
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,7 +35,8 @@ export function StickyCTA() {
             <img
               src="/api/site-settings/assets/support-image"
               alt={content.business.supportImageAlt}
-              className="h-8 w-8 object-contain hidden md:block"
+              className="hidden md:block h-[var(--support-image-compact-height)] w-auto object-contain"
+              style={imageStyles}
             />
             <div className="flex items-center gap-2 text-sm">
               <MapPin className="w-4 h-4" />

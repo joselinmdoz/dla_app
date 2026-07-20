@@ -1,9 +1,11 @@
 "use client"
 
+import type { CSSProperties } from "react"
 import { useState } from "react"
 import Link from "next/link"
 import { Menu, Xmark, MapPin, FastArrowRight, User, Facebook, Instagram, Tiktok } from "iconoir-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
+import { getSafePixelValue } from "@/lib/landing-media"
 
 function isExternalUrl(url: string) {
   return /^https?:\/\//i.test(url)
@@ -19,6 +21,10 @@ export function Header() {
   const { content, isSectionEnabled } = useLandingContent()
   const { business, header } = content
   const headerEnabled = isSectionEnabled("headerSectionEnabled")
+  const logoStyles = {
+    "--logo-height-mobile": getSafePixelValue(business.headerLogoHeightMobile, 40, 24, 120),
+    "--logo-height-desktop": getSafePixelValue(business.headerLogoHeightDesktop, 48, 24, 160),
+  } as CSSProperties
   const visibleNavButtons = [...header.navButtons]
     .filter((button) => button.isVisible && button.text.trim().length > 0)
     .sort((a, b) => a.position - b.position)
@@ -36,7 +42,8 @@ export function Header() {
             <img
               src="/api/site-settings/assets/logo"
               alt={business.logoAlt}
-              className="h-10 md:h-12 w-auto"
+              className="h-[var(--logo-height-mobile)] md:h-[var(--logo-height-desktop)] w-auto max-w-[220px] md:max-w-[320px] object-contain"
+              style={logoStyles}
             />
             <div className="hidden sm:block">
               <h1 className="text-primary font-bold text-2xl md:text-[2.15rem] tracking-wide uppercase leading-none">
