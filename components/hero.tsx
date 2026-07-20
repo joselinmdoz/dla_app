@@ -61,7 +61,7 @@ export function Hero() {
             <div className="max-w-xl mx-auto md:mx-0 mb-16 p-6 md:p-8 bg-primary/10 rounded-2xl border-2 border-primary/30 backdrop-blur-sm">
               <div className="flex items-center justify-center gap-4 md:gap-6">
                 <img
-                  src={content.business.supportImageUrl}
+                  src="/api/site-settings/assets/support-image"
                   alt={content.business.supportImageAlt}
                   className="h-16 w-16 md:h-20 md:w-20 object-contain flex-shrink-0"
                 />
@@ -87,7 +87,7 @@ export function Hero() {
                 {!heroSlidesEnabled ? (
                   <div className="w-full h-full flex items-center justify-center">
                     <img
-                      src={content.hero.fallbackImageUrl}
+                      src="/api/site-settings/assets/hero-fallback"
                       alt={content.hero.fallbackImageAlt}
                       className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
                     />
@@ -101,7 +101,7 @@ export function Hero() {
                   // Fallback image when no slides
                   <div className="w-full h-full flex items-center justify-center">
                     <img
-                      src={content.hero.fallbackImageUrl}
+                      src="/api/site-settings/assets/hero-fallback"
                       alt={content.hero.fallbackImageAlt}
                       className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
                     />

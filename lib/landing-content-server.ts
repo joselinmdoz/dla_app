@@ -5,6 +5,16 @@ import path from "path"
 import { defaultLandingContent, LandingContent } from "@/lib/landing-content"
 
 const existenceCache = new Map<string, true>()
+export type LandingAssetKey =
+  | "logo"
+  | "support-image"
+  | "hero-fallback"
+  | "location-map"
+  | "seo-og"
+  | "seo-twitter"
+  | "seo-favicon"
+  | "seo-shortcut"
+  | "seo-apple"
 
 function isExternalAsset(value: string): boolean {
   return /^https?:\/\//i.test(value) || value.startsWith("data:") || value.startsWith("blob:")
@@ -38,6 +48,33 @@ function resolveLandingAsset(asset: string, fallback: string): string {
 
   const normalized = normalizePath(trimmed)
   return fileExistsInPublic(normalized) ? normalized : fallback
+}
+
+export function isExternalLandingAsset(value: string): boolean {
+  return isExternalAsset(value)
+}
+
+export function getLandingAssetPath(content: LandingContent, key: LandingAssetKey): string {
+  switch (key) {
+    case "logo":
+      return resolveLandingAsset(content.business.logoUrl, defaultLandingContent.business.logoUrl)
+    case "support-image":
+      return resolveLandingAsset(content.business.supportImageUrl, defaultLandingContent.business.supportImageUrl)
+    case "hero-fallback":
+      return resolveLandingAsset(content.hero.fallbackImageUrl, defaultLandingContent.hero.fallbackImageUrl)
+    case "location-map":
+      return resolveLandingAsset(content.location.mapImageUrl, defaultLandingContent.location.mapImageUrl)
+    case "seo-og":
+      return resolveLandingAsset(content.seo.ogImageUrl, defaultLandingContent.seo.ogImageUrl)
+    case "seo-twitter":
+      return resolveLandingAsset(content.seo.twitterImageUrl, defaultLandingContent.seo.twitterImageUrl)
+    case "seo-favicon":
+      return resolveLandingAsset(content.seo.faviconUrl, defaultLandingContent.seo.faviconUrl)
+    case "seo-shortcut":
+      return resolveLandingAsset(content.seo.shortcutIconUrl, defaultLandingContent.seo.shortcutIconUrl)
+    case "seo-apple":
+      return resolveLandingAsset(content.seo.appleIconUrl, defaultLandingContent.seo.appleIconUrl)
+  }
 }
 
 export function sanitizeLandingContentAssets(content: LandingContent): LandingContent {

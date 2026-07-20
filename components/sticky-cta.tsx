@@ -28,7 +28,7 @@ export function StickyCTA() {
           {/* Location Info with Truck */}
           <div className="flex items-center gap-2 text-primary-foreground">
             <img
-              src={content.business.supportImageUrl}
+              src="/api/site-settings/assets/support-image"
               alt={content.business.supportImageAlt}
               className="h-8 w-8 object-contain hidden md:block"
             />

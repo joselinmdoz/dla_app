@@ -51,7 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: content.seo.ogImageUrl,
+          url: "/api/site-settings/assets/seo-og",
           alt: content.seo.ogImageAlt,
         },
       ],
@@ -60,7 +60,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: content.seo.defaultTitle,
       description: content.seo.description,
-      images: [content.seo.twitterImageUrl || content.seo.ogImageUrl],
+      images: ["/api/site-settings/assets/seo-twitter"],
     },
     robots: {
       index: true,
@@ -74,9 +74,9 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     icons: {
-      icon: content.seo.faviconUrl,
-      shortcut: content.seo.shortcutIconUrl,
-      apple: content.seo.appleIconUrl,
+      icon: "/api/site-settings/assets/seo-favicon",
+      shortcut: "/api/site-settings/assets/seo-shortcut",
+      apple: "/api/site-settings/assets/seo-apple",
     },
     manifest: content.seo.manifestUrl,
     generator: "v0.app",

@@ -20,7 +20,7 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img
-                src={content.business.logoUrl}
+                src="/api/site-settings/assets/logo"
                 alt={content.business.logoAlt}
                 className="h-12 w-12 object-contain"
               />
@@ -31,7 +31,7 @@ export function Footer() {
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <img
-                src={content.business.supportImageUrl}
+                src="/api/site-settings/assets/support-image"
                 alt={content.business.supportImageAlt}
                 className="h-8 w-8 object-contain"
               />

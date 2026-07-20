@@ -34,7 +34,7 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
             <img
-              src={business.logoUrl}
+              src="/api/site-settings/assets/logo"
               alt={business.logoAlt}
               className="h-10 md:h-12 w-auto"
             />

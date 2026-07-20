@@ -21,13 +21,13 @@ export function LocationSection() {
         <div className="text-center mb-12 md:mb-16">
           <div className="flex items-center justify-center gap-4 mb-6">
             <img
-              src={content.business.supportImageUrl}
+              src="/api/site-settings/assets/support-image"
               alt={content.business.supportImageAlt}
               className="h-16 w-16 object-contain"
             />
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight">{content.location.sectionTitle}</h2>
             <img
-              src={content.business.supportImageUrl}
+              src="/api/site-settings/assets/support-image"
               alt={content.business.supportImageAlt}
               className="h-16 w-16 object-contain transform scale-x-[-1]"
             />
@@ -41,7 +41,7 @@ export function LocationSection() {
           {/* Map Placeholder */}
           <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden bg-secondary">
             <img
-              src={content.location.mapImageUrl}
+              src="/api/site-settings/assets/location-map"
               alt={content.location.mapImageAlt}
               className="w-full h-full object-cover"
             />
