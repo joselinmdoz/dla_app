@@ -8,3 +8,4 @@ siterefs/
 .env.docker
 Dockerfile
 Dockerfile.dev
+dla_mobile_app/

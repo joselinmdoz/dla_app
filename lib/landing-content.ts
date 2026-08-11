@@ -62,6 +62,34 @@ export interface LandingContent {
     title: string
     iconName: string
   }
+  about: {
+    badgeText: string
+    sectionTitle: string
+    subtitle: string
+    introTitle: string
+    introParagraph1: string
+    introParagraph2: string
+    introParagraph3: string
+    visionTitle: string
+    visionDescription: string
+    missionTitle: string
+    missionDescription: string
+    valuesBadgeText: string
+    valuesTitle: string
+    valuesSubtitle: string
+    commitmentTitle: string
+    commitmentDescription: string
+    responsibilityTitle: string
+    responsibilityDescription: string
+    trustTitle: string
+    trustDescription: string
+    qualityTitle: string
+    qualityDescription: string
+    respectTitle: string
+    respectDescription: string
+    personalizedAttentionTitle: string
+    personalizedAttentionDescription: string
+  }
   menu: {
     title: string
     allCategoryLabel: string
@@ -284,6 +312,42 @@ export const defaultLandingContent: LandingContent = {
     title: "Conoce Nuestros Espacios",
     iconName: "Building2",
   },
+  about: {
+    badgeText: "Conoce DLA",
+    sectionTitle: "¿Quiénes Somos?",
+    subtitle:
+      "En DLA Viajes y Envíos acercamos a las familias con un servicio confiable, responsable y cercano para cada envío a Cuba.",
+    introTitle: "Envíos con cuidado, transparencia y confianza",
+    introParagraph1:
+      "En DLA Viajes y Envíos somos una empresa dedicada a brindar un servicio confiable de envíos a Cuba, comprometida con acercar a las familias a través de una atención responsable, personalizada y de calidad.",
+    introParagraph2:
+      "Entendemos que cada paquete representa mucho más que un envío; representa apoyo, cariño y la tranquilidad de quienes desean ayudar a sus seres queridos. Por eso trabajamos con transparencia, responsabilidad y un firme compromiso de ofrecer un servicio seguro y eficiente en cada entrega.",
+    introParagraph3:
+      "Nuestro objetivo es convertirnos en la opción de confianza para quienes necesitan enviar a Cuba con la seguridad de que sus envíos serán tratados con el cuidado que merecen.",
+    visionTitle: "Nuestra Visión",
+    visionDescription:
+      "Ser la empresa de mayor confianza en el servicio de envíos a Cuba, reconocida por nuestra excelencia, responsabilidad y atención personalizada. Aspiramos a crecer continuamente, incorporando nuevas soluciones que hagan cada envío más rápido, seguro y accesible para nuestros clientes.",
+    missionTitle: "Nuestra Misión",
+    missionDescription:
+      "Brindar un servicio de envíos a Cuba seguro, eficiente y transparente, ofreciendo atención personalizada y acompañamiento durante todo el proceso. Trabajamos con compromiso y responsabilidad para que cada cliente tenga la tranquilidad de que sus envíos llegarán a su destino con el cuidado y la confianza que nos distinguen.",
+    valuesBadgeText: "Lo que nos define",
+    valuesTitle: "Nuestros Valores",
+    valuesSubtitle:
+      "Cada envío que gestionamos sigue los mismos principios de responsabilidad, cercanía y excelencia.",
+    commitmentTitle: "Compromiso",
+    commitmentDescription: "Cumplimos lo que prometemos y damos seguimiento a cada envío.",
+    responsibilityTitle: "Responsabilidad",
+    responsibilityDescription: "Tratamos cada paquete con el cuidado y la importancia que merece.",
+    trustTitle: "Confianza",
+    trustDescription: "Actuamos con honestidad y transparencia en cada servicio.",
+    qualityTitle: "Calidad",
+    qualityDescription: "Buscamos la excelencia en la atención y en cada proceso.",
+    respectTitle: "Respeto",
+    respectDescription: "Valoramos a cada cliente y ofrecemos un trato amable y profesional.",
+    personalizedAttentionTitle: "Atención Personalizada",
+    personalizedAttentionDescription:
+      "Escuchamos las necesidades de nuestros clientes para brindar la mejor solución.",
+  },
   menu: {
     title: "Nuestras ofertas",
     allCategoryLabel: "Todos",
@@ -471,6 +535,7 @@ export function parseLandingContent(raw: string | null | undefined): LandingCont
       hero: mergeSection(defaultLandingContent.hero, parsed.hero),
       featureCards: mergeSection(defaultLandingContent.featureCards, parsed.featureCards),
       officeGallery: mergeSection(defaultLandingContent.officeGallery, parsed.officeGallery),
+      about: mergeSection(defaultLandingContent.about, parsed.about),
       menu: mergeSection(defaultLandingContent.menu, parsed.menu),
       location: mergeSection(defaultLandingContent.location, parsed.location),
       contact: mergeSection(defaultLandingContent.contact, parsed.contact),

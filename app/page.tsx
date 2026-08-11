@@ -1,6 +1,7 @@
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
 import { FeatureCards } from "@/components/feature-cards"
+import { AboutSection } from "@/components/about-section"
 import { MenuSection } from "@/components/menu-section"
 import { OfficeGallery } from "@/components/office-gallery"
 import { LocationSection } from "@/components/location-section"
@@ -28,6 +29,7 @@ export default async function Home() {
         <MenuSection />
         <OfficeGallery />
         <LocationSection />
+        <AboutSection />
         <ContactSection />
         <Footer />
         <StickyCTA />

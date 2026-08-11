@@ -14,6 +14,7 @@ interface SiteSettings {
   heroSlidesEnabled: boolean
   menuSectionEnabled: boolean
   locationSectionEnabled: boolean
+  aboutSectionEnabled: boolean
   contactSectionEnabled: boolean
 }
 
@@ -25,6 +26,7 @@ export default function SettingsPage() {
     heroSlidesEnabled: true,
     menuSectionEnabled: true,
     locationSectionEnabled: true,
+    aboutSectionEnabled: true,
     contactSectionEnabled: true
   })
   const [isLoading, setIsLoading] = useState(true)
@@ -45,6 +47,7 @@ export default function SettingsPage() {
           heroSlidesEnabled: true,
           menuSectionEnabled: true,
           locationSectionEnabled: true,
+          aboutSectionEnabled: true,
           contactSectionEnabled: true
         }
         
@@ -60,6 +63,8 @@ export default function SettingsPage() {
               parsed.menuSectionEnabled = setting.value === 'true'
             } else if (setting.key === 'locationSectionEnabled') {
               parsed.locationSectionEnabled = setting.value === 'true'
+            } else if (setting.key === 'aboutSectionEnabled') {
+              parsed.aboutSectionEnabled = setting.value === 'true'
             } else if (setting.key === 'contactSectionEnabled') {
               parsed.contactSectionEnabled = setting.value === 'true'
             }
@@ -71,6 +76,7 @@ export default function SettingsPage() {
           parsed.heroSlidesEnabled = data.heroSlidesEnabled !== 'false'
           parsed.menuSectionEnabled = data.menuSectionEnabled !== 'false'
           parsed.locationSectionEnabled = data.locationSectionEnabled !== 'false'
+          parsed.aboutSectionEnabled = data.aboutSectionEnabled !== 'false'
           parsed.contactSectionEnabled = data.contactSectionEnabled !== 'false'
         }
         
@@ -94,6 +100,7 @@ export default function SettingsPage() {
         { key: 'heroSlidesEnabled', value: settings.heroSlidesEnabled.toString() },
         { key: 'menuSectionEnabled', value: settings.menuSectionEnabled.toString() },
         { key: 'locationSectionEnabled', value: settings.locationSectionEnabled.toString() },
+        { key: 'aboutSectionEnabled', value: settings.aboutSectionEnabled.toString() },
         { key: 'contactSectionEnabled', value: settings.contactSectionEnabled.toString() }
       ]
 
@@ -227,6 +234,20 @@ export default function SettingsPage() {
               id="locationSection"
               checked={settings.locationSectionEnabled}
               onCheckedChange={(checked) => setSettings({ ...settings, locationSectionEnabled: checked })}
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <Label htmlFor="aboutSection">Sección Quiénes Somos</Label>
+              <p className="text-sm text-muted-foreground">
+                Muestra la sección institucional con visión, misión y valores
+              </p>
+            </div>
+            <Switch
+              id="aboutSection"
+              checked={settings.aboutSectionEnabled}
+              onCheckedChange={(checked) => setSettings({ ...settings, aboutSectionEnabled: checked })}
             />
           </div>
 

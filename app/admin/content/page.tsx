@@ -45,6 +45,7 @@ const visibilityDefaults = {
   officeGalleryEnabled: true,
   menuSectionEnabled: true,
   locationSectionEnabled: true,
+  aboutSectionEnabled: true,
   contactSectionEnabled: true,
   footerSectionEnabled: true,
   stickyCtaEnabled: true,
@@ -85,6 +86,7 @@ const visibilityFields: Array<{
   { key: "officeGalleryEnabled", label: "Oficinas", description: "Mostrar galería de oficinas", section: "landing" },
   { key: "menuSectionEnabled", label: "Menú", description: "Mostrar sección de productos", section: "landing" },
   { key: "locationSectionEnabled", label: "Ubicación", description: "Mostrar sección de ubicación", section: "landing" },
+  { key: "aboutSectionEnabled", label: "Nosotros", description: "Mostrar sección de quiénes somos", section: "landing" },
   { key: "contactSectionEnabled", label: "Contacto", description: "Mostrar sección de contacto", section: "landing" },
   { key: "footerSectionEnabled", label: "Footer", description: "Mostrar pie de página", section: "landing" },
   { key: "stickyCtaEnabled", label: "Sticky CTA", description: "Mostrar barra fija inferior", section: "landing" },
@@ -906,6 +908,196 @@ export default function AdminContentPage() {
             value={formData.officeGallery.iconName}
             onChange={(value) => updateField("officeGallery", "iconName", value)}
           />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Quiénes Somos</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4 md:grid-cols-2">
+          <div>
+            <Label>Badge sección</Label>
+            <Input
+              value={formData.about.badgeText}
+              onChange={(e) => updateField("about", "badgeText", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Título sección</Label>
+            <Input
+              value={formData.about.sectionTitle}
+              onChange={(e) => updateField("about", "sectionTitle", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label>Subtítulo</Label>
+            <Textarea
+              value={formData.about.subtitle}
+              onChange={(e) => updateField("about", "subtitle", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label>Título bloque principal</Label>
+            <Input
+              value={formData.about.introTitle}
+              onChange={(e) => updateField("about", "introTitle", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label>Párrafo principal 1</Label>
+            <Textarea
+              value={formData.about.introParagraph1}
+              onChange={(e) => updateField("about", "introParagraph1", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label>Párrafo principal 2</Label>
+            <Textarea
+              value={formData.about.introParagraph2}
+              onChange={(e) => updateField("about", "introParagraph2", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label>Párrafo principal 3</Label>
+            <Textarea
+              value={formData.about.introParagraph3}
+              onChange={(e) => updateField("about", "introParagraph3", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Título visión</Label>
+            <Input
+              value={formData.about.visionTitle}
+              onChange={(e) => updateField("about", "visionTitle", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Título misión</Label>
+            <Input
+              value={formData.about.missionTitle}
+              onChange={(e) => updateField("about", "missionTitle", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label>Descripción visión</Label>
+            <Textarea
+              value={formData.about.visionDescription}
+              onChange={(e) => updateField("about", "visionDescription", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label>Descripción misión</Label>
+            <Textarea
+              value={formData.about.missionDescription}
+              onChange={(e) => updateField("about", "missionDescription", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Badge valores</Label>
+            <Input
+              value={formData.about.valuesBadgeText}
+              onChange={(e) => updateField("about", "valuesBadgeText", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Título valores</Label>
+            <Input
+              value={formData.about.valuesTitle}
+              onChange={(e) => updateField("about", "valuesTitle", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label>Subtítulo valores</Label>
+            <Textarea
+              value={formData.about.valuesSubtitle}
+              onChange={(e) => updateField("about", "valuesSubtitle", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 1 título</Label>
+            <Input
+              value={formData.about.commitmentTitle}
+              onChange={(e) => updateField("about", "commitmentTitle", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 1 descripción</Label>
+            <Textarea
+              value={formData.about.commitmentDescription}
+              onChange={(e) => updateField("about", "commitmentDescription", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 2 título</Label>
+            <Input
+              value={formData.about.responsibilityTitle}
+              onChange={(e) => updateField("about", "responsibilityTitle", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 2 descripción</Label>
+            <Textarea
+              value={formData.about.responsibilityDescription}
+              onChange={(e) => updateField("about", "responsibilityDescription", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 3 título</Label>
+            <Input
+              value={formData.about.trustTitle}
+              onChange={(e) => updateField("about", "trustTitle", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 3 descripción</Label>
+            <Textarea
+              value={formData.about.trustDescription}
+              onChange={(e) => updateField("about", "trustDescription", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 4 título</Label>
+            <Input
+              value={formData.about.qualityTitle}
+              onChange={(e) => updateField("about", "qualityTitle", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 4 descripción</Label>
+            <Textarea
+              value={formData.about.qualityDescription}
+              onChange={(e) => updateField("about", "qualityDescription", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 5 título</Label>
+            <Input
+              value={formData.about.respectTitle}
+              onChange={(e) => updateField("about", "respectTitle", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 5 descripción</Label>
+            <Textarea
+              value={formData.about.respectDescription}
+              onChange={(e) => updateField("about", "respectDescription", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 6 título</Label>
+            <Input
+              value={formData.about.personalizedAttentionTitle}
+              onChange={(e) => updateField("about", "personalizedAttentionTitle", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Valor 6 descripción</Label>
+            <Textarea
+              value={formData.about.personalizedAttentionDescription}
+              onChange={(e) => updateField("about", "personalizedAttentionDescription", e.target.value)}
+            />
+          </div>
         </CardContent>
       </Card>
 
