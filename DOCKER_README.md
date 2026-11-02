@@ -59,4 +59,8 @@ docker exec -it next_app_dev sh
 
 
 hacer salva en produccion 
-ocker exec postgres_dla_db pg_dump -U postgres -d dla_db > /opt/backups/dla/dla_db_$(date +%F_%H-%M-%S).sql
+docker exec postgres_dla_db pg_dump -U postgres -d dla_db > /opt/backups/dla/dla_db_$(date +%F_%H-%M-%S).sql
+
+Para copiar archivos desde el servidor via ssh
+scp -r -i ~/.ssh/id_rsa_contabo -P 2223 jose@31.220.98.64:/opt/dlaenvios/dla_app/backups/ ~/Descargas/
+dla_db_2026-10-19_17-24-17.sql                

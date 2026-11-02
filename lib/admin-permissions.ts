@@ -4,6 +4,7 @@ export const ADMIN_PERMISSIONS = {
   FEATURE_CARDS_MANAGE: "featureCards.manage",
   OFFICE_IMAGES_MANAGE: "officeImages.manage",
   LANDING_CONTENT_MANAGE: "landingContent.manage",
+  SERVICE_PAGES_MANAGE: "servicePages.manage",
   SHIPMENTS_MANAGE: "shipments.manage",
   DATA_MANAGE: "data.manage",
   IMPORT_EXPORT_MANAGE: "importExport.manage",
@@ -58,6 +59,12 @@ export const ADMIN_PERMISSION_DEFINITIONS: AdminPermissionDefinition[] = [
     label: "Contenido Landing",
     description: "Editar textos/sections del landing",
     href: "/admin/content",
+  },
+  {
+    key: ADMIN_PERMISSIONS.SERVICE_PAGES_MANAGE,
+    label: "Páginas de servicios",
+    description: "Gestionar páginas públicas de precios y envíos",
+    href: "/admin/service-pages",
   },
   {
     key: ADMIN_PERMISSIONS.SHIPMENTS_MANAGE,
@@ -155,6 +162,10 @@ const ADMIN_ROUTE_REQUIREMENTS: AdminRoutePermissionRequirement[] = [
   {
     href: "/admin/content",
     permissions: [ADMIN_PERMISSIONS.LANDING_CONTENT_MANAGE],
+  },
+  {
+    href: "/admin/service-pages",
+    permissions: [ADMIN_PERMISSIONS.SERVICE_PAGES_MANAGE],
   },
   {
     href: "/admin/shipments",

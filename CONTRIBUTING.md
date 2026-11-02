@@ -4,7 +4,7 @@ Gracias por colaborar con este proyecto.
 
 ## Requisitos
 
-- Node.js 18 o superior
+- Node.js 26.12.1 (usa `nvm use` si tienes nvm instalado; la versión está fijada en `.nvmrc`)
 - `pnpm` o `npm`
 - Git
 

@@ -17,4 +17,19 @@
       <image:title>DLA servicios</image:title>
     </image:image>
   </url>
+  <url>
+    <loc>https://dlaenvios.com/precios-envios-cuba</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://dlaenvios.com/tiempos-de-entrega-cuba</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://dlaenvios.com/envios-a-cuba-desde-orlando</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>

@@ -1,6 +1,6 @@
 # Desarrollo - Dockerfile
 # Usar mirror de Docker para evitar problemas de conexión
-FROM docker.m.daocloud.io/node:20-alpine
+FROM docker.m.daocloud.io/node:26.12.1-alpine
 
 WORKDIR /app
 

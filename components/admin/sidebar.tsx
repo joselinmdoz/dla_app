@@ -61,6 +61,12 @@ const navItems = [
     permissions: [ADMIN_PERMISSIONS.LANDING_CONTENT_MANAGE],
   },
   {
+    label: "Páginas de servicios",
+    href: "/admin/service-pages",
+    icon: FileText,
+    permissions: [ADMIN_PERMISSIONS.SERVICE_PAGES_MANAGE],
+  },
+  {
     label: "Envíos",
     href: "/admin/shipments",
     icon: Truck,
