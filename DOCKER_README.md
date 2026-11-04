@@ -63,14 +63,14 @@ En **Panel Admin → Salvas del sistema** se puede descargar un paquete JSON que
 
 - Datos operativos, catálogos, envíos, usuarios y promociones.
 - Configuración del sitio, contenido, slides, tarjetas e imágenes de oficinas.
-- Los archivos almacenados en `public/graphics`.
+- Las imágenes se descargan por separado mediante **Descargar imágenes** en un archivo `tar.gz`.
 
 Para restaurarlo en una base de datos nueva:
 
 1. Configure las variables de entorno del servidor nuevo, especialmente `DATABASE_URL` y `JWT_SECRET`.
 2. Inicie PostgreSQL y aplique las migraciones: `docker compose run --rm prod npx prisma migrate deploy`.
 3. Inicie la aplicación e ingrese al panel con una cuenta administradora.
-4. Abra **Salvas del sistema**, seleccione el paquete y escriba `RESTAURAR`.
+4. Abra **Salvas del sistema**, restaure el paquete JSON escribiendo `RESTAURAR` y luego restaure el archivo de imágenes `tar.gz`.
 
 La restauración reemplaza los datos de la aplicación existentes. El paquete contiene hashes de contraseñas, por lo que debe guardarse de forma privada. Las variables de entorno y secretos no forman parte de la salva.
 

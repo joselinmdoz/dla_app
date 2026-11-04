@@ -2,12 +2,14 @@ import "server-only"
 
 import { readdir, readFile, writeFile, mkdir } from "fs/promises"
 import path from "path"
+import { gunzipSync, gzipSync } from "zlib"
 import prisma from "@/lib/prisma"
 import { ensurePromotionTables } from "@/lib/promotion-db"
 
 export const BACKUP_FORMAT = "dla-system-backup"
 export const BACKUP_VERSION = 1
-const MAX_BACKUP_BYTES = 100 * 1024 * 1024
+const MAX_BACKUP_BYTES = 20 * 1024 * 1024
+const MAX_MEDIA_BACKUP_BYTES = 150 * 1024 * 1024
 
 type JsonRecord = Record<string, unknown>
 
@@ -17,8 +19,9 @@ export type SystemBackup = {
   createdAt: string
   application: string
   data: JsonRecord
-  images: Array<{ path: string; contentBase64: string }>
 }
+
+type GraphicsFile = { path: string; content: Buffer }
 
 const OFFICE_IMAGES_TABLE_SQL = `
   CREATE TABLE IF NOT EXISTS "OfficeImage" (
@@ -44,7 +47,7 @@ function serializable<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T
 }
 
-async function listGraphics(directory: string, prefix = ""): Promise<Array<{ path: string; contentBase64: string }>> {
+async function listGraphics(directory: string, prefix = ""): Promise<GraphicsFile[]> {
   let entries: Array<{
     name: string | Buffer
     isDirectory: () => boolean
@@ -56,7 +59,7 @@ async function listGraphics(directory: string, prefix = ""): Promise<Array<{ pat
     return []
   }
 
-  const files: Array<{ path: string; contentBase64: string }> = []
+  const files: GraphicsFile[] = []
   for (const entry of entries) {
     const fileName = String(entry.name)
     const relativePath = path.posix.join(prefix, fileName)
@@ -65,7 +68,7 @@ async function listGraphics(directory: string, prefix = ""): Promise<Array<{ pat
       files.push(...(await listGraphics(absolutePath, relativePath)))
     } else if (entry.isFile()) {
       const content = await readFile(absolutePath)
-      files.push({ path: relativePath, contentBase64: content.toString("base64") })
+      files.push({ path: relativePath, content })
     }
   }
   return files
@@ -91,7 +94,6 @@ export async function createSystemBackup(): Promise<SystemBackup> {
     officeImages,
     promotionCodes,
     promotionAudits,
-    images,
   ] = await Promise.all([
     prisma.user.findMany(),
     prisma.province.findMany(),
@@ -109,7 +111,6 @@ export async function createSystemBackup(): Promise<SystemBackup> {
     prisma.$queryRaw<JsonRecord[]>`SELECT * FROM "OfficeImage"`,
     prisma.$queryRaw<JsonRecord[]>`SELECT * FROM "PromotionCode"`,
     prisma.$queryRaw<JsonRecord[]>`SELECT * FROM "PromotionCodeAudit"`,
-    listGraphics(path.join(process.cwd(), "public", "graphics")),
   ])
 
   return {
@@ -122,13 +123,12 @@ export async function createSystemBackup(): Promise<SystemBackup> {
       clients, products, shipments, shipmentProducts, heroSlides, featureCards,
       siteSettings, officeImages, promotionCodes, promotionAudits,
     }),
-    images,
   }
 }
 
 export function parseSystemBackup(raw: string): SystemBackup {
   if (Buffer.byteLength(raw, "utf8") > MAX_BACKUP_BYTES) {
-    throw new Error("El paquete supera el límite de 100 MB")
+    throw new Error("El paquete supera el límite de 20 MB")
   }
   let parsed: unknown
   try {
@@ -141,7 +141,7 @@ export function parseSystemBackup(raw: string): SystemBackup {
   if (backup.format !== BACKUP_FORMAT || backup.version !== BACKUP_VERSION) {
     throw new Error("El paquete no corresponde a una salva compatible de DLA")
   }
-  if (!backup.data || typeof backup.data !== "object" || !Array.isArray(backup.images)) {
+  if (!backup.data || typeof backup.data !== "object") {
     throw new Error("El paquete está incompleto")
   }
   return backup as SystemBackup
@@ -237,24 +237,99 @@ export async function restoreSystemBackup(backup: SystemBackup) {
     }
   }, { timeout: 60_000 })
 
-  const graphicsDir = path.join(process.cwd(), "public", "graphics")
-  for (const image of backup.images) {
-    const relativePath = safeImagePath(image.path)
-    if (typeof image.contentBase64 !== "string") throw new Error("Contenido de imagen inválido")
-    const target = path.join(graphicsDir, relativePath)
-    await mkdir(path.dirname(target), { recursive: true })
-    await writeFile(target, Buffer.from(image.contentBase64, "base64"))
-  }
-
   return {
     records: Object.values(backup.data).reduce<number>(
       (total, value) => total + (Array.isArray(value) ? value.length : 0),
       0
     ),
-    images: backup.images.length,
   }
 }
 
 export function backupFilename() {
   return `dla-salva-${new Date().toISOString().replace(/[:.]/g, "-")}.json`
+}
+
+function writeTarString(target: Buffer, value: string, offset: number, length: number) {
+  Buffer.from(value).copy(target, offset, 0, Math.max(0, length - 1))
+}
+
+function writeTarOctal(target: Buffer, value: number, offset: number, length: number) {
+  const octal = Math.floor(value).toString(8).padStart(length - 1, "0")
+  writeTarString(target, octal, offset, length)
+}
+
+function tarHeader(filePath: string, size: number): Buffer {
+  const header = Buffer.alloc(512)
+  writeTarString(header, filePath, 0, 100)
+  writeTarOctal(header, 0o644, 100, 8)
+  writeTarOctal(header, 0, 108, 8)
+  writeTarOctal(header, 0, 116, 8)
+  writeTarOctal(header, size, 124, 12)
+  writeTarOctal(header, Math.floor(Date.now() / 1000), 136, 12)
+  header.fill(0x20, 148, 156)
+  header[156] = "0".charCodeAt(0)
+  writeTarString(header, "ustar", 257, 6)
+  writeTarString(header, "00", 263, 2)
+  const checksum = header.reduce((sum, byte) => sum + byte, 0)
+  writeTarOctal(header, checksum, 148, 8)
+  return header
+}
+
+export async function createMediaBackup(): Promise<Buffer> {
+  const images = await listGraphics(path.join(process.cwd(), "public", "graphics"))
+  const chunks: Buffer[] = []
+  for (const image of images) {
+    const filePath = `graphics/${safeImagePath(image.path)}`
+    if (Buffer.byteLength(filePath) > 100) throw new Error(`La ruta de imagen es demasiado larga: ${image.path}`)
+    chunks.push(tarHeader(filePath, image.content.length), image.content)
+    const padding = image.content.length % 512
+    if (padding) chunks.push(Buffer.alloc(512 - padding))
+  }
+  chunks.push(Buffer.alloc(1024))
+  return gzipSync(Buffer.concat(chunks))
+}
+
+function readTarString(buffer: Buffer, offset: number, length: number) {
+  const end = buffer.indexOf(0, offset)
+  return buffer.subarray(offset, end === -1 ? offset + length : Math.min(end, offset + length)).toString("utf8")
+}
+
+function readTarOctal(buffer: Buffer, offset: number, length: number) {
+  const value = readTarString(buffer, offset, length).trim()
+  return value ? Number.parseInt(value, 8) : 0
+}
+
+export async function restoreMediaBackup(raw: Buffer) {
+  if (raw.length > MAX_MEDIA_BACKUP_BYTES) throw new Error("El archivo de imágenes supera el límite de 150 MB")
+  let tar: Buffer
+  try {
+    tar = gunzipSync(raw)
+  } catch {
+    throw new Error("El archivo de imágenes no es un paquete tar.gz válido")
+  }
+
+  const graphicsDir = path.join(process.cwd(), "public", "graphics")
+  let offset = 0
+  let restored = 0
+  while (offset + 512 <= tar.length) {
+    const header = tar.subarray(offset, offset + 512)
+    if (header.every((byte) => byte === 0)) break
+    const name = readTarString(header, 0, 100)
+    const size = readTarOctal(header, 124, 12)
+    if (!name.startsWith("graphics/")) throw new Error("El paquete contiene una ruta no permitida")
+    const relativePath = safeImagePath(name.slice("graphics/".length))
+    const dataStart = offset + 512
+    const dataEnd = dataStart + size
+    if (!name || !Number.isFinite(size) || size < 0 || dataEnd > tar.length) throw new Error("El paquete de imágenes está dañado")
+    const target = path.join(graphicsDir, relativePath)
+    await mkdir(path.dirname(target), { recursive: true })
+    await writeFile(target, tar.subarray(dataStart, dataEnd))
+    restored++
+    offset = dataStart + Math.ceil(size / 512) * 512
+  }
+  return { images: restored }
+}
+
+export function mediaBackupFilename() {
+  return `dla-imagenes-${new Date().toISOString().replace(/[:.]/g, "-")}.tar.gz`
 }
