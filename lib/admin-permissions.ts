@@ -8,6 +8,7 @@ export const ADMIN_PERMISSIONS = {
   SHIPMENTS_MANAGE: "shipments.manage",
   DATA_MANAGE: "data.manage",
   IMPORT_EXPORT_MANAGE: "importExport.manage",
+  SYSTEM_BACKUP_MANAGE: "systemBackup.manage",
   PRODUCTS_MANAGE: "products.manage",
   CATEGORIES_MANAGE: "categories.manage",
   CLIENTS_MANAGE: "clients.manage",
@@ -83,6 +84,12 @@ export const ADMIN_PERMISSION_DEFINITIONS: AdminPermissionDefinition[] = [
     label: "Importar/Exportar",
     description: "Importación y exportación de datos",
     href: "/admin/import",
+  },
+  {
+    key: ADMIN_PERMISSIONS.SYSTEM_BACKUP_MANAGE,
+    label: "Salvas del sistema",
+    description: "Exportar y restaurar datos, configuración e imágenes",
+    href: "/admin/system-backup",
   },
   {
     key: ADMIN_PERMISSIONS.PRODUCTS_MANAGE,
@@ -175,6 +182,10 @@ const ADMIN_ROUTE_REQUIREMENTS: AdminRoutePermissionRequirement[] = [
   {
     href: "/admin/import",
     permissions: [ADMIN_PERMISSIONS.IMPORT_EXPORT_MANAGE],
+  },
+  {
+    href: "/admin/system-backup",
+    permissions: [ADMIN_PERMISSIONS.SYSTEM_BACKUP_MANAGE],
   },
   {
     href: "/admin/products",

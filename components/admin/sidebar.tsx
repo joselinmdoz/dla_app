@@ -15,6 +15,7 @@ import {
   Truck,
   LogOut,
   FileSpreadsheet,
+  ArchiveRestore,
   Database,
   Image,
   Building2,
@@ -83,6 +84,12 @@ const navItems = [
     href: "/admin/import",
     icon: FileSpreadsheet,
     permissions: [ADMIN_PERMISSIONS.IMPORT_EXPORT_MANAGE],
+  },
+  {
+    label: "Salvas del sistema",
+    href: "/admin/system-backup",
+    icon: ArchiveRestore,
+    permissions: [ADMIN_PERMISSIONS.SYSTEM_BACKUP_MANAGE],
   },
   {
     label: "Mercado",

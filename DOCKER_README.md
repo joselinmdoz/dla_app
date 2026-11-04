@@ -57,10 +57,27 @@ docker exec -it next_app_dev sh
 - El puerto **5440** se expone para PostgreSQL (conexión desde host)
 - Los cambios en código se reflejan automáticamente en desarrollo gracias al volume mount
 
+## Salvas desde el panel administrativo
 
-hacer salva en produccion 
+En **Panel Admin → Salvas del sistema** se puede descargar un paquete JSON que incluye:
+
+- Datos operativos, catálogos, envíos, usuarios y promociones.
+- Configuración del sitio, contenido, slides, tarjetas e imágenes de oficinas.
+- Los archivos almacenados en `public/graphics`.
+
+Para restaurarlo en una base de datos nueva:
+
+1. Configure las variables de entorno del servidor nuevo, especialmente `DATABASE_URL` y `JWT_SECRET`.
+2. Inicie PostgreSQL y aplique las migraciones: `docker compose run --rm prod npx prisma migrate deploy`.
+3. Inicie la aplicación e ingrese al panel con una cuenta administradora.
+4. Abra **Salvas del sistema**, seleccione el paquete y escriba `RESTAURAR`.
+
+La restauración reemplaza los datos de la aplicación existentes. El paquete contiene hashes de contraseñas, por lo que debe guardarse de forma privada. Las variables de entorno y secretos no forman parte de la salva.
+
+
+hacer salva en produccion
 docker exec postgres_dla_db pg_dump -U postgres -d dla_db > /opt/backups/dla/dla_db_$(date +%F_%H-%M-%S).sql
 
 Para copiar archivos desde el servidor via ssh
 scp -r -i ~/.ssh/id_rsa_contabo -P 2223 jose@31.220.98.64:/opt/dlaenvios/dla_app/backups/ ~/Descargas/
-dla_db_2026-10-19_17-24-17.sql                
+dla_db_2026-10-19_17-24-17.sql
