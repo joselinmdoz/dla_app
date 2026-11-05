@@ -3,6 +3,7 @@
 import {
   BadgeCheck,
   Building2,
+  ChevronDown,
   Eye,
   MessageSquare,
   Package,
@@ -12,135 +13,105 @@ import {
 } from "lucide-react"
 import { useLandingContent } from "@/hooks/use-landing-content"
 
+type CompactCardProps = {
+  title: string
+  description: string
+  icon: typeof Building2
+  label: string
+}
+
+function CompactCard({ title, description, icon: Icon, label }: CompactCardProps) {
+  return (
+    <article className="rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/40">
+      <details className="group">
+        <summary className="flex cursor-pointer list-none items-start gap-3 [&::-webkit-details-marker]:hidden">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Icon className="h-5 w-5" />
+          </span>
+          <span className="min-w-0 flex-1 pt-0.5">
+            <span className="block text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</span>
+            <span className="block text-lg font-bold leading-6 text-foreground">{title}</span>
+          </span>
+          <ChevronDown className="mt-2 h-4 w-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
+        </summary>
+        <p className="ml-[52px] pt-3 text-sm leading-6 text-muted-foreground">{description}</p>
+      </details>
+    </article>
+  )
+}
+
 export function AboutSection() {
   const { content, isSectionEnabled } = useLandingContent()
-  const aboutEnabled = isSectionEnabled("aboutSectionEnabled")
 
-  if (!aboutEnabled) {
-    return null
-  }
+  if (!isSectionEnabled("aboutSectionEnabled")) return null
 
-  const principleCards = [
-    {
-      title: content.about.visionTitle,
-      description: content.about.visionDescription,
-      icon: Eye,
-    },
-    {
-      title: content.about.missionTitle,
-      description: content.about.missionDescription,
-      icon: Target,
-    },
+  const principles = [
+    { title: content.about.visionTitle, description: content.about.visionDescription, icon: Eye, label: "Nuestra visión" },
+    { title: content.about.missionTitle, description: content.about.missionDescription, icon: Target, label: "Nuestra misión" },
   ]
 
   const values = [
-    {
-      title: content.about.commitmentTitle,
-      description: content.about.commitmentDescription,
-      icon: Target,
-    },
-    {
-      title: content.about.responsibilityTitle,
-      description: content.about.responsibilityDescription,
-      icon: Package,
-    },
-    {
-      title: content.about.trustTitle,
-      description: content.about.trustDescription,
-      icon: ShieldCheck,
-    },
-    {
-      title: content.about.qualityTitle,
-      description: content.about.qualityDescription,
-      icon: BadgeCheck,
-    },
-    {
-      title: content.about.respectTitle,
-      description: content.about.respectDescription,
-      icon: Users,
-    },
-    {
-      title: content.about.personalizedAttentionTitle,
-      description: content.about.personalizedAttentionDescription,
-      icon: MessageSquare,
-    },
+    { title: content.about.commitmentTitle, description: content.about.commitmentDescription, icon: Target },
+    { title: content.about.responsibilityTitle, description: content.about.responsibilityDescription, icon: Package },
+    { title: content.about.trustTitle, description: content.about.trustDescription, icon: ShieldCheck },
+    { title: content.about.qualityTitle, description: content.about.qualityDescription, icon: BadgeCheck },
+    { title: content.about.respectTitle, description: content.about.respectDescription, icon: Users },
+    { title: content.about.personalizedAttentionTitle, description: content.about.personalizedAttentionDescription, icon: MessageSquare },
   ]
 
   return (
-    <section id="nosotros" className="py-20 md:py-32 bg-gradient-to-b from-background via-background to-muted/10">
-      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full mb-4">
-            <Building2 className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">{content.about.badgeText}</span>
+    <section id="nosotros" className="bg-muted/20 py-12 md:py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <header className="mb-8 flex flex-col gap-3 md:mb-10 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-2xl">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+              <Building2 className="h-4 w-4" />
+              {content.about.badgeText}
+            </div>
+            <h2 className="text-3xl font-bold tracking-tight text-primary sm:text-4xl">{content.about.sectionTitle}</h2>
           </div>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary tracking-tight mb-4">
-            {content.about.sectionTitle}
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">{content.about.subtitle}</p>
-        </div>
+          <p className="max-w-xl text-sm leading-6 text-muted-foreground md:text-base">{content.about.subtitle}</p>
+        </header>
 
-        <div className="grid xl:grid-cols-[1.2fr_0.8fr] gap-8 mb-8">
-          <article className="relative overflow-hidden rounded-3xl border border-border bg-card p-8 md:p-10">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,212,59,0.16),transparent_42%)] pointer-events-none" />
-            <div className="relative">
-              <div className="w-16 h-16 bg-primary/15 rounded-2xl flex items-center justify-center mb-6">
-                <Building2 className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight mb-6">
-                {content.about.introTitle}
-              </h3>
-              <div className="space-y-5 text-base md:text-lg text-muted-foreground leading-8">
-                <p>{content.about.introParagraph1}</p>
+        <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+          <article className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
+            <div className="mb-3 flex items-center gap-3">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <Building2 className="h-5 w-5" />
+              </span>
+              <h3 className="text-xl font-bold text-foreground md:text-2xl">{content.about.introTitle}</h3>
+            </div>
+            <p className="text-sm leading-6 text-muted-foreground md:text-base">{content.about.introParagraph1}</p>
+            <details className="group mt-3 border-t border-border pt-3">
+              <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-semibold text-primary [&::-webkit-details-marker]:hidden">
+                Conoce más sobre DLA
+                <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="space-y-3 pt-3 text-sm leading-6 text-muted-foreground">
                 <p>{content.about.introParagraph2}</p>
                 <p>{content.about.introParagraph3}</p>
               </div>
-            </div>
+            </details>
           </article>
 
-          <div className="grid gap-6">
-            {principleCards.map(({ title, description, icon: Icon }) => (
-              <article
-                key={title}
-                className="rounded-3xl border border-border bg-secondary/70 p-8 transition-colors hover:border-primary/40"
-              >
-                <div className="w-14 h-14 bg-primary/15 rounded-2xl flex items-center justify-center mb-5">
-                  <Icon className="w-7 h-7 text-primary" />
-                </div>
-                <h3 className="text-2xl font-bold text-foreground mb-3">{title}</h3>
-                <p className="text-muted-foreground leading-7">{description}</p>
-              </article>
-            ))}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            {principles.map((item) => <CompactCard key={item.label} {...item} />)}
           </div>
         </div>
 
-        <div className="rounded-3xl border border-border bg-card p-8 md:p-10">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+        <div className="mt-4 rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
+          <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full mb-4">
-                <ShieldCheck className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium text-primary">{content.about.valuesBadgeText}</span>
+              <div className="mb-2 inline-flex items-center gap-2 text-sm font-medium text-primary">
+                <ShieldCheck className="h-4 w-4" />
+                {content.about.valuesBadgeText}
               </div>
-              <h3 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
-                {content.about.valuesTitle}
-              </h3>
+              <h3 className="text-2xl font-bold tracking-tight text-foreground">{content.about.valuesTitle}</h3>
             </div>
-            <p className="text-muted-foreground max-w-2xl">{content.about.valuesSubtitle}</p>
+            <p className="max-w-xl text-sm leading-6 text-muted-foreground">{content.about.valuesSubtitle}</p>
           </div>
-
-          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
-            {values.map(({ title, description, icon: Icon }) => (
-              <article
-                key={title}
-                className="h-full rounded-2xl border border-border bg-background/70 p-6 hover:border-primary/40 transition-colors"
-              >
-                <div className="w-12 h-12 bg-primary/15 rounded-xl flex items-center justify-center mb-4">
-                  <Icon className="w-6 h-6 text-primary" />
-                </div>
-                <h4 className="text-xl font-bold text-foreground mb-2">{title}</h4>
-                <p className="text-muted-foreground leading-7">{description}</p>
-              </article>
-            ))}
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {values.map((item) => <CompactCard key={item.title} label="Valor" {...item} />)}
           </div>
         </div>
       </div>
