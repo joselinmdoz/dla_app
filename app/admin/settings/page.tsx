@@ -19,18 +19,21 @@ interface SiteSettings {
   serviceLinksFloatingEnabled: boolean
 }
 
+const DEFAULT_SETTINGS: SiteSettings = {
+  featureCardsEnabled: true,
+  officeGalleryEnabled: true,
+  heroSlidesEnabled: true,
+  menuSectionEnabled: true,
+  locationSectionEnabled: true,
+  aboutSectionEnabled: true,
+  contactSectionEnabled: true,
+  serviceLinksFloatingEnabled: true,
+}
+
 export default function SettingsPage() {
   const { toast } = useToast()
-  const [settings, setSettings] = useState<SiteSettings>({
-    featureCardsEnabled: true,
-    officeGalleryEnabled: true,
-    heroSlidesEnabled: true,
-    menuSectionEnabled: true,
-    locationSectionEnabled: true,
-    aboutSectionEnabled: true,
-    contactSectionEnabled: true,
-    serviceLinksFloatingEnabled: false
-  })
+  const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SETTINGS)
+  const [savedSettings, setSavedSettings] = useState<SiteSettings>(DEFAULT_SETTINGS)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
 
@@ -43,16 +46,7 @@ export default function SettingsPage() {
         const data = await response.json()
         
         // La API puede devolver un objeto o un array
-        const parsed: SiteSettings = {
-          featureCardsEnabled: true,
-          officeGalleryEnabled: true,
-          heroSlidesEnabled: true,
-          menuSectionEnabled: true,
-          locationSectionEnabled: true,
-          aboutSectionEnabled: true,
-          contactSectionEnabled: true,
-          serviceLinksFloatingEnabled: false
-        }
+        const parsed: SiteSettings = { ...DEFAULT_SETTINGS }
         
         if (Array.isArray(data)) {
           data.forEach((setting: { key: string; value: string }) => {
@@ -83,10 +77,11 @@ export default function SettingsPage() {
           parsed.locationSectionEnabled = data.locationSectionEnabled !== 'false'
           parsed.aboutSectionEnabled = data.aboutSectionEnabled !== 'false'
           parsed.contactSectionEnabled = data.contactSectionEnabled !== 'false'
-          parsed.serviceLinksFloatingEnabled = data.serviceLinksFloatingEnabled === 'true'
+          parsed.serviceLinksFloatingEnabled = data.serviceLinksFloatingEnabled !== 'false'
         }
         
         setSettings(parsed)
+        setSavedSettings(parsed)
       } catch (error) {
         console.error('Error fetching settings:', error)
       } finally {
@@ -100,7 +95,7 @@ export default function SettingsPage() {
   const handleSave = async () => {
     setIsSaving(true)
     try {
-      const settingsToSave = [
+      const allSettings: Array<{ key: keyof SiteSettings; value: string }> = [
         { key: 'featureCardsEnabled', value: settings.featureCardsEnabled.toString() },
         { key: 'officeGalleryEnabled', value: settings.officeGalleryEnabled.toString() },
         { key: 'heroSlidesEnabled', value: settings.heroSlidesEnabled.toString() },
@@ -110,6 +105,12 @@ export default function SettingsPage() {
         { key: 'contactSectionEnabled', value: settings.contactSectionEnabled.toString() },
         { key: 'serviceLinksFloatingEnabled', value: settings.serviceLinksFloatingEnabled.toString() }
       ]
+      const settingsToSave = allSettings.filter(({ key, value }) => savedSettings[key].toString() !== value)
+
+      if (settingsToSave.length === 0) {
+        toast({ title: 'Sin cambios', description: 'La configuración ya está actualizada' })
+        return
+      }
 
       for (const setting of settingsToSave) {
         const response = await fetch('/api/site-settings', {
@@ -122,6 +123,8 @@ export default function SettingsPage() {
           throw new Error('Error al guardar configuración')
         }
       }
+
+      setSavedSettings(settings)
 
       toast({
         title: 'Configuración guardada',

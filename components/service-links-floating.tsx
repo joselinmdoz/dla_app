@@ -27,7 +27,7 @@ export function ServiceLinksFloating() {
   const { isSectionEnabled } = useLandingContent()
   const [isOpen, setIsOpen] = useState(false)
 
-  if (!isSectionEnabled("serviceLinksFloatingEnabled", false)) return null
+  if (!isSectionEnabled("serviceLinksFloatingEnabled", true)) return null
 
   return (
     <div className="fixed bottom-24 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
