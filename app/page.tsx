@@ -8,10 +8,13 @@ import { LocationSection } from "@/components/location-section"
 import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
 import { StickyCTA } from "@/components/sticky-cta"
-import { getLandingContentServer, getStructuredDataFromContent } from "@/lib/site-settings"
+import { ServiceLinksFloating } from "@/components/service-links-floating"
+import { LandingContentProvider } from "@/hooks/use-landing-content"
+import { getLandingContentServer, getSiteSettings, getStructuredDataFromContent } from "@/lib/site-settings"
 
 export default async function Home() {
   const content = await getLandingContentServer()
+  const settings = await getSiteSettings()
   const structuredData = getStructuredDataFromContent(content.seo.structuredDataJson)
 
   return (
@@ -22,18 +25,21 @@ export default async function Home() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       ) : null}
-      <main className="min-h-screen bg-background">
-        <Header />
-        <Hero />
-        <FeatureCards />
-        <MenuSection />
-        <OfficeGallery />
-        <LocationSection />
-        <AboutSection />
-        <ContactSection />
-        <Footer />
-        <StickyCTA />
-      </main>
+      <LandingContentProvider initialContent={content} initialSettings={settings}>
+        <main className="min-h-screen bg-background">
+          <Header />
+          <Hero />
+          <FeatureCards />
+          <MenuSection />
+          <OfficeGallery />
+          <LocationSection />
+          <AboutSection />
+          <ContactSection />
+          <Footer />
+          <StickyCTA />
+          <ServiceLinksFloating />
+        </main>
+      </LandingContentProvider>
     </>
   )
 }

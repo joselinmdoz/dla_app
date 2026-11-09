@@ -16,6 +16,7 @@ interface SiteSettings {
   locationSectionEnabled: boolean
   aboutSectionEnabled: boolean
   contactSectionEnabled: boolean
+  serviceLinksFloatingEnabled: boolean
 }
 
 export default function SettingsPage() {
@@ -27,7 +28,8 @@ export default function SettingsPage() {
     menuSectionEnabled: true,
     locationSectionEnabled: true,
     aboutSectionEnabled: true,
-    contactSectionEnabled: true
+    contactSectionEnabled: true,
+    serviceLinksFloatingEnabled: false
   })
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
@@ -48,7 +50,8 @@ export default function SettingsPage() {
           menuSectionEnabled: true,
           locationSectionEnabled: true,
           aboutSectionEnabled: true,
-          contactSectionEnabled: true
+          contactSectionEnabled: true,
+          serviceLinksFloatingEnabled: false
         }
         
         if (Array.isArray(data)) {
@@ -67,6 +70,8 @@ export default function SettingsPage() {
               parsed.aboutSectionEnabled = setting.value === 'true'
             } else if (setting.key === 'contactSectionEnabled') {
               parsed.contactSectionEnabled = setting.value === 'true'
+            } else if (setting.key === 'serviceLinksFloatingEnabled') {
+              parsed.serviceLinksFloatingEnabled = setting.value === 'true'
             }
           })
         } else if (typeof data === 'object') {
@@ -78,6 +83,7 @@ export default function SettingsPage() {
           parsed.locationSectionEnabled = data.locationSectionEnabled !== 'false'
           parsed.aboutSectionEnabled = data.aboutSectionEnabled !== 'false'
           parsed.contactSectionEnabled = data.contactSectionEnabled !== 'false'
+          parsed.serviceLinksFloatingEnabled = data.serviceLinksFloatingEnabled === 'true'
         }
         
         setSettings(parsed)
@@ -101,7 +107,8 @@ export default function SettingsPage() {
         { key: 'menuSectionEnabled', value: settings.menuSectionEnabled.toString() },
         { key: 'locationSectionEnabled', value: settings.locationSectionEnabled.toString() },
         { key: 'aboutSectionEnabled', value: settings.aboutSectionEnabled.toString() },
-        { key: 'contactSectionEnabled', value: settings.contactSectionEnabled.toString() }
+        { key: 'contactSectionEnabled', value: settings.contactSectionEnabled.toString() },
+        { key: 'serviceLinksFloatingEnabled', value: settings.serviceLinksFloatingEnabled.toString() }
       ]
 
       for (const setting of settingsToSave) {
@@ -178,6 +185,20 @@ export default function SettingsPage() {
               id="featureCards"
               checked={settings.featureCardsEnabled}
               onCheckedChange={(checked) => setSettings({ ...settings, featureCardsEnabled: checked })}
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <Label htmlFor="serviceLinksFloating">Botón flotante de servicios</Label>
+              <p className="text-sm text-muted-foreground">
+                Muestra enlaces rápidos a precios, tiempos de entrega y envíos desde Orlando
+              </p>
+            </div>
+            <Switch
+              id="serviceLinksFloating"
+              checked={settings.serviceLinksFloatingEnabled}
+              onCheckedChange={(checked) => setSettings({ ...settings, serviceLinksFloatingEnabled: checked })}
             />
           </div>
 
