@@ -8,7 +8,7 @@ RUN apk add --no-cache openssl openssl-dev
 COPY package*.json ./
 COPY prisma ./prisma/
 
-RUN npm install
+RUN npm ci --registry=https://registry.npmjs.org/
 
 # ---------- build ----------
 FROM docker.m.daocloud.io/node:26.12.1-alpine AS build

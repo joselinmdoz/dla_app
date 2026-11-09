@@ -12,7 +12,7 @@ COPY package*.json ./
 COPY prisma ./prisma/
 
 # Instalar dependencias
-RUN npm install
+RUN npm ci --registry=https://registry.npmjs.org/
 
 # Copiar código fuente
 COPY . .
